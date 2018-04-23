@@ -1,0 +1,175 @@
+ import "msgcode.proto";
+ import "battle.proto";
+package PaoEntity;
+
+message RanklistSoldier
+{
+
+    required uint32 TempleteId  =1;    //士兵魔板ID
+    required uint32 Quality   =2;      //品质
+    required uint32 Star      =3;      //星级
+    required uint32 Level     =4;      //等级
+    required uint32 SoldierType  =5;   //0：天空 1地面
+}
+message SoldierList
+{
+    repeated RanklistSoldier Soldiers = 1; //士兵集合
+}
+
+message RanklistCommander
+{
+     required uint32 TempleteId        =1; //指挥官Id
+     required uint32  Level            =2; //等级
+     required CommanderFormType Type   =3;//指挥官形态
+}
+
+message RLSkill //排行榜模块:竞技场防守阵容科技技能
+{
+    
+    required  uint32 SkillId             =1;//技能id
+    required   int32   level             =2;//技能等级
+    required  uint32  gradelevel         =3;//品阶等级
+}
+message ArenaDefendFormation
+{
+    required uint32 TotalFight              =1;  //总战力
+    required uint32 WonTimes                =2;  //胜利场数
+    repeated RLSkill SkillIdList            =3; // 技能ID列表
+    required RanklistCommander commander    =4; // 指挥官信息
+    required SoldierList SoldierList        =5; // 士兵集合
+    required int32   spaceargu              =6;    //站位
+}
+message ArenaCharacter  //竞技场角色排行信息
+{
+	
+	required uint32  Rank         =1;     //当前竞技场名次
+	required int32   ChangeRank   =2;     //与昨日每日排行榜名次变动 （当前排名-昨日排名）-上升 +下降
+    required string  Icon         =3;     // 角色头像
+    required uint32  Level        =4;     //角色等级
+    required string  Name         =5;     //角色名字
+    required string GUID          =7;     // 角色guid
+    required uint32 TotalFight    =6;     //总战力
+}
+
+message FightCharacter //排行榜角色信息(通用)
+{
+    required uint32  Rank         =1;     //当前战力榜名次
+    required int32   ChangeRank   =2;     //与昨日每日排行榜名次变动 +上升 -下降
+    required string  Icon         =3;     // 角色头像
+    required uint32  Level        =4;     //角色等级
+    required string  Name         =5;     //角色名字
+    required string GUID          =8;     //角色guid
+    required uint32  Total        =6;     //  最大战力，军衔，进度等等
+   // optional SoldierList SoldierList =7; // 小队信息集合 
+}
+
+enum RankingListType
+{
+     Arena_RealTime    = 1;   //竞技场实时排名
+     Fight_All         =2;    //最强5个兵种战力
+     Fight_Sky         =3;    //最强空军5个战力
+     Fight_Ground      =4;    //最强陆地5个战力
+     Fight_TotalStar   =5;    //军衔排行
+     League_TotalFight   =6;    //联盟排行
+     EndlessTower      =7;    //单人爬塔排行
+     ISLCurRank        =8;    //跨服天梯当前届全服排名
+     ISLLastRank       =9;    //跨服天梯上一届全服排名
+     ISLCurServerRank  =10;   //跨服天梯当前届本服排名
+     LeagueWar_S       =11;   //公会战S区排名(淘汰赛)
+     LeagueWar_ABC     =12;   //公会战ABC赛区排名(积分赛)
+}
+
+message CMD_RANKINGLIST_CTS_GETRANK
+{
+	optional MsgCode msgcode 			= 1[default =RANKINGLIST_CTS_GETRANK];
+    required RankingListType  Type      = 2;
+}
+
+//发送50个玩家排名信息
+message CMD_RANKINGLIST_STC_SENDRANKARENA
+{
+	optional MsgCode msgcode 			= 1[default =RANKINGLIST_STC_SENDRANKARENA];
+	required ArenaCharacter  myArenaRankInfo =2;
+    repeated ArenaCharacter  RankList    =3;
+}
+
+
+message CMD_RANKINGLIST_STC_SENDRANKFIGHT //战力榜
+{
+    optional  MsgCode              msgcode             =1[default =RANKINGLIST_STC_SENDRANKFIGHT];
+    required  RankingListType      Type                =2; //战力榜类型
+    required  FightCharacter       myFightCharacter    =3; //自身信息
+    repeated  FightCharacter       RankList            =4; //前50名信息
+}
+
+message CMD_RANKINGLIST_STC_SENDENDLESSTOWER
+{
+    optional MsgCode            msgcode            =1[default =RANKINGLIST_STC_SENDENDLESSTOWER];
+    required FightCharacter     myFightCharacter   =2; //自身信息
+    repeated  FightCharacter    RankList           =3; //前50名信息
+}
+
+//获取指定角色阵容信息
+message CMD_RANKINGLIST_CTS_GETFORMATION
+{
+    optional MsgCode               msgcode             = 1[default =RANKINGLIST_CTS_GETFORMATION];
+    required  RankingListType      Type                =2;//排行榜类型
+    required  string              Target_GUID          =3;//要查看的人的guid
+
+}
+
+//发送指定角色竞技场阵容
+message CMD_RANKINGLIST_STC_SENDARENAFORMATION
+{
+    optional MsgCode               msgcode         = 1[default =RANKINGLIST_STC_SENDARENAFORMATION];
+    required ArenaDefendFormation  Formation       =2;
+}
+
+//发送指定角色小队阵容
+message CMD_RANKINGLIST_STC_SENDFIGHTFORMATION
+{
+   optional MsgCode               msgcode         = 1[default =RANKINGLIST_STC_SENDFIGHTFORMATION];
+   required  RankingListType      Type            =2; //战力榜类型  
+   required SoldierList           SoldierList     =3; // 小队信息集合 
+}
+
+
+/***************************联盟排行榜************************************/
+message Rank_LeagueInfo
+{
+    required int32  Rank          =1;//联盟排名
+    required string LeagueName    =2;//联盟名
+    required string LeaderName    =3;//盟主名
+    required string Icon          =4;//联盟icon
+    required int32  MembersCount  =5;//成员数量
+    required string Logan         =6;//口号
+    required int32  TotalFight      =7;//三日活跃度
+}
+
+message CMD_RANKINGLIST_STC_SENDRANKLEAGUEVATALITY
+{
+    optional MsgCode            msgcode         =1[default =RANKINGLIST_STC_SENDRANKLEAGUEVATALITY];
+    repeated Rank_LeagueInfo    LeagueList      =2;//联盟
+    optional Rank_LeagueInfo    MyLeague        =3;//自己所在联盟,没有则不发
+}
+/**************************************************************************/
+/***********************公会战**************************/
+
+message LeagueWarCharacter //公会战角色击杀数排名信息
+{
+    required int32   Rank          =1;     //排名      
+    required string  Icon          =2;     //角色头像
+    required uint32  Level         =3;     //角色等级
+    required string  Name          =4;     //角色名字
+    required string  ServerName    =5;     //服务器名
+    required int32   TotalKills    =6;     //杀敌数
+}
+
+message CMD_RANKINGLIST_STC_SENDRANKLEAGUEWAR
+{
+    optional MsgCode            msgcode       =1[default =RANKINGLIST_STC_SENDRANKLEAGUEWAR];
+    required RankingListType    Type          =2; //排行榜类型 S或者ABC
+    repeated LeagueWarCharacter List          =3; //该数据集合(100个，可配置) 每x小时刷新一次，保存在游戏服务器
+    optional LeagueWarCharacter MyRankInfo    =4; //玩家自身数据每次由游戏服务器向跨服服务器去取，这时可能导致排名与游戏服务器中的老数据不一致，所以要记录一个上次排名，这时候取上次排名即可。
+    //上次排名在每次刷新时覆盖。
+}

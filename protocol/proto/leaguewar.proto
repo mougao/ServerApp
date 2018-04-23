@@ -1,0 +1,662 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "league.proto";
+import "battle.proto";
+import "rankinglist.proto";
+import "common.proto";
+package PaoEntity;
+
+
+/****************************赛区信息***********************************/
+enum Zone
+{//赛区
+	S =1;
+	A =2;
+	B =3;
+	C =4; 
+}
+
+enum StrongHoldStatus
+{
+    Unbeatable   =0;//不可进攻的
+    CanAttack    =1;//可进攻的
+	Destroyed    =2;//已被摧毁
+}
+
+enum StrongHoldBuffType
+{
+    Empty      =0;
+	Machine_HP =1;
+	Machine_ATT =2;
+	Life_HP    =3;
+	Life_ATT   =4;
+}
+
+enum StrongHoldType
+{
+	Normal 		=1;
+	BuffTower	=2;
+}
+
+enum LW_LeagueStatus
+{
+	Sleep = 0;			//未报名，什么都不能做
+	Wait = 1;			//报名后，等待下一场战斗开始
+	WaitSelect = 2;		//进攻前等待选择首个进攻据点
+	Fighting = 3;		//战斗中
+}
+
+message StrongHoldBuff
+{
+	required StrongHoldBuffType BuffType =1;//BUFF类型
+	required int32              Value    =2;//BUFF值，0-100，分母为100 
+}
+/*公会战主界面基本信息*/
+message LW_BaseInfo
+{
+	required int32 Season           = 1;//赛季
+	required Zone  Zone             = 2;//赛区
+	required int32 Order            = 3;//场次
+    required int32 Apply_StartTime  = 4;//报名开始时间
+    required int32 Apply_EndTime    = 5;//报名结束时间
+    required bool  IsApply          = 6;//所在公会是否报名参赛
+    required int32 NextOrderStartTime = 7;//下场比赛开始时间
+    required bool  IsFight          = 8;//战斗是否开始
+    required bool  IsNextSeason     = 9; //true表示是下赛季的报名开始时间和场次
+}
+
+/*ABC赛区(积分赛)内公会信息*/
+message LW_ZoneLeagueInfo
+{
+	required int32 Rank             =1;//排名
+	required string Icon            =2;//公会头像
+	required string Name            =3;//公会名
+	required string ServerName      =4;//公会所属服务器名
+	required int32 Wins             =5;//胜场数
+	required int32 TotalScore       =6;//总积分
+	required int32 TotalKills       =7;//累计杀敌
+	required int32 TotalDestroyStrongholds =8;//累计摧毁据点
+}
+
+/*S区(淘汰赛)场次信息*/
+message LW_OrderInfo_S  
+{
+	required int32 Season 								=1; //赛季
+	required int32 Order 						        =2; //场次
+	required int32 StartTime 						    =3; //下场比赛开始时间
+	required int32 Status                               =4; //比赛状态 0未开始，1战斗中，2已结束
+	repeated LW_ZoneLeagueInfo_S_Couple Couples =5; //S赛区第X场比赛内公会信息  2个公会为1组对手
+}
+
+message LW_ZoneLeagueInfo_S_Couple
+{
+    required  int32 MaxRank        =1;//最大可能排名(可用于显示赛程图)
+    repeated  string LeagueNames   =2;//2个公会名
+    optional  string Winner        =3;//获胜者(当比赛打完时)
+}
+
+/*S区最终排名信息*/
+message LW_S_Final_RankInfo
+{
+	required int32 Rank 			=1;//排名
+	required string Icon 			=2;//头像
+	required string Name            =3;//公会名
+	required string ServerName      =4;//公会所属服务器名
+}
+
+
+/*主界面基本信息，玩家登录时发送;或者由跨服服务器主动发送，如比赛开始，结束等*/
+message CMD_LW_STC_BASEINFO
+{
+	optional  MsgCode         msgcode      = 1[default = LW_STC_BASEINFO];
+	required  LW_BaseInfo BaseInfo = 2;//基本信息  
+}
+
+
+
+message CMD_LW_CTS_APPLY 
+{
+	optional  MsgCode         msgcode      = 1[default = LW_CTS_APPLY]; 
+}
+message CMD_LW_STC_APPLY
+{
+	optional MsgCode         msgcode      = 1[default = LW_STC_APPLY]; 
+	required ErrorCode       ReturnCode   = 2;
+}
+
+
+
+message CMD_LW_CTS_GET_ZONEINFO
+{//ABC赛区
+	optional  MsgCode         msgcode      = 1[default = LW_CTS_GET_ZONEINFO];
+	required  Zone            zone         = 2;//赛区
+}
+
+message CMD_LW_STC_SEND_ZONEINFO
+{
+	optional  MsgCode         msgcode                = 1[default = LW_STC_SEND_ZONEINFO];
+	required  Zone            zone                   = 2;//赛区
+    optional  LW_ZoneLeagueInfo MyLeagueInfo = 3;//自己所在公会信息
+    repeated  LW_ZoneLeagueInfo LeagueInfos  = 4;//赛区内所有公会信息
+}
+
+
+
+message CMD_LW_CTS_GET_ZONEINFO_S  //获取S赛区信息
+{
+	optional  MsgCode         msgcode       = 1[default =LW_CTS_GET_ZONEINFO_S];      
+}
+message CMD_LW_STC_SEND_ZONEINFO_S  //返回S赛区信息
+{
+    optional  MsgCode       		  msgcode            = 1[default =LW_STC_SEND_ZONEINFO_S];
+	repeated  LW_OrderInfo_S  OrderInfos         = 2;//场次比赛信息(最多3场比赛) 
+}
+
+
+
+message CMD_LW_CTS_GET_S_FINAL_RESULT 
+{
+	optional  MsgCode         msgcode       = 1[default =LW_CTS_GET_S_FINAL_RESULT];
+}
+
+message CMD_LW_STC_SEND_S_FINAL_RESULT //返回S区最终排名信息
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SEND_S_FINAL_RESULT];
+    repeated  LW_S_Final_RankInfo Ranks		= 2;
+}
+
+/*联盟成员累计伤害排行信息*/
+message LW_Member_TotalDamage_RankInfo
+{
+	required int32  			Rank 			=1;
+	required string 			Icon 			=2;
+	required int32 				Level 			=3;
+	required string 			Name 			=4;
+	required int32  			VipLevel		=5;
+	required LeagueMemberType   Type 			=6;//职位1会长2副会长3帮众
+	required int32              TotalDamage 	=7;//累计伤害
+}
+
+
+message CMD_LW_CTS_GET_MEMBER_TotalDamage
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_GET_MEMBER_TotalDamage];
+}
+
+message CMD_LW_STC_SEND_MEMBER_TotalDamage
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SEND_MEMBER_TotalDamage];
+	repeated LW_Member_TotalDamage_RankInfo MemberInfos	=2;
+}
+
+/****************************赛区信息报文结束***********************************/
+
+
+
+
+
+
+/****************************公会战布阵界面********************************/
+/*布防界面据点基本信息*/
+message StrongHoldBaseInfo
+{
+	required int32 				ID                  =1;//据点ID
+	required StrongHoldType     StrongHoldType      =2;//据点类型
+	required StrongHoldBuffType OwnBuffType         =3;//自身拥有的buff
+	repeated StrongHoldBuff     Buffs               =4;//受益的buff集合(最多也就2种)
+    required int32              CurrTeamsCount      =5;//当前布防队伍数量
+    required int32              MaxTeamsCount       =6;//最大布防队伍数量
+    required StrongHoldStatus   StrongHoldStatus    =7;//据点状态
+}
+
+message LW_SkillIconInfo
+{
+    required  uint32 SkillId             =1;//技能id
+    required  uint32  gradelevel         =2;//品阶等级   
+}
+message LW_Commander
+{
+    required uint32 Level             =1;//等级
+    required uint32 Gender            =2;//指挥官性别
+    required CommanderFormType Type   =3;//指挥官形态
+}
+
+message LW_SoldierIconInfo
+{
+    required uint32 TempleteId  =1;    //士兵魔板ID
+    required uint32 Quality     =2;    //品质
+    required uint32 Star        =3;    //星级
+    required uint32 Level       =4;    //等级
+    required uint32 SoldierType =5;    //0：天空 1地面
+    optional bool   IsDead      =6;    //是否阵亡，当前hp为0
+}
+/*防守队伍信息*/
+message LW_Team_IconInfo
+{
+    required string TeamGUID                =1;//队伍ID
+    required int32  Order                   =2;//顺序         
+    required string Icon                    =3;//玩家头像
+    required string Name                    =4;//名字
+    required string OwnerGUID               =5;//队伍所有者guid
+    required LW_Commander Commander   	    =6;//指挥官信息
+	required uint32 TotalFight              =7;//总战力
+    repeated LW_SkillIconInfo SkillList     =8;//科技列表
+    repeated LW_SoldierIconInfo SoldierList =9;//士兵集合
+    optional bool IsDead                    =10;//是否被消灭
+}
+
+
+/*布防界面据点详细信息*/
+message StrongHoldDetailInfo
+{
+    required int32              ID               =1;//据点ID
+    repeated LW_Team_IconInfo MyFormations       =2;//我的队伍
+    repeated LW_Team_IconInfo AllFormations      =3;//该据点所有防守队伍
+}
+
+
+message CMD_LW_CTS_GET_LEAGUE_DEFENSIVE_BASE
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_GET_LEAGUE_DEFENSIVE_BASE];	
+}
+message CMD_LW_STC_SEND_LEAGUE_DEFENSIVE_BASE
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SEND_LEAGUE_DEFENSIVE_BASE];	
+    repeated StrongHoldBaseInfo StrongHoldBaseInfos = 2;
+    repeated int32            MyTeamPositions       = 3;//我布防的据点(一个队伍一个据点id，最多也就3个)
+}
+/*据点队伍数更新，全公会在线人员广播*/
+message CMD_LW_STC_UPDATE_STRONGHOLD_DENFENSIVE_BASE  
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_UPDATE_STRONGHOLD_DENFENSIVE_BASE];
+	required  StrongHoldBaseInfo StrongHoldBaseInfo = 2;//更新队伍的据点
+}
+/*发送玩家队伍布防位置,每次对据点队伍的增删，都会向队伍所属玩家发送此条报文*/
+message CMD_LW_STC_SEND_TEAM_POSITIONS
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SEND_TEAM_POSITIONS];
+	repeated  int32           Positions             = 2;//存的是据点id
+}
+
+
+/*查看本方据点详细信息*/
+message CMD_LW_CTS_GET_STRONGHOLD_DEFENSIVE_DETAIL 
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_GET_STRONGHOLD_DEFENSIVE_DETAIL];
+	required  int32           StrongHoldID          = 2;//据点id
+}
+message CMD_LW_STC_SEND_STRONGHOLD_DEFENSIVE_DETAIL
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SEND_STRONGHOLD_DEFENSIVE_DETAIL];
+    required  StrongHoldDetailInfo StrongHoldDetailInfo =2;
+}
+
+
+/*防守队伍布阵*/
+message LW_DF_Formation
+{
+	required CommanderFormType CommanderForm = 1; //指挥官形态
+	repeated string SoldierList = 2;	 	      //兵种ID列表
+	repeated uint32 SkillList   = 3;		      //技能列表
+}
+/*增加防守队伍*/
+message CMD_LW_CTS_ADD_TEAM
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_ADD_TEAM];
+	required  int32           StrongHoldId          = 2;
+	required  LW_DF_Formation  Formation            = 3;
+}
+message CMD_LW_STC_ADD_TEAM
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_ADD_TEAM];
+	required ErrorCode        ReturnCode            = 2;
+}
+
+/*调整防守队伍*/
+message CMD_LW_CTS_ADJUST_TEAM
+{
+	optional MsgCode         msgcode       		= 1[default =LW_CTS_ADJUST_TEAM];
+	required string          TeamGUID           = 2;
+	required int32           StrongHoldId       = 3;
+	required LW_DF_Formation Formation          = 4;
+}
+message CMD_LW_STC_ADJUST_TEAM
+{
+	optional MsgCode         msgcode       		= 1[default =LW_STC_ADJUST_TEAM];
+	required ErrorCode       ReturnCode         = 2;
+}
+
+/*删除防守队伍*/
+message CMD_LW_CTS_REMOVE_TEAM
+{
+	optional MsgCode         msgcode            = 1[default =LW_CTS_REMOVE_TEAM];
+	required int32           StrongHoldId       = 2;
+	required string          TeamGUID           = 3;
+}
+message CMD_LW_STC_REMOVE_TEAM
+{
+	optional MsgCode         msgcode            = 1[default =LW_STC_REMOVE_TEAM];
+	required ErrorCode       ReturnCode         = 2;
+}
+
+
+/*更改buff塔buff类型*/
+message CMD_LW_CTS_CHANGE_BUFF
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_CHANGE_BUFF];
+	required  int32           TowerID               = 2;//就是据点的id
+	required  StrongHoldBuffType BuffType           = 3;//选择的buff类型
+
+}
+message CMD_LW_STC_CHANGE_BUFF
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_CHANGE_BUFF];
+    required  ErrorCode       ReturnCode            = 2;//若成功发送更新报文，更新布防界面据点基本信息
+}
+
+/****************************公会战布阵界面报文结束********************************/
+
+
+
+
+
+/****************************公会战战场报文********************************/
+/*战场队伍信息*/
+message LW_Team_BattleInfo
+{
+	required string TeamGUID                =1;//队伍ID
+    required int32  Order                   =2;//顺序         
+    required string Icon                    =3;//玩家头像
+    required string Name                    =4;//名字
+    required string OwnerGUID               =5;//队伍所有者guid
+	required uint32 TotalFight              =6;//总战力
+	required LW_Commander CommanderBaseInfo =7;//指挥官等级，性别，形态
+	required BattleInfo CommanderBattleInfo =8;//指挥官战斗信息
+	repeated BattleInfo Soldiers 	     	=9;//兵种列表
+	repeated SkillStatus SkillList 	        =10;//科技技能列表
+	required uint32 SkillEnergy             =11[default =0];//能量点
+	required uint32 CommanderSkillCD        =12[default =0];//指挥官技能cd
+	required bool  IsDead                   =13;//是否被消灭
+}
+
+/*设置进攻阵容*/
+message CMD_LW_CTS_SET_ATTACK_FORMATION
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_CTS_SET_ATTACK_FORMATION];
+	repeated  string          SoldierList           = 2;//士兵列表
+}
+message CMD_LW_STC_SET_ATTACK_FORMATION
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STC_SET_ATTACK_FORMATION];
+    required  ErrorCode       ReturnCode            = 2;
+}
+
+
+
+/****************************公会战战场报文结束****************************/
+
+
+
+
+/******************************************************************************************************************************
+******************************************************游戏服务器与跨服通信*****************************************************
+******************************************************************************************************************************/
+
+/*每个赛区的比赛时间*/
+message TimeOfEachZone
+{
+	required Zone zone =1;//赛区
+	required int32 Season =2;//赛季
+    required int32 Apply_StartTime =3;//报名开始时间
+    required int32 Apply_StopTime  =4;//报名结束时间
+    required bool  IsNextSeason    =5;//是否是下赛季报名开始时间和场次
+    required int32 Next_Game_StartTime =6;//所在赛区下场比赛开始时间 
+    required int32 Next_Game_Order     =7;//将要进行的比赛场次
+}
+/*每个公会所在赛区*/
+message ZoneOfLeague
+{
+	required Zone zone =1;
+	required string LeagueGUID =2;
+	required bool  IsApply   =3;//是否已报名
+}
+
+//发送赛区比赛时间 （服务器连接时推，以及每场战斗打完推送）
+message CMD_LW_KTS_SEND_TIMEOFEACHZONE
+{
+	optional  MsgCode    msgcode      	= 1[default =LW_KTS_SEND_TIMEOFEACHZONE];
+	repeated  TimeOfEachZone List       = 2;
+}
+
+//发送公会所在赛区信息 （服务器连接时推，赛季结束推送）
+message CMD_LW_KTS_SEND_ZONEOFLEAGUE
+{
+	optional  MsgCode    msgcode      	= 1[default =LW_KTS_SEND_ZONEOFLEAGUE];
+	repeated  ZoneOfLeague List       = 2;
+}
+
+message CMD_LW_STK_APPLY
+{
+	optional  MsgCode    msgcode      	= 1[default =LW_STK_APPLY];
+	required  string     OwnerId        = 2;//玩家id
+	required  string     LeagueGUID     = 3;//联盟id
+	required  string     LeagueName     = 4;//联盟名
+	required  string     LeagueIcon     = 5;//联盟头像
+}
+message CMD_LW_KTS_APPLY
+{
+	optional MsgCode    msgcode      	= 1[default =LW_KTS_APPLY];
+	required string     OwnerId         = 2;//玩家id
+	required string     LeagueGUID      = 3;//联盟id
+	required ErrorCode  ReturnCode      = 4;
+}
+
+
+message CMD_LW_STK_GET_ZONEINFO
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_ZONEINFO];
+	required string    OwnerId          =2;//玩家id
+	required Zone      Zone             =3;//赛区
+}
+message CMD_LW_KTS_SEND_ZONEINFO
+{
+	optional MsgCode   msgcode          =1[default =LW_KTS_SEND_ZONEINFO];
+	required string     OwnerId         =2;//玩家id
+	required Zone      Zone             =3;//赛区
+	repeated LW_ZoneLeagueInfo LeagueInfos =4;
+	optional LW_ZoneLeagueInfo MyLeagueInfo = 5;//自己所在公会信息
+}
+
+
+message CMD_LW_STK_GET_ZONEINFO_S
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_ZONEINFO_S];
+	required string     OwnerId         =2;//玩家id
+}
+message CMD_LW_KTS_SEND_ZONEINFO_S
+{
+	optional MsgCode   msgcode          =1[default =LW_KTS_SEND_ZONEINFO_S];
+	required string     OwnerId         =2;//玩家id
+	repeated LW_OrderInfo_S  OrderInfos    = 3;//场次比赛信息(最多3场比赛) 
+}
+
+
+message CMD_LW_STK_GET_S_FINAL_RESULT
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_S_FINAL_RESULT];
+	required string     OwnerId         =2;//玩家id
+}
+message CMD_LW_KTS_SEND_S_FINAL_RESULT //返回S区最终排名信息
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_SEND_S_FINAL_RESULT];
+	required  string          OwnerId               = 2;//玩家id
+    repeated  LW_S_Final_RankInfo Ranks		        = 3;
+}
+
+
+
+message CMD_LW_STK_GET_SELF_KILLSRANK //获取自身个人杀敌排行信息
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_SELF_KILLSRANK];   
+	required string     OwnerId         =2;//玩家id
+	required RankingListType Type       =3;//排行类型 是S还是ABC赛区
+}
+message CMD_LW_KTS_SEND_SELF_KILLSRANK
+{
+	optional MsgCode   msgcode          =1[default =LW_KTS_SEND_SELF_KILLSRANK];
+	required string     OwnerId         =2;//玩家id
+	required RankingListType Type       =3;//排行类型 是S还是ABC赛区
+    optional LeagueWarCharacter MyInfo  =4;//我的杀敌排行信息
+}
+
+
+
+message CMD_LW_STK_GET_ALL_KILLSRANK  //获取前100名(可配)击杀数排行，排行榜刷新时，由游戏服务器向跨服去获取最新数据
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_ALL_KILLSRANK];
+	required RankingListType Type       =2;//排行类型 是S还是ABC赛区
+}
+message CMD_LW_KTS_SEND_ALL_KILLSRANK  
+{
+	optional MsgCode   msgcode          =1[default =LW_KTS_SEND_ALL_KILLSRANK];
+	required RankingListType Type       =2;//排行类型 是S还是ABC赛区
+	repeated LeagueWarCharacter RankList =3;//前100名排行
+}
+
+
+/*成员累计伤害排行*/
+message CMD_LW_STK_GET_MEMBER_TOTALDAMAGE
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_MEMBER_TOTALDAMAGE];
+	required string    OwnerId          =2;//玩家id
+	required string    LeagueGUID       =3;//公会id
+}
+message CMD_LW_KTS_SEND_MEMBER_TOTALDAMAGE
+{
+	optional MsgCode   msgcode          =1[default =LW_KTS_SEND_MEMBER_TOTALDAMAGE];
+	required string    OwnerId          =2;//玩家id
+	repeated LW_Member_TotalDamage_RankInfo MemberInfos	=3;
+}
+
+/*公会布防基本信息*/
+message CMD_LW_STK_GET_LEAGUE_DEFENSIVE_BASE
+{
+	optional MsgCode   msgcode          =1[default =LW_STK_GET_LEAGUE_DEFENSIVE_BASE];
+	required string    OwnerId          =2;//玩家id
+    required string    LeagueGUID       =3;//公会id
+}
+message CMD_LW_KTS_SEND_LEAGUE_DEFENSIVE_BASE
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_SEND_LEAGUE_DEFENSIVE_BASE];
+	required string           OwnerId               = 2;//玩家id	
+    repeated StrongHoldBaseInfo StrongHoldBaseInfos = 3;
+    repeated int32            TeamPositions         = 4;//玩家队伍位置
+}
+
+/*据点队伍更新，全公会在线人员广播*/
+message CMD_LW_KTS_UPDATE_STRONGHOLD_DENFENSIVE_BASE  
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_UPDATE_STRONGHOLD_DENFENSIVE_BASE];
+	required  string          LeagueGUID            = 2;//公会id
+	required  StrongHoldBaseInfo StrongHoldBaseInfo = 3;//更新队伍的据点
+}
+/*发送玩家队伍布防位置,每次对据点队伍的增删，都会向队伍所属玩家发送此条报文*/
+message CMD_LW_KTS_SEND_TEAM_POSITIONS
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_SEND_TEAM_POSITIONS];
+	required  string          OwnerId               = 2;//玩家id	
+	repeated  int32           Positions             = 3;//存的是据点id
+}
+
+
+/*玩家主动查看据点详细信息*/
+message CMD_LW_STK_GET_STRONGHOLD_DEFENSIVE_DETAIL
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STK_GET_STRONGHOLD_DEFENSIVE_DETAIL];
+	required  string   		  OwnerId               = 2;//玩家id
+	required string   		  LeagueGUID            = 3;//公会id
+	required  int32           StrongHoldID          = 4;//据点id
+}
+message CMD_LW_KTS_SEND_STRONGHOLD_DEFENSIVE_DETAIL
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_SEND_STRONGHOLD_DEFENSIVE_DETAIL];
+	required  string          OwnerId               = 2;//玩家id
+    required  StrongHoldDetailInfo StrongHoldDetailInfo =3;
+}
+
+
+/*增加防守队伍*/
+message CMD_LW_STK_ADD_TEAM
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STK_ADD_TEAM];
+	required  int32           StrongHoldId          = 2;
+	required  LW_Team_BattleInfo  Team              = 3;
+	required  string   		  OwnerId               = 4;//玩家id
+	required string   		  LeagueGUID            = 5;//公会id
+}
+message CMD_LW_KTS_ADD_TEAM
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_ADD_TEAM];
+	required  string   		  OwnerId               = 2;//玩家id
+	required ErrorCode        ReturnCode            = 3;
+}
+
+/*调整防守队伍*/
+message CMD_LW_STK_ADJUST_TEAM
+{
+	optional MsgCode         msgcode       		= 1[default =LW_STK_ADJUST_TEAM];
+	required int32           StrongHoldId       = 2;
+	required LW_Team_BattleInfo Team            = 3;
+	required string   		  OwnerId           = 4;//玩家id
+	required string   		  LeagueGUID        = 5;//公会id
+}
+message CMD_LW_KTS_ADJUST_TEAM
+{
+	optional MsgCode         msgcode       		= 1[default =LW_KTS_ADJUST_TEAM];
+	required ErrorCode       ReturnCode         = 2;
+	required string   		  OwnerId           = 3;//玩家id
+}
+
+/*删除防守队伍*/
+message CMD_LW_STK_REMOVE_TEAM
+{
+	optional MsgCode         msgcode            = 1[default =LW_STK_REMOVE_TEAM];
+	required int32           StrongHoldId       = 2;
+	required string          TeamGUID           = 3;
+	required string   		  OwnerId           = 4;//玩家id
+	required string   		  LeagueGUID        = 5;//公会id
+}
+message CMD_LW_KTS_REMOVE_TEAM
+{
+	optional MsgCode         msgcode            = 1[default =LW_KTS_REMOVE_TEAM];
+	required ErrorCode       ReturnCode         = 2;
+	required string   		  OwnerId           = 3;//玩家id
+}
+
+
+
+/*更改buff塔buff类型*/
+message CMD_LW_STK_CHANGE_BUFF
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_STK_CHANGE_BUFF];
+	required  string          OwnerId               = 2;//玩家id
+	required  string          LeagueGUID            = 3;//联盟guid
+	required  int32           TowerID               = 4;//就是据点的id
+	required  StrongHoldBuffType BuffType           = 5;//选择的buff类型
+
+}
+message CMD_LW_KTS_CHANGE_BUFF
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_CHANGE_BUFF];
+    required  ErrorCode       ReturnCode            = 2;//若成功发送更新报文，更新布防界面据点基本信息
+    required  string          OwnerId               = 3;//玩家id
+}
+
+/****************************公会战战场报文********************************/
+
+message CMD_LW_KTS_BATTLE_START
+{
+	optional  MsgCode         msgcode       		= 1[default =LW_KTS_BATTLE_START];
+    repeated  string          LeagueList            = 2;//进行比赛的公会  
+}
+/****************************公会战战场报文结束****************************/

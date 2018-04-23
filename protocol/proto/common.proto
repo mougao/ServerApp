@@ -1,0 +1,148 @@
+package PaoEntity;
+
+message CardData {  //测试代码
+    required int32 id = 1;
+    required string name = 2;
+}
+
+message BaseData{
+	required int32 type = 1;//1=level,2=exp,3=maxexp
+    required string value = 2;
+}
+
+message BattleInfo{
+    required  string     GUID                = 1;//实例ID
+    required  uint32     PrototypeID         = 2;//兵种模板Id
+    required  uint32     Quality             = 3;//品质
+    required  uint32     Star                = 4;//星级
+    required  uint32     Level               = 5;//等级
+    required  uint32     PositionArea        = 6;//站位区域：0:天空 1:地面
+    required  uint32     ArmyType            = 7;//兵种类型：0:机械 1;生命
+    required  uint32     PriorityAttack      = 8;//优先攻击：0:天空 1:地面
+    required  int32		 CurrentHP           = 9;//当前生命
+    required  int32      MaxHP               = 10;//最大生命
+    required  int32      DF                  = 11;//护甲
+    required  int32      ATT                 = 12;//攻击力
+    required  int32      CRT                 = 13;//暴击值
+    required  int32      EVD                 = 14;//闪避值
+    required  int32      HRA                 = 15;//命中值
+    required  int32      RHP                 = 16;//生命回复
+    required  int32      BDF                 = 17;//护甲穿透
+    required  int32      REG                 = 18;//能量回复
+    required  int32      LEG                 = 19;//能量上限
+    required  int32      RBO                 = 20;//能量波次回复
+
+    required  int32      DCRT                = 21;//抗暴
+    required  int32      HCRT                = 22;//暴击伤害
+    required  int32      HDEEP               = 23;//伤害加深
+    required  int32      HDEC                = 24;//伤害减免
+}
+
+message ItemInfo{
+
+	required  int32      template_id         = 1;//道具模板Id
+	required  int32      count               = 2;//道具数量
+}
+
+message BattleField{
+    enum BattleFieldType
+    {
+        Repeatable = 0;     //可重复挑战
+        Unrepeatable = 1;   //不可重复挑战
+        Challenge = 2;		//挑战副本
+    }
+    enum BattleFieldStatus
+    {
+        NotAvaliable = 0;   //未开启
+        Avaliable = 1;      //开启
+        Passed =2;          //已通关
+    }
+    enum TreasureBoxStatus
+    {
+    	NeverOpen = 0;		//从未开启
+    	Opened = 1;			//已开启
+    }
+    required uint32 ID = 1;                 			//模板ID
+    required BattleFieldType Type = 2;      			//关卡类型
+    required BattleFieldStatus Status = 3;  			//关卡状态
+    optional uint32 Star = 4[default = 0];  			//关卡评星
+    optional uint32 ChallengeTimes = 5[default = 0]; 	//今日已挑战次数
+    optional uint32 BuyTimes = 6[default = 0]; 			//今日精英副本购买次数
+	required TreasureBoxStatus BoxStatus = 7[default = NeverOpen];	//宝箱领取状态
+}
+
+//对应ResourceModule下的ResourcesType
+enum RewardType
+{
+    Item = 0;       //物品
+    Coin = 1;       //普通游戏币
+    Gold = 2;       //黄金(充值货币)
+    SkillPoint = 3; //技能点
+    Stamina = 4;    //体力
+    ArenaCoin = 5;  //竞技币
+    CharacterExp =6;//角色经验
+    TowerCoin   = 7;    //爬塔币
+    LeagueCoin   = 8;    //联盟币
+    VIPExp = 9; //VIP经验
+    LeagueWarCoin = 10; //联盟战争币
+    Rations = 11;       //挖矿军粮
+    LadderCoin = 12;    //天梯币
+    ExpCoin = 13;    //经验币
+    AreanScore = 14;    //竞技场积分
+}
+
+message Reward
+{
+    required RewardType Type = 1;       //奖励类型
+    optional uint32 ItemId = 2;                //如果类型是物品，则要说明物品ID
+    required uint32 Amount = 3;         //数量
+}
+
+message SoldierIconInfo{
+    required uint32 Prototype_ID = 1;   //模板ID
+    required uint32 Level        = 2;   //等级
+    required uint32 Star         = 3;   //星级
+    required uint32 Quality      = 4;   //品质
+    optional int32  MaxHP        = 5;   //最大血量
+    optional int32  CurrentHP    = 6;   //当前血量
+}
+
+enum TaskStatus{
+    Proccessing                         = 1;    // 进行中
+    Finished                            = 2;    // 已完成还未领奖
+    Fetched                             = 3;    // 已领取完
+}
+
+
+message TaskInfo{
+    required uint32 ID                  = 1;    // 任务模板ID
+    required TaskStatus Status          = 2;    // 任务状态
+    optional uint32 Progress            = 3;    // 任务进度（仅Proccessing状态有效）
+    optional uint32 MaxProgress         = 4;    // 最大任务进度
+    repeated Reward Rewards             = 5;    // 任务奖励列表
+    optional string Title               = 6;    // 任务名称
+    optional string Desc                = 7;    // 任务描述
+
+}
+
+message M_OtherAbility{
+
+    required  string     Key                 = 1;//加成属性标识
+    required  int32      HP                  = 2;//生命
+    required  int32      DF                  = 3;//护甲
+    required  int32      ATT                 = 4;//攻击力
+    required  int32      CRT                 = 5;//暴击值
+    required  int32      EVD                 = 6;//闪避值
+    required  int32      HRA                 = 7;//命中值
+    required  int32      RHP                 = 8;//生命回复
+    required  int32      BDF                 = 9;//护甲穿透
+
+}
+
+//技能实例类型
+message M_SkillInfo{
+    required uint32       skillid           = 1;//技能模板id
+    required uint32       gradelevel        = 2;//技能品阶等级
+
+}
+

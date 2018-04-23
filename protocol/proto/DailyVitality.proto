@@ -1,0 +1,35 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+
+enum DvBoxStatus
+{
+	 DvBoxClose 			= 0;    	//宝箱关闭中
+	 DvBoxOpen 				= 1;       	//宝箱已经打开
+	 DvBoxFetched 			= 2;	    //宝箱已经领取
+}
+
+message DailyVitalityBox
+{
+	required int32 BoxID 				= 1;
+	required DvBoxStatus DvBoxStatus 	= 2;
+}
+
+message CMD_DailyVitality_STC_Info
+{
+	optional MsgCode msgCode 			= 1[default = DailyVitality_STC_Info];
+	repeated DailyVitalityBox Boxes 	= 2;
+	required bool IsUpdte				= 3;	//false: 用户登录时 true：数据变更时
+}
+
+message CMD_DailyVitality_CTS_OpenBox
+{
+	optional MsgCode msgCode 		= 1[default = DailyVitality_CTS_OpenBox];
+	required int32 BoxID 			= 2;
+}
+
+message CMD_DailyVitality_STC_OpenBoxResponse
+{
+	optional MsgCode msgCode 		= 1[default = DailyVitality_STC_OpenBoxResponse];
+	required ErrorCode Error 		= 2;
+}

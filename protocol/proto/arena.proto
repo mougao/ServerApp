@@ -1,0 +1,252 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "battle.proto";
+import "common.proto";
+package PaoEntity;
+
+message CMD_ARENA_STC_BASEINFO {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_BASEINFO];
+
+    required  int32           rank                = 2;//当前排名
+    required  int32           maxrank             = 3;//历史排名
+
+
+    required  int32           ChallengeTimes      = 4;//已战次数
+    required  int32           MaxBuyChallengeTimes   = 5;//最大购买挑战次数
+    required  int32           BuyChallengeCount   = 6;//已买挑战次数
+    required  int32           Countdown           = 7;//挑战冷却倒计时
+    repeated  string          soldiers            = 8;//阵型士兵列表
+    repeated  M_SkillInfo     skills              = 9;//阵型科技技能列表
+    required  int32           arenacoin           = 10;//竞技场兑换币
+    required  int32           fight               = 11;//防守阵容战力
+    required  int32           CostGold            = 12;//挑战次数购买黄金 ********
+    required  int32           MaxChallengeTimes   = 13;//最大可挑战次数 **********
+    required CommanderFormType CommanderForm      = 14; //指挥官形态
+
+}
+
+message CMD_ARENA_CTS_REFRESH {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_REFRESH];
+
+}
+
+message ArenaSoldierInfo{
+    required int32           template_id               = 1;
+    required int32           level                     = 2;
+    required int32           star                      = 3;//军衔 ********
+    required int32           quality                   = 4;//品质 ********
+}
+
+message ArenaMemberInfo{
+
+     required int32           rank                     = 1;//排名
+     required string          character_guid           = 2;//玩家实例guid
+     required string          name                     = 3;//玩家名字
+     required int32           level                    = 4;//玩家等级
+     required int32           fight                    = 5;//玩家战力
+
+     repeated ArenaSoldierInfo soldiers                = 6;//玩家阵型士兵
+     repeated M_SkillInfo      skills                  = 7;//阵型科技技能列表
+
+     required string           icon                    = 8;//玩家头像id
+     required int32            wonTimes                = 9;//胜利场数
+     required int32            spaceargu               = 10;//占位参数(战斗中位置)，站位越小，越靠前
+     required int32            gender                  = 11;//性别，0：女 1：男
+     required CommanderFormType CommanderForm          = 12; //指挥官形态
+}
+
+message CMD_ARENA_STC_REFRESH {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_REFRESH];
+
+    required  int32           type                = 2;//0：刷新 1：替换（发生在发起挑战报文的回复）
+    repeated  ArenaMemberInfo members             = 3;//竞技玩家集合
+}
+
+message CMD_ARENA_CTS_SETFORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_SETFORMATION];
+
+    required  CommanderFormType commandertype     = 2; //指挥官初始形态
+    repeated  string          soldiers            = 3;//阵型士兵列表
+    repeated  int32           skills              = 4;//阵型科技技能列表
+
+}
+
+message CMD_ARENA_STC_SETFORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_SETFORMATION];
+
+    required  ErrorCode       result              = 2;
+
+    required  CommanderFormType commandertype     = 3; //指挥官初始形态
+    repeated  string          soldiers            = 4;//阵型士兵列表
+    repeated  M_SkillInfo     skills              = 5;//阵型科技技能列表
+
+    required  int32           fight               = 6;//阵型战力
+
+}
+
+message CMD_ARENA_CTS_CHALLENGE {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_CHALLENGE];
+
+    required int32           rank                 = 2;//排名
+    required string          character_guid       = 3;//玩家实例guid
+
+}
+
+message CMD_ARENA_STC_CHALLENGE {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_CHALLENGE];
+
+    required  ErrorCode       result              = 2;
+}
+
+message CMD_ARENA_CTS_BUYCHALLENGECOUNT {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_BUYCHALLENGECOUNT];
+
+}
+
+message CMD_ARENA_STC_BUYCHALLENGECOUNT {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_BUYCHALLENGECOUNT];
+
+    required  ErrorCode       result              = 2;
+
+    required  int32           ChallengeTimes      = 4;//已挑战次数
+    required  int32           BuyChallengeCount   = 5;//已买挑战次数
+}
+
+
+message ArenaLog{
+    required int32    Type                          = 1;//0：发起挑战 1：被挑战
+    required string ChallengerName                = 2;//战斗方玩家名字
+    required int32    Result                        = 3;//战斗结果0：成功 1：失败
+    required int32    Time                          = 4;//战斗发生到现在的持续时间
+    required int32    RankChange                    = 5;//排名变更信息 +：排名上升 -：排名下降 0：排名不变
+    required string BattleVideo                   = 6;//战斗录像信息（暂时没有）
+    required string ChallengerIcon                = 7;//战斗方玩家头像
+
+}
+
+message CMD_ARENA_STC_CHALLENGELOG {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_CHALLENGELOG];
+
+    required  int32             IsUpdate            = 2;//是否更新 0:更新 1:添加
+
+    repeated  ArenaLog        Logs                = 3;//挑战记录
+
+}
+
+message CMD_ARENA_CTS_CLEARCOOLTIME {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_CLEARCOOLTIME];
+
+}
+
+message CMD_ARENA_STC_CLEARCOOLTIME {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_CLEARCOOLTIME];
+
+    required  ErrorCode       result              = 2;
+}
+
+
+message CMD_ARENA_STC_MAXRANKCHANGE {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_MAXRANKCHANGE];
+
+    required  int32           Gold                = 2; //奖励黄金数量
+    required  int32           OldMaxRank          = 3; //老历史排名
+    required  int32           NewMaxRank          = 4; //新历史排名
+}
+
+//关闭挑战记录标志
+message CMD_ARENA_CTS_UPDATELOGSIGN {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_UPDATELOGSIGN];
+
+}
+
+//返回关闭挑战记录标志
+message CMD_ARENA_STC_UPDATELOGSIGN {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_UPDATELOGSIGN];
+
+}
+
+//开启挑战记录标志
+message CMD_ARENA_STC_SETLOGSIGN {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_SETLOGSIGN];
+
+}
+
+//////////////////////////////////////////////////////竞技场优化////////////////////////////////////////////////////////////////////
+
+message ArenaRankRewardInfo{
+    required int32           rank               = 1;//竞技场排名
+    required int32           status             = 2;//0：未领取 1：可领取 2：已经领取
+    repeated Reward          rewards            = 3;//奖励信息
+}
+
+message CMD_ARENA_STC_INITRANKREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_INITRANKREWARD];
+    repeated  ArenaRankRewardInfo     infos       = 2;//排行奖励信息
+    repeated  Reward          totalrewards        = 3;//累计奖励
+}
+
+
+message CMD_ARENA_STC_UPDATERANKREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_UPDATERANKREWARD];
+    repeated  ArenaRankRewardInfo     infos       = 2;//排行奖励信息
+    repeated  Reward          totalrewards        = 3;//累计奖励
+}
+
+
+
+message CMD_ARENA_CTS_GETRANKREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_GETRANKREWARD];
+    required  int32           rank                = 2; 
+}
+
+
+message CMD_ARENA_STC_GETRANKREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_GETRANKREWARD];
+    required  ErrorCode       result              = 2;
+    repeated  Reward          rewards             = 3;//奖励信息
+}
+
+message ArenaScoreRewardInfo{
+    required int32           score              = 1;//竞技场积分
+    required int32           status             = 2;//0：未领取 1：可领取 2：已经领取
+    repeated Reward          rewards            = 3;//奖励信息
+}
+
+message CMD_ARENA_STC_INITSCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_INITSCOREREWARD];
+    repeated  ArenaScoreRewardInfo     infos       = 2;//积分奖励信息
+
+}
+
+
+message CMD_ARENA_STC_UPDATESCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_UPDATESCOREREWARD];
+    repeated  ArenaScoreRewardInfo     infos       = 2;//积分奖励信息
+}
+
+
+
+message CMD_ARENA_CTS_GETSCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_GETSCOREREWARD];
+    required  int32           score                = 2; 
+}
+
+
+message CMD_ARENA_STC_GETSCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_GETSCOREREWARD];
+    required  ErrorCode       result              = 2;
+    repeated  Reward          rewards            = 3;//奖励信息
+}
+
+
+message CMD_ARENA_CTS_ONEKEYGETSCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_CTS_ONEKEYGETSCOREREWARD];
+
+}
+
+
+message CMD_ARENA_STC_ONEKEYGETSCOREREWARD {
+    optional  MsgCode         msgcode             = 1     [default = ARENA_STC_ONEKEYGETSCOREREWARD];
+    required  ErrorCode       result              = 2;
+    repeated Reward         rewards            = 3;//奖励信息
+}

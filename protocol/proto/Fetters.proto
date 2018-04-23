@@ -1,0 +1,86 @@
+ import "msgcode.proto";
+ import "errorcode.proto";
+ package PaoEntity;
+
+message FettersTalent
+{
+    required int32 ID =1;  //天赋ID
+    required int32 Type =2;//0专属1攻击2天赋
+    required bool  IsActive =3;//是否激活
+    required int32 SoldierTemleteID =4;//专属士兵模板ID，普通天赋则为0
+    required int32	ATT=5; //攻击加成百分比
+    required int32	DF=6; //防御加成百分比
+    required int32	HP=7; //血量加成百分比
+    required int32 Quality=8; //品质
+    required string Icon=9; //图片名
+    required bool  FettersSlots =10; //是否处于锁定状态
+}
+//羁绊位实例
+message FettersSlot
+{
+	required int32 SlotID      =1; //槽ID
+    required string SoldierID =2; //士兵实例ID ，若未放入士兵则为空
+    repeated FettersTalent Talents=3;//3个天赋信息
+}
+
+ enum PutOperate
+ {
+      PutIn  =0;//放入
+      PutOut =1;//卸下
+ }
+ 
+ message CMD_FETTERS_CTS_PUT_SLOT
+ {
+     optional MsgCode       msgcode               =1[default = FETTERS_CTS_PUT_SLOT];
+     required int32         SlotID                =2;
+     required PutOperate    Operate               =3;
+     required string        SlodierGUID           =4;
+
+ }
+ message CMD_FETTERS_STC_PUT_SLOT
+ {
+    optional MsgCode       msgcode               =1[default = FETTERS_STC_PUT_SLOT];
+    required int32         SlotID                =2;  //操作的羁绊位Id
+    required bool          HasNewFetter          =3;  //是否有新的羁绊关系产生
+    required ErrorCode     ReturnCode            =4;
+ }
+ message CMD_FETTERS_CTS_WASH
+ {
+ 	 optional MsgCode       msgcode               =1[default = FETTERS_CTS_WASH];
+ 	 required int32         SlotID                =2;//天赋位ID
+ 	 repeated int32         Types                 =3;//锁定的type, 0专属1攻击2天赋
+ }
+
+ message CMD_FETTERS_STC_WASH
+ {
+    optional MsgCode       msgcode               =1[default = FETTERS_STC_WASH];
+    required ErrorCode     ReturnCode            =2;
+ }
+
+ message CMD_FETTERS_STC_SEND_SLOT
+ {
+    optional MsgCode       msgcode               =1[default = FETTERS_STC_SEND_SLOT];
+    required bool          IsUpdate              =2;//0:登录发送，1更新
+    repeated FettersSlot   Slots                 =3;
+
+ }
+
+message ISL_Fetters_Buff
+{
+     required int32     Type  =1;//0血1防2攻
+     required float     Vaule =2;//加成值 0.55表示加成55%  
+}
+
+message ISL_Fetters_Soldier
+{
+    required string SoldierGUID =1;
+    required int32 TempleteID=2;
+    required int32 Star =3;
+    repeated ISL_Fetters_Buff  FettersBuff =4; //羁绊属性
+    repeated ISL_Fetters_Buff  TalentsBuff =5; //天赋属性
+}
+
+message ISL_Fetters_Soldiers
+{
+   repeated ISL_Fetters_Soldier  Soldiers =1; //羁绊位士兵信息
+}

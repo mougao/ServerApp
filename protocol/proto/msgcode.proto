@@ -1,0 +1,850 @@
+package PaoEntity;
+//格式要求：模块名_方向_功能描述（例如：ITEM_STC_BAGINFO 表示物品模块，服务器发往客户端，背包信息）
+//CODE说明：0x00??????表示发往网关服务器
+//          0x10??????表示发往客户端
+//          0x20??????表示发往游戏服务器
+//          0x30??????表示发往登录服务器
+//          0x40??????表示发往跨服网关服务器
+//          0x50??????表示发往跨服服务器
+//已有的报文可以不再修改，新加报文请严格执行
+
+enum MsgCode {
+    // Test Module 测试
+    TEST_REQUEST                    = 0x20001000;
+    TEST_RESPONSE                   = 0x10001000;
+    MSG_STC_HEARTBEAT               = 0x10A010A0;
+
+    //Server Message 服务器间
+    SERVER_GTL_VALIDATE             = 0x3000000A; // 网关向登录服务器请求验证Token
+    SERVER_LTG_VALIDATE             = 0x0000000A; // 登录服务器返回Token验证
+    SERVER_GTS_ENTERGAME            = 0x20000001; // 网关通知服务器客户端登录
+    SERVER_GTS_LEAVEGAME            = 0x20000002; // 网关通知服务器客户端离线
+    SERVER_STG_CLOSESESSION         = 0x0000000B; // 游戏服务器通知网关关闭客户端连接
+    SERVER_STG_REPORT               = 0x00000002; // 游戏服务器通知网关服务器
+    SERVER_STG_CLIENTLOGINED        = 0x00000003; // 游戏服务器通知网关客户端登陆成功
+    SERVER_GTL_CLIENTLOGINED        = 0x30000001; // 网关通知登录服务器客户端登陆成功
+    SERVER_GTL_REGIST               = 0x30000000; // 网关注册到登陆服务器
+    SERVER_GTL_GAMESTATUS           = 0x30000002; // 网关通知登陆服务器游戏服务器状态
+
+    SERVER_BTG_REPORT               = 0x00000004; // 战斗服务器通知网关服务器
+
+    SERVER_STXG_HEARTBRETHE          = 0x40FF0001;   //游戏服务器发往跨服网关的心跳包
+    SERVER_XGTS_HEARTBRETHE          = 0x20FF0001;   //跨服返回游戏服务器的心跳
+    SERVER_STXG_REGIST               = 0x40FF0002;   //游戏服务器注册
+    SERVER_XGTX_REGIST               = 0x50FF0002;   //游戏服务器注册到跨服服务器
+    SERVER_XTS_REGIST                = 0X20FF0002;   //跨服服务器返回游戏服务器注册成功
+    SERVER_XGTX_UNREGIST             = 0x50FF0003;   //游戏服务器关闭连接
+    SERVER_STX_TEST                  = 0x50FF0004;   //游戏服务器发送测试报文
+    SERVER_XTS_TEST                  = 0x20FF0004;   //跨服服务器发送测试报文
+
+    // Login Module 登录模块
+    LG_GTC_CLOSECONNECTION          = 0x10000000; // 服务器主动断开连接
+    LG_RG_KEY_REQ                   = 0x30001001; // 一键注册 请求
+    LG_RG_KEY_RES                   = 0x10001001; // 一键注册 回复
+    LG_CTL_REGIST                   = 0x30001002; // 注册账号请求
+    LG_LTC_REGIST                   = 0x10001002; // 注册账号返回
+    LG_CTL_MODIFYPSW                = 0x30001003; // 更换密码
+    LG_LTC_MODIFYPSW                = 0x10001003; // 更换密码返回
+    LG_CTL_REGCODE                  = 0x30001004; // 请求验证码
+    LG_LTC_REGCODE                  = 0x10001004; // 返回验证码
+    LG_CTL_LOGIN                    = 0x30001010; // 客户端请求登录
+    LG_LTC_LOGIN                    = 0x10001010; // 登录返回
+    LG_LTC_SERVERLIST               = 0x10001005; // 服务器列表信息
+    LG_CTL_SERVERLIST               = 0x30001005; // 请求服务器列表
+    LG_LTC_LATESTLOGININFO          = 0x10001006; // 最近登录信息列表
+    LG_CTG_LOGIN                    = 0x0000000C; // 客户端请求网关登录
+    LG_GTC_LOGIN                    = 0x1000000C; // 网关返回客户端登陆请求
+    LG_LTC_NOTICE                   = 0x1000000D; // 登陆服务器返回通知消息
+    LG_CTG_KEEPALIVE                = 0x0000000E; // 客户端和网关的心跳包
+    LG_GTC_KEEPALIVE                = 0x1000000E;  //网关发给客户端的心跳包
+    LG_CTS_UmengInfo                = 0x2000000F;  //客户端友盟信息
+    LG_STC_UmengInfoResp            = 0x1000000F;  //服务器返回
+    LG_STC_NotLogined               = 0x10000010;   //服务器返回客户端当前没有登陆
+    // Global Module 全局
+    GLOB_STC_NEWDAY                 = 0x100AA001; //每日刷新
+    GLOB_STC_NEWWEEK                = 0x100AA002; //每周刷新
+
+    // Character Module 角色模块
+    CRT_STC_STATUS                  = 0x10002000;//回复角色状态 0：角色不存在 1：角色已存在
+    CRT_CTS_CREATE                  = 0x20002001;//创建角色
+    CRT_STC_CREATE                  = 0x10002001;//创建角色回复 0：成功 1：同名 2:同账号
+    CRT_STC_BASEINFO                = 0x10002002;//推送角色基本信息
+    CRT_STC_ABILITYINFO             = 0x10002003;//推送角色能力信息（战斗属性）
+    CRT_STC_UPDATEBASE              = 0x10002004;//更新角色基本信息
+    CRT_STC_EQUIPMENT               = 0x10002005;//推送角色装备信息
+    CRT_STC_SKILL                   = 0x10002006;//推送角色技能信息
+    CRT_STC_TalentSKILL             = 0x10002007;//推送角色天赋信息
+    CRT_STC_SendInfoFinish          = 0x10002008;//推送角色信息结束标志
+    CRT_CTS_UpTalentSkillLevel      = 0x20002009;//天赋技能升级
+    CRT_STC_UpTalentSkillLevel      = 0x10002009;//天赋技能升级返回
+    CRT_CTS_UpSkillLevel            = 0x20002010;//技能升级
+    CRT_STC_UpSkillLevel            = 0x10002010;//技能升级返回
+    CRT_CTS_SkillPointUp            = 0x20002011;//技能点增加
+    CRT_STC_SkillPointUp            = 0x10002011;//技能点增加返回
+
+    CRT_CTS_ResetTalentPoint        = 0x20002012;//重置天赋点
+    CRT_STC_ResetTalentPoint        = 0x10002012;//重置天赋点返回
+
+    CRT_CTS_UpEquipmentLevel        = 0x20002013;//装备升级
+    CRT_STC_UpEquipmentLevel        = 0x10002013;//装备升级返回
+    CRT_CTS_UpEquipmentQuality      = 0x20002014;//装备升阶
+    CRT_STC_UpEquipmentQuality      = 0x10002014;//装备升阶返回
+    CRT_CTS_OneKeyUpLevel           = 0x20002015;//装备一键升级
+    CRT_STC_OneKeyUpLevel           = 0x10002015;//装备一键升级返回
+
+    CRT_CTS_BUYSKILLPOINT            = 0x20002016;//技能点增加
+    CRT_STC_BUYSKILLPOINT            = 0x10002016;//技能点增加返回
+
+    CRT_STC_CURRENTGUIDES           = 0x10002017;   //发送当前新手引导
+    CRT_CTS_FINISHGUIDE             = 0x20002018;   //完成一步新手引导
+    CRT_STC_FINISHGUIDERESP         = 0x10002018;   //完成一步新手引导返回
+    CRT_STC_SPECIALSOLDIER          = 0x10002019;   //定制战斗完成后发送兵种
+    CRT_STC_FINISHEDGUIDE           = 0x1000201A;   //完成一步新手引导
+
+
+    CRT_CTS_SKILLUPGRADE            = 0x20002020;//科技升阶
+    CRT_STC_SKILLUPGRADE            = 0x10002020;//科技升阶返回
+
+    CRT_STC_TARGETAPPEAR            = 0x10002021;//目标开启显示
+    CRT_STC_TARGETDISAPPEAR         = 0x10002022;//目标关闭显示
+
+    CRT_CTS_UPEQUIPSTAR             = 0x20002023;//指挥官装备升星
+    CRT_STC_UPEQUIPSTAR             = 0x10002023;//指挥官装备升星返回
+
+    CRT_CTS_TestAddExp              = 0x20002098;//指挥官测试报文 添加经验
+    CRT_CTS_TestAddSomeThing        = 0x20002099;//试图添加测试数据
+
+    //Soldier Module 兵种模块
+    SOLR_STC_SOLDIERINFO            = 0x10003001; // 拥有士兵推送
+    SOLR_CTS_ADDSOLDIER             = 0x20003003; // 添加士兵请求
+    SOLR_STC_ADDSOLDIER             = 0x10003003; // 添加士兵请求回复 0：成功 1：碎片不足 2；士兵模板Id未找到
+    SOLR_CTS_DELETESOLDIER          = 0x20003004; // 移除士兵请求
+    SOLR_STC_DELETESOLDIER          = 0x10003004; // 移除士兵请求回复 0：成功 1：未找到指定士兵
+
+    SOLR_CTS_UPQUALITY              = 0x20003005; //士兵升阶
+    SOLR_STC_UPQUALITY              = 0x10003005; //士兵升阶返回
+
+    SOLR_CTS_UPSTAR                 = 0x20003006; //士兵升星
+    SOLR_STC_UPSTAR                 = 0x10003006; //士兵升星返回
+
+    SOLR_STC_WEAREQUIPMENT          = 0x10003007; //士兵穿装备返回
+
+    SOLR_STC_UPDATEEXP              = 0x10003008; //更新士兵经验值
+
+    SOLR_STC_UPDATE_OTHER_STATUS    = 0x10003009; //更新士兵额外状态
+
+    SOLR_CTS_GETDETAILINFO          = 0x20003010; //获取士兵详细属性信息
+    SOLR_STC_GETDETAILINFO          = 0x10003010; //返回士兵详细属性信息
+    SOLR_CTS_GROWTH_WASH            = 0x20003011; //士兵资质洗练
+    SOLR_STC_GROWTH_WASH            = 0x10003011; //士兵资质洗练返回
+    SOLR_STC_GROWTHINFO             = 0x10003012; //士兵资质洗练信息推送
+    SOLR_CTS_GROWTH_LOCK            = 0x2000300A; //士兵资质锁定/取消
+    SOLR_STC_GROWTH_LOCK            = 0x1000300A; //士兵资质锁定/取消返回
+
+    SOLR_CTS_UPSMALLSTAR            = 0x20003013; //士兵小升星
+    SOLR_STC_UPSMALLSTAR            = 0x10003013; //返回士兵小升星
+
+    SOLR_CTS_UPSKILL                = 0x20003014; //士兵技能升级
+    SOLR_STC_UPSKILL                = 0x10003014; //返回士兵技能升级
+
+    SOLR_CTS_BUYEXPITEM             = 0x20003015; //购买士兵经验道具
+    SOLR_STC_BUYEXPITEM             = 0x10003015; //返回购买士兵经验道具
+
+    SOLR_CTS_ONEKEYWEARON           = 0x20003016; //一键穿戴喜好
+    SOLR_STC_ONEKEYWEARON           = 0x10003016; //返回一键穿戴喜好
+
+    SOLR_CTS_EQUIPONEKEUPLEVEL      = 0x20003017; //一键升级装备
+    SOLR_STC_EQUIPONEKEUPLEVEL      = 0x10003017; //返回一键升级装备
+
+    SOLR_CTS_EQUIPUPLEVEL           = 0x20003018; //装备升级
+    SOLR_STC_EQUIPUPLEVEL           = 0x10003018; //返回装备升级
+
+    SOLR_CTS_EQUIPUPQUALITY         = 0x20003019; //装备升阶
+    SOLR_STC_EQUIPUPQUALITY         = 0x10003019; //返回装备升阶
+
+    SOLR_CTS_EQUIPUPSTAR            = 0x20003020; //装备升星
+    SOLR_STC_EQUIPUPSTAR            = 0x10003020; //返回装备升星
+
+    SOLR_CTS_EQUIPDOWNSTAR          = 0x20003021; //装备降星
+    SOLR_STC_EQUIPDOWNSTAR          = 0x10003021; //返回装备降星
+
+    SOLD_STC_EQUIPMENTS             = 0x10003022; //推送或更新装备信息
+
+    //Item Module
+    ITEM_STC_BAGINFO                = 0x10004001; // 背包道具推送
+    ITEM_CTS_ADDITEM                = 0x20004002; // 添加道具
+    ITEM_STC_UPDATEITEM             = 0x10004002; // 添加道具回复 0：成功 1:背包已满 2：未找到道具配置
+    ITEM_CTS_DELETEITEM             = 0x20004003; // 移除道具
+    ITEM_STC_DELETEITEM             = 0x10004003; // 移除道具回复 0：成功 1：未找到指定道具
+    ITEM_CTS_USEITEM                = 0x20004004; // 使用道具
+    ITEM_STC_USEITEM                = 0x10004004; // 使用道具回复
+
+    ITEM_STC_SELLITEM               = 0x10004005; // 出售道具回复
+
+    ITEM_CTS_EXCHANGEITEM           = 0x20004006; // 兑换道具
+    ITEM_STC_EXCHANGEITEM           = 0x10004006; // 兑换道具回复
+
+    ITEM_CTS_USEOTHERITEM           = 0x20004007; // 其他道具使用携带返回信息
+    ITEM_STC_USEOTHERITEM           = 0x10004007; // 其他道具使用回复
+
+
+    //ResourcesModule 资源模块
+    RESOURCE_STC_INFO               = 0x10005001; // 资源信息推送
+
+    //BattleModule    战斗模块
+    BATTLE_CTS_END                      = 0x20010002;   //战斗结束
+    BATTLE_STC_ENDRESPONSE              = 0x10010002;   //战斗结束返回
+    BATTLE_CTS_SETFORMATIONSKILL        = 0x20010003;   //设置阵型技能
+    BATTLE_CTS_SETFORMATIONSOLDIER      = 0x20010004;   //设置阵型兵种
+    BATTLE_STC_SETFORMATIONRESPONSE     = 0x10010005;   //设置阵型返回
+    BATTLE_STC_FORMATION                = 0x10010006;   //服务器下发阵型
+    BATTLE_STC_STARTPVEBATTLE         = 0x10010001;   //开始章节战斗服务器回复
+    BATTLE_STC_STARTPVPBATTLE         = 0x10010011;   //开始竞技场战斗服务器回复
+	BATTLE_STC_STARTFORTRESSBATTLE		= 0x10010012;	//开始据点战斗
+    BATTLE_CTS_CANCLEBATTLE             = 0x20010007;   //取消战斗
+    BATTLE_STC_CANCLEBATTLE             = 0x10010007;   //取消战斗回复
+    BATTLE_STC_CANCLEBATTLEBYSERVER     = 0x10010008;   //服务器主动取消战斗
+    BR_CTS_RECORDDATA                   = 0x20010009;   //客户端发送服务器战斗录像
+    BR_STC_RECORDDATA                   = 0x10010009;   //服务器下发战斗录像数据
+
+    //ChapterModule   章节副本模块
+    CHAPTER_STC_BATTLEFIELD         = 0x10020002;   // 关卡信息
+    CHAPTER_STC_CHAPTERLIST         = 0x10020003;   // 副本章节信息列表
+    CHAPTER_CTS_CHALLENGE           = 0x20020004;   // 挑战关卡
+    CHAPTER_STC_CHALLENGE           = 0x10020004;   // 挑战关卡服务器返回
+    CHAPTER_CTS_FETCHREWARD         = 0x20020005;   // 领取副本评星奖励
+    CHPATER_STC_FETCHREWARDRESPONSE = 0x10020005;   // 领取副本评星奖励回复
+
+    CHAPTER_CTS_BUYCHALLENGETIMES   = 0x20020006;   // 购买精英关卡挑战次数
+    CHPATER_STC_BUYCHALLENGETIMES   = 0x10020006;   // 购买精英关卡挑战次数
+
+    CHAPTER_CTS_SWEEP               = 0x20020007;   // 副本扫荡
+    CHPATER_STC_SWEEP               = 0x10020007;   // 副本扫荡
+
+    CHAPTER_CTS_OPENBOX				= 0x20020008;	//开副本宝箱
+    CHAPTER_STC_OPENBOXRESPOSNE		= 0x10020008;	//开副本宝箱结果
+
+    //ChatModule      聊天模块
+    CHAT_CTS_SENDCHATINFO           =0x20050001; // 请求发送聊天信息
+    CHAT_STC_SENDCHATINFO           =0x10050001; // 发送聊天信息返回
+    CHAT_STC_SENDPUBLICRECORDS      =0x10050002; // 发送世界聊天记录
+    CHAT_STC_SENDLEAGUERECORDS      =0x10050003; // 发送公会聊天记录
+    CHAT_STC_SENDPRIVATERECORDS     =0x10050009; // 发送私聊记录
+    CHAT_CTS_BUYCOUNT               =0x20050005; // 请求购买次数
+    CHAT_STC_BUYCOUNTRESPONSE       =0x10050005;  //购买次数返回
+    CHAT_CTS_REQUESTADDTOBLACKLIST  =0x20050004; //请求添加黑名单
+    CHAT_STC_TOBLACKLISTRESPONSE    =0x10050004;  //添加黑名单返回
+    CHAT_STC_SENDBLACKLIST          =0x10050007;  //发送玩家黑名单
+    CHAT_CTS_REMOVECHARACTER        =0x20050008;  // 移除黑名单中某玩家
+    CHAT_STC_REMOVERESPONSE         =0x1005000A;  //移除黑名单返回
+    CHAT_STC_FREEWORLDCHATCOUNT     =0x10050008; // 更新免费发言次数
+    CHAT_STC_SENDMARQUEERECORD      =0x1005000B;  // 跑马灯广播
+    CHAT_CTS_SEARCH                 =0x2005000C;//找人聊天
+    CHAT_STC_SEARCH                 =0x1005000C;//找人聊天返回
+
+    //MailModule 邮件模块
+    MAIL_STC_SENDMAIL               = 0x10060001;       //向客户端发送邮件（单封）
+    MAIL_STC_FETCHREWARDRESPONSE    = 0x10060002;       //服务端响应客户端领取奖励服务
+    MAIL_STC_DELETEMAIL             = 0x10060003;       //删除邮件
+    MAIL_STC_CREATEMAIL             = 0x10060004;       //创建邮件
+    MAIL_STC_READMAILRESPONSE       = 0x10060005;       //阅读邮件结果
+    MAIL_CTS_FETCHREWARD            = 0x20060001;       //客户端请求领取奖励 (单封或多封)
+    MAIL_CTS_READMAIL               = 0x20060002;       //阅读邮件(单封)
+
+
+    //GoldHand   点金手
+    GOLDHAND_STC_GETGOLDHANDINFO            = 0x10070001;   //玩家登陆时，推送点金相关的信息
+    GOLDHAND_STC_REQUESTCOINRESPONSE        = 0x10070002;   //返回点金结果
+    GOLDHAND_STC_VIPLEVELUP                 = 0x10070004;   //vip等级上升，刷新点金次数上限
+    GOLDHAND_CTS_FETCHCOIN                  = 0x20070001;   //点金操作，获取纸币
+
+
+    //STAMINAModule 体力系统
+    STAMINA_CTS_BUYSTAMINA          =0x20080001; //购买体力
+    STAMINA_STC_BUYSTAMINARESPONSE  =0x10080001; //购买体力回复
+    STAMINA_STC_SENDSTAMINAINFO     =0x10080002; //发送体力信息
+
+    //ArenaModule  竞技场系统
+    ARENA_STC_BASEINFO                                     =0x10090001;//竞技场基本信息
+    ARENA_CTS_REFRESH                                      =0x20090002; //刷新竞技场PK玩家（每次刷新3个玩家）
+    ARENA_STC_REFRESH                                      =0x10090002; //刷新竞技场PK玩家返回（一个或3个 替换和刷新操作）
+    ARENA_CTS_SETFORMATION                                 =0x20090003; //设置竞技场阵容
+    ARENA_STC_SETFORMATION                                 =0x10090003; //设置竞技场阵容返回
+    ARENA_CTS_CHALLENGE                                    =0x20090004; //发起挑战
+    ARENA_STC_CHALLENGE                                    =0x10090004; //发起挑战返回
+    ARENA_CTS_BUYCHALLENGECOUNT                            =0x20090005; //购买挑战次数
+    ARENA_STC_BUYCHALLENGECOUNT                            =0x10090005; //购买挑战次数返回
+
+    ARENA_STC_CHALLENGELOG                                 =0x10090006; //挑战记录推送
+
+    ARENA_CTS_CLEARCOOLTIME                                =0x20090007; //清理冷却时间
+    ARENA_STC_CLEARCOOLTIME                                =0x10090007; //清理冷却时间回复
+    ARENA_STC_MAXRANKCHANGE                                =0x10090008; //最大战力变动
+
+    ARENA_STC_UPDATELOGSIGN                                =0x10090009; //更新新日志标志
+
+    ARENA_CTS_UPDATELOGSIGN                                =0x20090010; //更新新日志标志
+    ARENA_STC_SETLOGSIGN                                   =0x10090010; //返回更新新日志标志
+
+    ARENA_STC_INITRANKREWARD                               =0x10090011;//初始化排行奖励信息
+    ARENA_STC_UPDATERANKREWARD                             =0x10090012;//更新排行奖励信息（添加，修改）
+    ARENA_CTS_GETRANKREWARD                                =0x20090013;//获取排行奖励
+    ARENA_STC_GETRANKREWARD                                =0x10090013;//获取排行奖励返回
+
+    ARENA_STC_INITSCOREREWARD                              =0x10090014;//初始化积分奖励信息
+    ARENA_STC_UPDATESCOREREWARD                            =0x10090015;//更新积分奖励信息（添加，修改）
+    ARENA_CTS_GETSCOREREWARD                               =0x20090016;//获取积分奖励
+    ARENA_STC_GETSCOREREWARD                               =0x10090016;//获取奖励返回
+    ARENA_CTS_ONEKEYGETSCOREREWARD                         =0x20090017;//一键领取奖励
+    ARENA_STC_ONEKEYGETSCOREREWARD                         =0x10090017;//一键领取奖励返回
+
+    //RechargeModule 充值模块
+    RECHARGE_STC_RECHARGERESPONSE                          =0x100A0001;//充值返回
+    RECHARGE_STC_SENDINFO                                  =0x100A0002;//发送角色各充值条目首充信息
+    RECHARGE_STC_SENDMONTHINFO                             =0x100A0003;//发送月卡信息
+    RECHARGE_CTS_GETMONTHREWARD                            =0x200A0004;//领取月卡奖励
+    RECHARGE_STC_GETMONTHREWARDRESPONSE                    =0x100A0004;//领取月卡回复(成功，已领，无月卡)
+    RECHARGE_STC_SENDEXTREMEINFO                           =0x100A0005;//发送至尊卡信息
+
+    //CardLotteryModule 抽卡系统
+    CARDLOTTERY_STC_GOODINFO                                = 0x100B0001;   //给客户端商品信息
+    CARDLOTTERY_STC_DRAWRESPOSNE                            = 0x100B0002;   //返回抽卡结果
+    CARDLOTTERY_STC_HOTRESPONSE                             = 0x100B0003;   //回复热点
+    CARDLOTTERY_CTS_HOTREQUEST                              = 0x200B0001;   //热点请求
+    CARDLOTTERY_CTS_DRAW                                    = 0x200B0002;   //抽卡(即购买物品送随机卡)
+
+
+    // ShopModule 商店系统
+    Shop_CTS_INFO                                           = 0x200C0001;   // 客户端向服务器请求常驻商店信息
+    Shop_STC_INFO                                           = 0x100C0001;   // 服务器向客户端推送商店信息
+    Shop_CTS_BUYITEM                                        = 0x200C0002;   // 客户端购买物品请求
+    Shop_STC_BUYITEM                                        = 0x100C0002;   // 服务器购买物品回复
+    Shop_CTS_REFRESHBUYITEM                                 = 0x200C0003;   // 客户端刷新物品请求
+    Shop_STC_REFRESHBUYITEM                                 = 0x100C0003;   // 服务器刷新物品回复
+
+    //VipModule vip系统 (Character.proto)
+    VIP_STC_BASEINFO                                        = 0x100D0001;   //推送vip信息
+
+    // SignInModule(Character.proto)签到系统
+    SIGNIN_CTS_GETREWARD                                    = 0x200E0001;    //领取签到奖励
+    SIGNIN_STC_GETREWARDRESPONSE                            = 0x100E0001;    // 领取签到奖励回复
+    SIGNIN_STC_SENDSIGNININFO                               = 0x100E0002;    //推送签到信息
+    SIGNIN_CTS_GETOVERDUEVIPREWARD                          = 0x200E0003;    //领取过期的VIP奖励
+    SIGNIN_STC_SENDOVERDUEVIPREWARD                         = 0x100E0003;    //领取过期的VIP奖励返回
+    SIGNIN_CTS_GETSIGNINTARGETREWARD                        = 0x200E0004;     //领取签到目标奖励
+    SIGNIN_STC_SENDSIGNINTARGETREWARD                       = 0x100E0004;    //领取签到目标奖励返回
+
+     //DuplicateResources 资源副本
+     DUPRES_STC_BASEINFO                                    = 0x100F0001;   //推送副本基本信息
+     DUPRES_CTS_CHALLENGE                                   = 0x200F0002;   //发起副本挑战
+     DUPRES_STC_CHALLENGE                                   = 0x100F0002;   //发起副本挑战回复
+     DUPRES_CTS_SWEEP                                       = 0x200F0003;   //发起扫荡
+     DUPRES_STC_SWEEP                                       = 0x100F0003;   //发起扫荡回复
+
+     //TowerModule  爬塔副本
+     TOWER_STC_TOWERINFO                                    = 0x10100001;   //下发爬塔信息
+     TOWER_STC_TOWERTYPE                                    = 0x10100002;   //下发爬塔难度
+     TOWER_STC_FIELDINFO                                    = 0x10100003;   //爬塔关卡信息
+     TOWER_STC_TOWERRESETCOUNT                              = 0x10100004;   //下发重置次数
+     TOWER_CTS_OPENTOWER                                    = 0x20100005;   //请求开启爬塔(第一次)
+     TOWER_CTS_RESETTOWER                                   = 0x20100006;   //重置爬塔
+     TOWER_STC_RESETTOWER                                   = 0x10100006;   //重置爬塔返回
+     TOWER_CTS_CHALLENGETOWER                               = 0x20100007;   //挑战爬塔关卡
+     TOWER_STC_CHALLENGETOWER                               = 0x10100007;   //挑战爬塔关卡返回
+     TOWER_CTS_CHANGELEVEL                                  = 0x20100008;   //下降挑战难度
+     TOWER_STC_CHANGELEVEL                                  = 0x10100008;   //下降挑战难度返回
+     TOWER_CTS_FETCHREWARD                                  = 0x20100009;   //领取关卡奖励
+     TOWER_STC_FETCHREWARD                                  = 0x10100009;   //领取关卡奖励放回
+     TOWER_STC_TOWERCOIN                                    = 0x1010000A;   //爬塔币信息
+     TOWER_STC_CLEAR                                        = 0x1010000B;   //通关
+     TOWER_CTS_SWEEP                                        = 0x2010000C;   //扫荡
+     TOWER_STC_SWEEP                                        = 0x1010000C;   //扫荡返回
+
+     //RankingList  排行榜
+     RANKINGLIST_CTS_GETRANK                                = 0x20110001;   //获取排行榜信息（参数：排行榜类型）
+     RANKINGLIST_STC_SENDRANKARENA                          = 0x10110001;   //发送竞技场排行榜
+     RANKINGLIST_STC_SENDRANKFIGHT                          = 0x10110002;   //发送战力排行榜
+     RANKINGLIST_CTS_GETFORMATION                           = 0x20110002;   //获取角色阵容信息
+     RANKINGLIST_STC_SENDARENAFORMATION                     = 0x10110003;   //发送指定角色竞技场阵容
+     RANKINGLIST_STC_SENDFIGHTFORMATION                     = 0x10110004;   //发送指定角色小队阵容
+     RANKINGLIST_STC_SENDRANKLEAGUEVATALITY                 = 0x10110005;   //发送联盟活跃度排行榜
+     RANKINGLIST_STC_SENDENDLESSTOWER                       = 0x10110006;   //发送单人爬塔排行榜
+     RANKINGLIST_STC_SENDRANKLEAGUEWAR                      = 0x10110007;   //发送公会战个人杀敌数排行榜
+
+     //Task  任务系统
+     Task_STC_TaskLIST                                      = 0x10120001;   //下发任务列表
+     Task_CTS_Fetch                                         = 0x20120002;   //领取任务请求
+     Task_STC_Fetch                                         = 0x10120002;   //领取任务响应
+
+     //SystemSettings 系统设置
+     SYSTEMSETTINGS_CTS_CHANGEICON                          = 0x20130001;   //更改头像
+     SYSTEMSETTINGS_STC_CHANGEICONRESPONSE                  = 0x10130001;   //更改头像回复
+     SYSTEMSETTINGS_CTS_CHANGENAME                          = 0x20130002;   //更改名字
+     SYSTEMSETTINGS_STC_CHANGENAMERESPONSE                  = 0x10130002;   //改名回复
+
+     //activity 活动模块
+     ACTIVITY_STC_UPDATEINFO                                = 0x10140001;   //更新活动状态信息
+     ACTIVITY_CTS_EXCHANGEREDEEMCODE                        = 0x20140003;   //输入兑换码
+     ACTIVITY_STC_EXCHANGEREDEEMCODERESPONSE                = 0x10140003;   //输入兑换码返回
+     ACTIVITY_STC_NEWSERVERINFO                             = 0x10140004;   //开服活动相关信息
+     ACTIVITY_STC_QUESTGROUPINFO                            = 0x10140005;   //单日循环活动分组信息
+
+     //首冲活动模块
+     ACTIVITY_STC_FIRSTRECHARGEINFO                         = 0x10150001;   //首冲活动信息
+     ACTIVITY_STC_FIRSTRECHARGEFETCHRESULT                  = 0x10150002;   //领奖结果
+     ACTIVITY_CTS_FIRSTRECHARGEFETCH                        = 0x20150001;   //领奖请求
+
+    //战力活动模块
+    ACTIVITY_STC_FIGHTRANKREWARDCONFIG                      = 0x10160001;   //推送排行奖励配置信息
+    ACTIVITY_STC_FIGHTRANKLIST                              = 0x10160002;   //推送当前的排行榜信息
+    ACTIVITY_CTS_FIGHTRANKLISTREQUEST                       = 0x20160001;   //客户端请求排名信息
+
+    //联盟模块
+    LEAGUE_CTS_LEAGUEBASEINFO                                = 0x20170001;   //获取联盟基本信息
+    LEAGUE_STC_LEAGUEBASEINFO                                = 0x10170001;   //推送联盟基本信息
+    LEAGUE_CTS_LEAGUE_MEMBERINFO                             = 0x20170002;   //获取联盟成员信息
+    LEAGUE_STC_LEAGUE_MEMBERINFO                             = 0x10170002;   //返回获取联盟成员信息
+    LEAGUE_CTS_LEAGUELIST                                    = 0x20170003;   //获取联盟列表
+    LEAGUE_STC_LEAGUELIST                                    = 0x10170003;   //返回获取联盟列表
+    LEAGUE_CTS_SEARCH_LEAGUE                                 = 0x20170004;   //搜索联盟列表
+    LEAGUE_CTS_LEAGUE_APPLYLIST                              = 0x20170005;   //获取联盟申请列表
+    LEAGUE_STC_LEAGUE_APPLYLIST                              = 0x10170005;   //返回获取联盟申请列表
+    LEAGUE_CTS_LEAGUE_LOG                                    = 0x20170006;   //获取联盟日志
+    LEAGUE_STC_LEAGUE_LOG                                    = 0x10170006;   //返回获取联盟日志
+    LEAGUE_CTS_CREATE_LEAGUE                                 = 0x20170007;   //创建联盟
+    LEAGUE_STC_CRAETE_LEAGUE                                 = 0x10170007;   //返回创建联盟
+    LEAGUE_CTS_CLOSE_LEAGUE                                  = 0x20170008;   //解散联盟
+    LEAGUE_STC_CLOSE_LEAGUE                                  = 0x10170008;   //返回解散联盟
+    LEAGUE_CTS_SETING_LEAGUE                                 = 0x20170009;   //设置联盟
+    LEAGUE_STC_SETING_LEAGUE                                 = 0x10170009;   //返回设置联盟
+    LEAGUE_CTS_LEAGUE_NOTICE                                 = 0x20170010;   //设置联盟公告
+    LEAGUE_STC_LEAGUE_NOTICE                                 = 0x10170010;   //返回设置联盟公告
+    LEAGUE_CTS_LEAGUE_APPLY                                  = 0x20170011;   //申请加入联盟
+    LEAGUE_STC_LEAGUE_APPLY                                  = 0x10170011;   //返回申请加入联盟
+    LEAGUE_CTS_RESPONSE_LEAGUE_APPLY                         = 0x20170012;   //批复申请
+    LEAGUE_STC_RESPONSE_LEAGUE_APPLY                         = 0x10170012;   //返回批复申请
+    LEAGUE_CTS_LEAVE_LEAGUE                                  = 0x20170013;   //主动离开联盟
+    LEAGUE_STC_LEAVE_LEAGUE                                  = 0x10170013;   //返回主动离开联盟
+    LEAGUE_CTS_DROPPED_LEAGUE                                = 0x20170014;   //被联盟除名
+    LEAGUE_STC_DROPPED_LEAGUE                                = 0x10170014;   //返回被联盟除名
+    LEAGUE_CTS_EXCHANGE_LEAGUE_LEADER                        = 0x20170015;   //会长转让
+    LEAGUE_STC_EXCHANGE_LEAGUE_LEADER                        = 0x10170015;   //返回会长转让
+    LEAGUE_CTS_IMPEACH_LEAGUE_LEADER                         = 0x20170016;   //弹劾会长
+    LEAGUE_STC_IMPEACH_LEAGUE_LEADER                         = 0x10170016;   //返回弹劾会长
+    LEAGUE_CTS_EXCHANGE_LEAGUE_POSITION                      = 0x20170017;   //职位改变
+    LEAGUE_STC_EXCHANGE_LEAGUE_POSITION                      = 0x10170017;   //返回职位改变
+    LEAGUE_STC_ADD_LEAGUE_MEMBER                             = 0x10170018;   //添加联盟成员
+    LEAGUE_STC_REMOVE_LEAGUE_MEMBER                          = 0x10170019;   //移除联盟成员
+    LEAGUE_STC_UPDATE_LEAGUE_MEMBER                          = 0x10170020;   //更新联盟成员
+    LEAGUE_CTS_CHANGE_LEAGUE_NAME                            = 0x20170021;   //联盟改名
+    LEAGUE_STC_CHANGE_LEAGUE_NAME                            = 0x10170021;   //返回联盟改名
+    //LEAGUE_STC_UPDATE_LEAGUE_LIVENESS                      = 0x10170022;   //更新联盟活跃度（广播）
+    LEAGUE_STC_UPDATE_LEAGUE_COIN                            = 0x10170023;   //更新公会币
+    LEAGUE_CTS_GETMEMBER_DETAIL                              = 0x20170024;    //获取联盟成员详细信息（PVE阵容）
+    LEAGUE_STC_SENDMEMBER_DETAIL                             = 0x10170024;    //发送联盟成员详细信息
+    LEAGUE_CTS_GETDONATEINFO                                 = 0x20170030;  //获取联盟捐献信息
+    LEAGUE_STC_SENDDONATEINFO                                = 0x10170030;  //推送联盟捐献信息
+    LEAGUE_CTS_DONATE                                        = 0x20170031; //我要捐献
+    LEAGUE_STC_DONATE                                        = 0x10170031; //捐献返回
+    LEAGUE_CTS_GETBOX                                        = 0x20170032;// 我要领宝箱
+    LEAGUE_STC_GETBOXRESPONSE                                = 0x10170032; //领宝箱返回
+    LEAGUE_CTS_SENDLEAGUEMAIL                                = 0x20170033; //发送公会邮件(仅会长)
+    LEAGUE_STC_SENDLEAGUEMAIL_RESPONSE                       = 0x10170033; //发送邮件返回
+    LEAGUE_STC_LEAGUEMAIL_COUNT                              = 0x10170034; //公会邮件使用数量（仅会长）
+    LEAGUE_CTS_RECRUIT_BYPUBLIC                              = 0x20170035; //通过世界聊天招募
+    LEAGUE_STC_RECRUIT_BYPUBLIC_RESPONSE                     = 0x10170035; //招募返回
+    LEAGUE_STC_RECRUIT_TIME                                  = 0x10170036; //招募时间倒计时
+    LEAGUE_CTS_ONEKEY_REFUSE                                 = 0x20170037; //一键拒绝申请
+    LEAGUE_STC_ONEKEY_REFUSE_RESPONSE                        = 0x10170037; //一键拒绝申请返回  
+
+    
+
+    //随机怪物模块
+    RANDOMMONSTER_STC_SENDMONSTER                            = 0x10180001;   //发送随机怪物信息
+    RANDOMMONSTER_CTS_BRIBE                                  = 0x20180002;   //请求贿赂过关
+    RANDOMMONSTER_STC_BRIBE                                  = 0x10180002;   //请求贿赂过关返回
+    RANDOMMONSTER_STC_BRIBEREWARD                            = 0x10180003;   //贿赂奖励推送
+    RANDOMMONSTER_CTS_CHALLENGE                              = 0x20180004;   //发起随机怪物战斗
+    RANDOMMONSTER_STC_CHALLENGE                              = 0x10180004;   //随机怪物战斗返回
+
+    //挖矿模块
+    MINING_STC_MININGINFO                                    = 0x10190001;   //挖矿信息
+    MINING_STC_SELFMINES                                     = 0x10190002;   //自己的矿信息
+    MINING_STC_EMPTYMINES                                    = 0x10190003;   //空矿信息
+    MINING_STC_OTHERSMINES                                   = 0x10190004;   //玩家矿信息
+    MINING_CTS_CURRENTOUTPUT                                 = 0x20190005;   //请求矿产当前产量
+    MINING_STC_CURRENTOUTPUT                                 = 0x10190005;   //返回矿产当前产量
+    MINING_CTS_REFRESHEMPTYMINE                              = 0x20190006;   //请求刷新空矿
+    MINING_STC_REFRESHEMPTYMINE                              = 0x10190006;   //刷新空矿返回
+    MINING_CTS_REFRESHOTHERSMINE                             = 0x20190007;   //请求刷新玩家矿    
+    MINING_STC_REFRESHOTHERSMINE                             = 0x10190007;   //刷新玩家矿返回
+    MINING_STX_REFRESHOTHERSMINE                             = 0x50190007;   //向跨服服务器请求刷新玩家矿
+    MINING_XTS_FETCHOTHERSMINE                               = 0x20190010;   //跨服服务器向游戏服务器请求玩家矿信息
+    MINING_STX_OTHERMINEINFO                                 = 0x50190011;   //游戏服务器返回玩家矿信息
+    MINING_XTS_SENDOTHERSMINE                                = 0x20190012;   //跨服服务器返回给游戏服务玩家矿信息
+    MINING_STX_ROBMINERESULT                                 = 0x50190013;   //游戏服务器发送抢矿结果
+    MINING_XTS_ROBMINERESULT                                 = 0x20190013;   //跨服服务器转发抢矿结果
+    MINING_CTS_BEGINMINEDIGGING                              = 0x20190008;   //请求开始挖矿
+    MINING_STC_BEGINMINEDIGGING                              = 0x10190008;   //开始挖矿返回
+    MINING_STC_MININGLOGS                                    = 0x10190009;   //下发矿产被劫日志
+    MINING_CTS_FETCHREWARDINLOGS                             = 0x2019000A;   //领取日志中的奖励
+    MINING_STC_FETCHREWARDINLOGS                             = 0x1019000A;   //领取日志中的奖励返回
+    MINING_CTS_FETCHMINE                                     = 0x2019000B;   //收获矿产
+    MINING_STC_FETCHMINE                                     = 0x1019000B;   //收获矿产返回
+    MINING_CTS_ROBMINE                                       = 0x2019000C;   //抢劫矿产
+    MINING_STC_ROBMINE                                       = 0x1019000C;   //抢劫矿产返回
+    MINING_STC_RATIONS                                       = 0x1019000D;   //军粮信息
+    MINING_STC_ROBMINERESULT                                 = 0x1019000E;   //抢劫矿产结果
+    MINING_CTS_REFRESHOTHERMINEINFO                          = 0x2019000F;   //刷新其他玩家矿信息
+    MINING_STC_REFRESHOTHERMINEINFO                          = 0x1019000F;   //刷新其他玩家矿信息返回
+
+
+    //无尽之塔
+    ENDLESSTOWER_STC_TOWERINFO                               = 0x101A0001;   //下发无尽之塔信息
+    ENDLESSTOWER_CTS_CHALLEGECURRENTFLOOR                    = 0x201A0002;   //挑战当前层
+    ENDLESSTOWER_STC_CHALLEGECURRENTFLOOR                    = 0x101A0002;   //挑战当前层返回
+    ENDLESSTOWER_STC_CHALLEGECURRENTFLOORRESULT              = 0x101A0003;   //挑战当前层战斗结束返回
+    ENDLESSTOWER_CTS_FETCHFLOORREWARD                        = 0x201A0004;   //领取固定层奖励
+    ENDLESSTOWER_STC_FETCHFLOORREWARD                        = 0x101A0004;   //领取固定层奖励返回
+    ENDLESSTOWER_CTS_SWEEP                                   = 0x201A0005;   //开始扫荡
+    ENDLESSTOWER_STC_SWEEP                                   = 0x101A0005;   //开始扫荡回复
+    ENDLESSTOWER_CTS_RESET                                   = 0x201A0006;   //重置
+    ENDLESSTOWER_STC_RESET                                   = 0x101A0006;   //重置回复
+    ENDLESSTOWER_CTS_SWEEPSTATUS                             = 0x201A0007;   //扫荡状态查询
+    ENDLESSTOWER_STC_SWEEPSTATUS                             = 0x101A0007;   //扫荡状态查询回复
+    ENDLESSTOWER_CTS_FETCHSWEEPREWARD                        = 0x201A0008;   //领取扫荡奖励
+    ENDLESSTOWER_STC_FETCHSWEEPREWARD                        = 0x101A0008;   //领取扫荡奖励返回
+    ENDLESSTOWER_CTS_QUICKSWEEP                              = 0x201A0009;   //快速完成扫荡
+    ENDLESSTOWER_STC_QUICKSWEEP                              = 0x101A0009;   //快速完成扫荡完成
+    ENDLESSTOWER_CTS_VIRTUALBATTLE                           = 0x201A000A;   //模拟战斗
+    ENDLESSTOWER_STC_VIRTUALBATTLE                           = 0X101a000A;   //返回模拟战斗
+    ENDLESSTOWER_CTS_RECOMMENDFORMATION                      = 0x201A000B;   //查看推荐阵容
+    ENDLESSTOWER_STC_RECOMMENDFORMATION                      = 0x101A000B;   //推送推荐阵容
+
+    //成长基金活动
+    ACTIVITY_CTS_INVEST                                      = 0x201B0001;   //成长基金活动投资报文
+    ACTIVITY_STC_INVESTRESPONSE                              = 0x101B0001;   //投资结果
+    ACTIVITY_STC_GROUTHFUNDINFO                              = 0x101B0002;   //成长基金个人实例信息   
+
+    //联盟团本
+    LEAGUE_FB_CTS_BASEINFO                                   = 0x20200001;   //获取团本信息
+    LEAGUE_FB_STC_BASEINFO                                   = 0x10200001;   //返回获取团本信息（包括团本信息更新）
+    LEAGUE_FB_CTS_CHALLENGE                                  = 0x20200002;   //挑战团本
+    LEAGUE_FB_STC_CHALLENGE                                  = 0x10200002;   //返回挑战团本
+    LEAGUE_FB_CTS_SINGLE_KILL_RANK                           = 0x20200003;   //获取单boss击杀时间排行
+    LEAGUE_FB_STC_SINGLE_KILL_RANK                           = 0x10200003;   //返回单boss击杀时间排行
+    LEAGUE_FB_CTS_SINGLE_FIGHT_LOG                           = 0x20200004;   //公会单boss单次伤害排名
+    LEAGUE_FB_STC_SINGLE_FIGHT_LOG                           = 0x10200004;   //返回公会单boss单次伤害排名
+    LEAGUE_FB_CTS_GLOBAL_FIGHT_LOG                           = 0x20200005;   //全服单boss单次伤害排名
+    LEAGUE_FB_STC_GLOBAL_FIGHT_LOG                           = 0x10200005;   //返回全服单boss单次伤害排名（包括首杀日志）
+    LEAGUE_FB_STC_UPDATE_BASEINFO                            = 0x10200006;   //更新团本信息
+    LEAGUE_FB_STC_SENDCHALLENGEINFO                          = 0x10200007; //推送玩家挑战信息
+    LEAGUE_FB_CTS_GETTOTALDAMAGEREWARD                       = 0x20200008; //领取累计伤害目标奖励
+    LEAGUE_FB_STC_SENDTOTALDAMAGEREWARD                      = 0x10200008; //领取累计伤害目标奖励返回
+    LEAGUE_FB_CTS_GETPASSREWARD                              = 0x20200009; //领取通关奖励
+    LEAGUE_FB_STC_SENDPASSREWARD                             = 0x10200009; //领取通关奖励返回
+    LEAGUE_FB_CTS_GETSINGLEKILLRANKREWARD                    = 0x2020000A; //领取单boss击杀排行奖励
+    LEAGUE_FB_STC_SENDSINGLEKILLRANKREWARD                   = 0x1020000A; //领取单boss击杀排行奖励返回 
+    LEAGUE_FB_CTS_GETTOTALPROGRESSRANK                       = 0x2020000B; //获取fb进度排行
+    LEAGUE_FB_STC_SENDTOTALPROGRESSRANK                      = 0x1020000B; //发送fb进度排行                             
+    
+    //战术系统
+    TACTICS_STC_UPDATETACTIC                                 = 0x10210001;   //更新一条或者若干条战术信息
+    TACTICS_CTS_EQUIPSTONE                                   = 0x20210002;   //镶嵌一个宝石到某战术对应的孔槽里面
+    TACTICS_STC_EQUIPSTONE_RESPONSE                          = 0x10210002;   //镶嵌一个宝石到某战术对应的孔槽里面(服务器回复结果)
+    TACTICS_CTS_COMPOUND                                     = 0x20210003;   //合成一个已镶嵌宝石
+    TACTICS_STC_COMPOUND_RESPONSE                            = 0x10210003;   //合成结果(服务器返回)
+    TACTICS_CTS_UNEQUIP                                      = 0x20210004;   //卸下一个宝石从战术孔槽中
+    TACTICS_STC_UNEQUIP_RESPONSE                             = 0x10210004;   //卸下一个宝石服务器结果返回
+    TACTICS_CTS_ONEKEY_EQUIPSTONE                            = 0x20210005;   //一键装备宝石
+    TACTICS_STC_ONEKEY_EQUIPSTONE_RESPONSE                   = 0x10210005;   //一键装备宝石结果
+    TACTICS_CTS_ONEKEY_COMPOUND                              = 0x20210006;   //一键合成
+    TACTICS_STC_ONEKEY_COMPOUND_RESPONSE                     = 0x10210006;   //一键合成结果
+
+    //vip专属礼包
+    VIPGIFTS_CTS_BUY                                         = 0x20220001;   //购买vip礼包
+    VIPGIFTS_STC_BUY                                         = 0x10220001;   //返回购买vip礼包
+
+    VIPGIFTS_STC_BASEINFO                                    = 0x10220002;   //返回购买vip礼包
+
+
+    //好友系统
+    FRIEND_CTS_FRIENDOPERATE                                 = 0x20230001;   //好友操作（申请，拒绝，添加，删除）
+    FRIEND_STC_FRIENDOPERATE                                 = 0x10230001;   //好友操作返回
+    FRIEND_CTS_RECOMMEND                                     = 0x20230002;   //推荐好友
+    FRIEND_STC_RECOMMEND                                     = 0x10230002;   //推荐好友回复
+    FRIEND_CTS_GIVESTAMINA                                   = 0x20230003;   //赠送体力
+    FRIEND_STC_GIVESTAMINA                                   = 0x10230003;   //赠送体力回复
+    FRIEND_CTS_GETSTAMINA                                    = 0x20230004;   //领取体力
+    FRIEND_STC_GETSTAMINA                                    = 0x10230004;   //领取体力回复
+    FRIEND_CTS_SEARCH                                        = 0x20230005;   //查找好友
+    FRIEND_STC_SEARCH                                        = 0x10230005;   //查找好友回复
+    FRIEND_STC_FRIENDLIST                                    = 0x10230006;   //发送好友列表
+    FRIEND_STC_FRIENDAPPLYLIST                               = 0x10230007;   //发送好友申请列表
+    FRIEND_CTS_APPLYINOTHERWAYS                              = 0x20230006;   //除好友系统外的入口申请添加好友（传Name）
+
+    //大转盘活动
+    ACTIVITY_CTS_REQUESTRANKLIST                            = 0x20240001;   //请求排名
+    ACTIVITY_CTS_DIALLOTTERY                                = 0x20240002;   //抽奖品
+    ACTIVITY_STC_RANKLISTRESPONSE                           = 0x10240001;   //返回排名信息
+    ACTIVITY_STC_DIALINFO                                   = 0x10240002;   //玩家实例信息
+    ACTIVITY_STC_DIALLOTTERYINFO                            = 0x10240003;   //抽奖信息
+    ACTIVITY_STC_DIALLOTTERYRESPONSE                        = 0x10240004;   //抽奖品结果
+
+
+    //跨服天梯
+    ISL_CTS_BASEINFO                                        = 0x20250001;   //获取信息推送
+    ISL_STC_BASEINFO                                        = 0x10250001;   //基本信息推送
+
+    ISL_CTS_LADDERLOG                                       = 0x20250002;   //获取对战日志
+    ISL_STC_LADDERLOG                                       = 0x10250002;   //返回对战日志
+
+    ISL_CTS_RANK                                            = 0x20250003;   //获取跨服天梯排行榜
+    ISL_STC_RANK                                            = 0x10250003;   //返回跨服天梯排行榜
+
+    ISL_CTS_HISTORYRANK                                     = 0x20250004;   //获取跨服天梯荣誉榜
+    ISL_STC_HISTORYRANK                                     = 0x10250004;   //返回跨服天梯荣誉榜
+
+    ISL_CTS_STARTMATCH                                      = 0x20250005;   //开始匹配对手
+    ISL_STC_STARTMATCH                                      = 0x10250005;   //返回开始匹配对手（进入匹配等待，推送平均匹配时间）
+
+    ISL_CTS_STOPMATCH                                       = 0x20250006;   //取消匹配对手
+    ISL_STC_STOPMATCH                                       = 0x10250006;   //返回取消匹配对手
+
+    ISL_STC_SENDMATCHRESULT                                 = 0x10250007;   //返回匹配对手结果(包含布阵先后手信息)
+
+    ISL_CTS_SETSOLDIER                                      = 0x20250008;   //设置士兵信息
+    ISL_STC_SETSOLDIER                                      = 0x10250008;   //返回设置士兵信息
+
+    ISL_CTS_SETCOMMANDER                                    = 0x20250009;   //设置指挥官状态
+    ISL_STC_SETCOMMANDER                                    = 0x10250009;   //返回设置指挥官状态
+
+    ISL_CTS_SETSKILL                                        = 0x20250010;   //设置科技
+    ISL_STC_SETSKILL                                        = 0x10250010;   //返回科技
+
+    ISL_STC_UPDATESTEP                                      = 0x10250011;   //更新当前布阵状态（士兵，指挥官，科技的设置都需要等待此报文）
+    ISL_STC_STOP                                            = 0x10250012;   //强制停止开服天梯（跨服断开连接或者敌方游戏服务器断开连接）
+
+    ISL_CTS_BASERANK                                        = 0x20250013;   //获取基本排名信息
+    ISL_STC_BASERANK                                        = 0x10250013;   //基本排名信息推送
+
+    ISL_CTS_STARTFIGHT                                      = 0x20250014;   //布阵结束开启战斗
+    ISL_STC_STARTFIGHT                                      = 0x10250014;   //布阵结束开启战斗返回
+
+    ISL_CTS_OUTFIGHT                                        = 0x20250015;   //离开战斗
+    ISL_STC_OUTFIGHT                                        = 0x10250015;   //离开战斗返回
+
+    ISL_STC_OUTMATCH                                        = 0x10250016;   //超时退出匹配
+
+    ISL_STC_FINISHFIGHT                                     = 0x10250017;   //战斗结束结果返回
+
+    //与跨服通信
+    ISL_STK_BASEINFO                                        = 0x50250020;   //获取信息(游戏->跨服)
+    ISL_KTS_BASEINFO                                        = 0x20250020;   //基本信息(跨服->游戏)
+
+    ISL_STK_LADDERLOG                                       = 0x50250021;   //获取对战日志(游戏->跨服)
+    ISL_KTS_LADDERLOG                                       = 0x20250021;   //返回对战日志(跨服->游戏)
+
+    ISL_STK_RANK                                            = 0x50250022;   //获取跨服天梯排行榜(游戏->跨服)
+    ISL_KTS_RANK                                            = 0x20250022;   //返回跨服天梯排行榜(跨服->游戏)
+
+    ISL_STK_HISTORYRANK                                     = 0x50250023;   //获取跨服天梯荣誉榜(游戏->跨服)
+    ISL_KTS_HISTORYRANK                                     = 0x20250023;   //返回跨服天梯荣誉榜(跨服->游戏)
+
+    ISL_STK_STARTMATCH                                      = 0x50250024;   //开始匹配对手(游戏->跨服)
+    ISL_KTS_STARTMATCH                                      = 0x20250024;   //返回开始匹配对手(跨服->游戏)
+
+    ISL_STK_STOPMATCH                                       = 0x50250025;   //取消匹配对手(游戏->跨服)
+    ISL_KTS_STOPMATCH                                       = 0x20250025;   //返回取消匹配对手(跨服->游戏)
+
+    ISL_KTS_SENDMATCHRESULT                                 = 0x20250026;   //返回匹配对手结果(跨服->游戏)
+
+    ISL_STK_SETSOLDIER                                      = 0x50250027;   //设置士兵信息(游戏->跨服)
+    ISL_KTS_SETSOLDIER                                      = 0x20250027;   //返回设置士兵信息(跨服->游戏)
+
+    ISL_STK_SETCOMMANDER                                    = 0x50250028;   //设置指挥官状态(游戏->跨服)
+    ISL_KTS_SETCOMMANDER                                    = 0x20250028;   //返回设置指挥官状态(跨服->游戏)
+
+    ISL_STK_SETSKILL                                        = 0x50250029;   //设置科技(游戏->跨服)
+    ISL_KTS_SETSKILL                                        = 0x20250029;   //返回科技(跨服->游戏)
+
+    ISL_KTS_UPDATESTEP                                      = 0x20250030;   //更新当前布阵状态(跨服->游戏)
+
+    ISL_KTS_SET_ENEMY_SOLDIER                               = 0x20250031;   //设置敌方士兵 
+    ISL_STK_SET_ENEMY_SOLDIER                               = 0x50250031;   //设置敌方士兵返回
+
+    ISL_KTS_SET_ENEMY_SKILLs                                = 0x20250032;   //设置敌方科技
+    ISL_STK_SET_ENEMY_SKILLs                                = 0x50250032;   //设置敌方科技返回
+
+    ISL_KTS_SET_ENEMY_COMMANDER                             = 0x20250033;   //设置敌方指挥官
+    ISL_STK_SET_ENEMY_COMMANDER                             = 0x50250033;   //设置敌方指挥官返回
+
+    ISL_KTS_GET_ENEMY_OFFLINE_FORMATION                     = 0x20250034;   //获取敌方离线玩家的阵型镜像数据
+    ISL_STK_GET_ENEMY_OFFLINE_FORMATION                     = 0x50250034;   //返回敌方离线玩家的阵型镜像数据
+
+    ISL_KTS_SEND_ENEMY_FORMATION                            = 0x20250035;   //推送敌方阵型数据（敌方布阵进度进行随机模拟）
+    ISL_STK_SEND_ENEMY_FORMATION                            = 0x50250035;   //返回推送敌方阵型数据
+
+
+    ISL_STK_SEND_OWNER_FORMATION                            = 0x50250036;   //推送自身的阵型数据（在线布阵玩家突然离线后推送）
+    ISL_KTS_SEND_OWNER_FORMATION                            = 0x20250036;   //推送自身的阵型数据返回
+    
+    ISL_STK_SEND_BATTLE_RESULT                              = 0x50250037;   //推送战斗结算数据
+    ISL_KTS_SEND_BATTLE_RESULT                              = 0x20250037;   //推送战斗结算数据返回
+
+    ISL_STK_SEND_BATTLE_CANCLE                              = 0x50250038;   //推送战斗取消
+    ISL_KTS_SEND_BATTLE_CANCLE                              = 0x20250038;   //推送战斗取消
+
+    ISL_KTS_SEND_REWARD                                     = 0x20250039;   //推送奖励
+    ISL_STK_SEND_REWARD                                     = 0x50250039;   //推送奖励返回
+    
+    ISL_KTS_STOP                                            = 0x20250040;   //强制停止开服天梯业务
+
+    ISL_STK_BASERANK                                        = 0x50250041;   //获取基本排名信息
+    ISL_KTS_BASERANK                                        = 0x20250041;   //基本排名信息推送
+
+    ISL_KTS_OUTMATCH                                        = 0x20250042;   //超时退出匹配
+
+    ISL_KTS_FINISHFIGHT                                     = 0x20250043;   //战斗结束结果返回
+
+   // 游戏公告
+    NOTICE_STC_SEND                                         = 0x10260001;   //进入游戏后推送游戏公告
+
+    //羁绊系统
+    FETTERS_STC_SEND_SLOT                             = 0x10270001;  // 推送羁绊位实例
+    FETTERS_CTS_PUT_SLOT                              = 0x20270002;   //士兵放入或卸下
+    FETTERS_STC_PUT_SLOT                              = 0x10270002;   //操作返回
+    FETTERS_CTS_WASH                                  = 0x20270003;   //天赋洗练
+    FETTERS_STC_WASH                                  = 0x10270003;    //洗练返回
+    
+    //单日循环单笔可重复充值活动
+    ACTIVITY_CTS_REPEAT_RECHARGE_ONCE_FETCH                 = 0x20280001;   //领取奖励
+    ACTIVITY_STC_REPEAT_RECHARGE_ONCE_FETCH_RESPONSE        = 0x10280001;   //领奖回复
+    ACTIVITY_STC_REPEAT_RECHARGE_ONCE_TASK_INFO             = 0x10280002;   //推送任务信息
+
+    //大特卖(单日)活动
+    ACTIVITY_CTS_DAY_SPECIAL_TRADE_BUY						= 0x20290001;	//购买物品
+    ACTIVITY_STC_DAY_SPECIAL_TRADE_BUY_RESPONSE				= 0x10290001;	//购买回复
+    ACTIVITY_STC_DAY_SPECIAL_RECORD_INFO					= 0x10290002;	//推送购买记录信息
+
+  /******************************************公会战*****************************************/
+    //赛区
+    LW_STC_BASEINFO                                      =0x10300001;//推送公会战基本信息
+    LW_CTS_APPLY                                         =0x20300002;//报名参赛
+    LW_STC_APPLY                                         =0x10300002;//返回报名结果
+    LW_CTS_GET_ZONEINFO                                  =0x20300003;//获取赛区信息，ABC赛区
+    LW_STC_SEND_ZONEINFO                                 =0x10300003;//返回赛区信息
+    LW_CTS_GET_ZONEINFO_S                                =0x20300004;//获取S赛区信息
+    LW_STC_SEND_ZONEINFO_S                               =0x10300004;//返回S赛区信息
+    LW_CTS_GET_S_FINAL_RESULT                            =0x20300005;//获取S赛区最终比赛结果
+    LW_STC_SEND_S_FINAL_RESULT                           =0x10300005;//返回S赛区最终比赛结果
+    LW_CTS_GET_MEMBER_TotalDamage                        =0x20300006;//获取公会成员累计伤害排行
+    LW_STC_SEND_MEMBER_TotalDamage                       =0x10300006;//返回公会成员累计伤害排行
+    //布阵防守
+    LW_CTS_GET_LEAGUE_DEFENSIVE_BASE                     =0x20300007;//获取公会布防界面
+    LW_STC_SEND_LEAGUE_DEFENSIVE_BASE                    =0x10300007;//返回公会布防界面
+    LW_CTS_GET_STRONGHOLD_DEFENSIVE_DETAIL               =0x20300008;//获取公会据点详细信息  
+    LW_STC_SEND_STRONGHOLD_DEFENSIVE_DETAIL              =0x10300008;//返回公会据点详细信息 
+    LW_CTS_CHANGE_BUFF                                   =0x20300009;//更改buff塔buff类型
+    LW_STC_CHANGE_BUFF                                   =0x10300009;//更改buff塔buff类型返回
+    LW_STC_UPDATE_STRONGHOLD_DENFENSIVE_BASE             =0x1030000A;//更新单个据点基本信息(据点队伍数量变化)
+    LW_STC_SEND_TEAM_POSITIONS                           =0x1030000B;//更新玩家防守队伍位置
+    LW_CTS_ADD_TEAM                                      =0x2030000C;//添加防守队伍
+    LW_STC_ADD_TEAM                                      =0x1030000C;//添加防守队伍返回
+    LW_CTS_ADJUST_TEAM                                   =0x2030000D;//调整防守队伍
+    LW_STC_ADJUST_TEAM                                   =0x1030000D;//调整防守队伍返回
+    LW_CTS_REMOVE_TEAM                                   =0x2030000E;//删除防守队伍
+    LW_STC_REMOVE_TEAM                                   =0x1030000E;//删除队伍返回
+    //赛场战斗
+    LW_CTS_SET_ATTACK_FORMATION                          =0x2030000F;//设置进攻阵容
+    LW_STC_SET_ATTACK_FORMATION                          =0x1030000F;//设置进攻阵容返回
+
+
+   // LW_CTS_GET_ENEMY_STRONGHOLD_DEFENSIVE_DETAIL         =0x20300009;//获取敌方据点详细信息
+   // LW_STC_SEND_ENEMY_STRONGHOLD_DEFENSIVE_DETAIL        =0x10300009;//返回敌方据点详细信息
+
+    ////////////////////////////////////////游戏服务器与跨服通信////////////////////////
+    //赛区
+    LW_KTS_SEND_TIMEOFEACHZONE                           =0x20300018;//发送赛区比赛时间 （首赛季开始报名前推送，以及每场战斗打完推送）
+    LW_KTS_SEND_ZONEOFLEAGUE                             =0x20300019;//发送公会所在赛区信息 （报名开始前发送，因为已经确定了公会所在赛区）
+    LW_STK_APPLY                                         =0x50300020;//报名参赛
+    LW_KTS_APPLY                                         =0x20300020;//返回报名结果
+    LW_STK_GET_ZONEINFO                                  =0x50300021;//获取赛区信息，ABC赛区
+    LW_KTS_SEND_ZONEINFO                                 =0x20300021;//返回赛区信息
+    LW_STK_GET_ZONEINFO_S                                =0x50300022;//获取S赛区信息
+    LW_KTS_SEND_ZONEINFO_S                               =0x20300022;//返回S赛区信息
+    LW_STK_GET_S_FINAL_RESULT                            =0x50300023;//获取S赛区最终比赛结果
+    LW_KTS_SEND_S_FINAL_RESULT                           =0x20300023;//返回S赛区最终比赛结果
+    LW_STK_GET_SELF_KILLSRANK                            =0x50300024;//获取自身击杀数排行
+    LW_KTS_SEND_SELF_KILLSRANK                           =0x20300024;//返回自身击杀数排行
+    LW_STK_GET_ALL_KILLSRANK                             =0x50300025;//获取前100名(可配)击杀数排行
+    LW_KTS_SEND_ALL_KILLSRANK                            =0x20300025;//返回前100名(可配)击杀数排行
+    LW_STK_GET_MEMBER_TOTALDAMAGE                        =0x50300026;//获取公会成员累计伤害排行
+    LW_KTS_SEND_MEMBER_TOTALDAMAGE                       =0x20300026;//返回公会成员累计伤害排行
+    //布阵防守
+    LW_STK_GET_LEAGUE_DEFENSIVE_BASE                     =0x50300027;//获取公会布防界面
+    LW_KTS_SEND_LEAGUE_DEFENSIVE_BASE                    =0x20300027;//返回公会布防界面
+    LW_STK_GET_STRONGHOLD_DEFENSIVE_DETAIL               =0x50300028;//获取公会据点详细信息  
+    LW_KTS_SEND_STRONGHOLD_DEFENSIVE_DETAIL              =0x20300028;//返回公会据点详细信息
+    LW_STK_CHANGE_BUFF                                   =0x50300029;//更改buff塔buff类型
+    LW_KTS_CHANGE_BUFF                                   =0x20300029;//更改buff塔buff类型返回
+    LW_KTS_UPDATE_STRONGHOLD_DENFENSIVE_BASE             =0x20300030;//更新单个据点基本信息(据点队伍数量变化)
+    LW_KTS_SEND_TEAM_POSITIONS                           =0x20300031;//更新玩家防守队伍位置
+    LW_STK_ADD_TEAM                                      =0x50300032;//添加防守队伍
+    LW_KTS_ADD_TEAM                                      =0x20300032;//添加防守队伍返回
+    LW_STK_ADJUST_TEAM                                   =0x50300033;//调整防守队伍
+    LW_KTS_ADJUST_TEAM                                   =0x20300033;//调整防守队伍返回
+    LW_STK_REMOVE_TEAM                                   =0x50300034;//删除防守队伍
+    LW_KTS_REMOVE_TEAM                                   =0x20300034;//删除队伍返回
+    //赛场战斗
+    LW_KTS_BATTLE_START                                  =0x20300035;//比赛开始报文
+
+    ////////////////////////////////////////物资兑换活动(单日,多日)////////////////////////
+    ACTIVITY_STC_EM_RECORD_INFO                          = 0x10310001;   //推送物资兑换记录
+    
+    ACTIVITY_CTS_PME_EXCHANGE                            = 0x20310002;   //(多日)发送兑换物资请求
+    ACTIVITY_STC_PME_EXCHANGE_RESPONSE                   = 0x10310002;   //(多日)回复物资对换结果
+
+    ACTIVITY_CTS_DME_EXCHANGE                            = 0x20310003;   //(单日)发送物资兑换请求
+    ACTIVITY_STC_DME_EXCHANGE_RESPONSE                   = 0x10310003;   //(单日)回复物资兑换结果
+
+    ////////////////////////////////////////日常活跃度////////////////////////
+    DailyVitality_CTS_OpenBox                            = 0x20320001;  //开箱子
+    DailyVitality_STC_OpenBoxResponse                    = 0x10320001;  //开箱子回复
+    DailyVitality_STC_Info                               = 0x10320002;  //推送玩家数据
+    
+    ////////////////////////////////////////统计-实时充值///////////////////////
+    STATISTICS_STK_SENDRECHARGEINFO                      = 0x50330001;   //向跨服发送实时充值记录
+
+    //////////////////////////////////////// 据点模块  ///////////////////////////////
+    FORTRESS_STC_LOTTERY_INFO                             = 0x10340001;   //据点抽奖实例信息
+    FORTRESS_CTS_LOTTERY                                  = 0x20340002;   //抽取奖励
+    FORTRESS_STC_LOTTERY_RESPONSE                         = 0x10340002;   //返回抽取奖励
+    FORTRESS_CTS_LOTTERY_OPEN                             = 0x20340003;   //打开奖励宝箱
+    FORTRESS_STC_LOTTERY_OPEN_RESPONSE                    = 0x10340003;   //获取宝箱奖励
+
+    FORTRESS_CTS_CONSTRUCTION_GETBASETINFO                = 0x20340101;   //获取基地基础信息
+    FORTRESS_STC_CONSTRUCTION_GETBASETINFO_RESPONSE       = 0x10340101;   //发送基地基础信息
+    FORTRESS_CTS_CONSTRUCTION_REFRESHRESOURCE             = 0x20340102;   // 刷新资源
+    FORTRESS_STC_CONSTRUCTION_CONS                        = 0x10340102;   //发送建筑信息（一个或多个）
+    FORTRESS_CTS_CONSTRUCTION_UPGRADE                     = 0x20340103;   // 建筑升级
+    FORTRESS_STC_CONSTRUCTION_UPGRADE_RESPONSE            = 0x10340103;   // 建筑升级返回
+    FORTRESS_CTS_CONSTRUCTION_GETRESOURCE                 = 0x20340104;   // 领取生产建筑资源
+    FORTRESS_STC_CONSTRUCTION_GETRESOURCE_RESPONSE        = 0x10340104;   // 领取资源返回
+    FORTRESS_CTS_CONSTRUCTION_ONEKEYGETRESOURCE           = 0x20340105;   // 一键领取资源
+    FORTRESS_STC_CONSTRUCTION_ONEKEYGETRESOURCE_RESPONSE  = 0x10340105;   // 一键领取资源返回 
+    FORTRESS_CTS_CONSTRUCTION_FIX                         = 0x20340106;   // 城防修复
+    FORTRESS_STC_CONSTRUCTION_FIX_RESPONSE                = 0x10340106;   // 城防回复返回
+    FORTRESS_STC_CONSTRUCTION_UPDATE_STARS                = 0x10340107;  // 更新副本星数(fb评星提升时)
+    FORTRESS_CTS_CONSTRUCTION_OUTFIRE                     = 0x20340108;  // 基地灭火
+    FORTRESS_STC_CONSTRUCTION_OUTFIRE_RESPONSE            = 0x10340108;  // 基地灭火返回
+    FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST                = 0x20340109;  //士兵休养
+    FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_RESPONSE       = 0x10340109;  //士兵休养返回
+    FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST_CANCEL         = 0x2034010A;  //士兵取消休养
+    FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_CANCEL_RESPONSE= 0x1034010A;   //士兵取消休养返回
+    FORTRESS_CTS_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER      = 0x2034010B; //伤员一键恢复
+    FORTRESS_STC_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER_RESPONSE =0x1034010B; //伤员一键恢复返回
+    FORTRESS_STC_CONSTRUCTION_HOSPITAL_SOLDIERS_RESPONSE  = 0x1034010C;   //发送急救帐篷中士兵血量列表
+
+
+}

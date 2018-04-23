@@ -1,0 +1,39 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+package PaoEntity;
+
+message CMD_RANDOMMONSTER_STC_SENDMONSTER
+{
+	 optional MsgCode msgcode 			  = 1[default =RANDOMMONSTER_STC_SENDMONSTER];
+     required bool  bCompleted            = 2;      //当前波怪物是否击杀 (True则不显示怪物)
+     required int32 MonsterID             = 3;    //主界面怪物模板ID
+     required int32 BossID   	            = 4;    //BOSSID
+     repeated int32 TalkContent           = 5;    //气泡内容，(id集合)
+     required int32 TodayProgress         = 6;    // 今日完成进度  每日最多完成10波
+     required int32 TotalProgress         = 7;    //  总完成进度   每完成30波进度清0 
+     required int32 Coin                  = 8;    // 当前波怪物美元奖励
+     required int32 Quality               = 9;    // 当前波怪物宝箱品质 
+     optional int32 BribeCoin             = 10;    // 贿赂所需美元
+     optional int32 BribeGold             = 11;   // 贿赂所需黄金
+}
+
+message CMD_RANDOMMONSTER_CTS_BRIBE    
+{
+     optional MsgCode msgcode          =1[default =RANDOMMONSTER_CTS_BRIBE];
+     required int32   MonsterID         =2;   //怪物模板ID
+
+}
+
+message CMD_RANDOMMONSTER_STC_BRIBE
+{
+     optional MsgCode msgcode         =1[default =RANDOMMONSTER_STC_BRIBE];
+     required ErrorCode ReturnCode    =2; // 0：成功   2501:美元不足 2502:黄金不够
+}
+
+message CMD_RANDOMMONSTER_STC_BRIBEREWARD
+{
+     optional MsgCode msgcode          =1[default =RANDOMMONSTER_STC_BRIBEREWARD];
+     repeated Reward Rewards           = 2;   // 奖励列表
+
+}

@@ -1,0 +1,228 @@
+import "msgcode.proto";
+import "common.proto";
+import "errorcode.proto";
+
+package PaoEntity;
+
+message CMD_ITEM_STC_BAGINFO {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_BAGINFO];
+
+    repeated  ItemInfo   item_list           = 2;//道具集合
+
+}
+
+
+message CMD_ITEM_CTS_ADDITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_CTS_ADDITEM];
+
+    repeated  ItemInfo   item_list           = 2;//将要添加的道具集合
+}
+
+message CMD_ITEM_STC_UPDATEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_UPDATEITEM];
+
+	required  ErrorCode      result          = 2;//0：成功 1:背包已满 2：未找到道具配置
+	repeated  ItemInfo   item_list           = 3;//已经添加的道具集合
+}
+
+message CMD_ITEM_CTS_DELETEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_CTS_DELETEITEM];
+
+    repeated  ItemInfo   item_list           = 2;//将要移除的道具集合 （数量不足不删）
+
+}
+
+message CMD_ITEM_STC_DELETEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_DELETEITEM];
+
+    required  ErrorCode      result          = 2;//0：成功 1：未找到道具配置
+    repeated  ItemInfo   item_list           = 3;//成功移除的道具集合
+
+}
+
+
+message CMD_ITEM_CTS_USEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_CTS_USEITEM];
+
+    message ItemUseInfo{
+
+        required  int32      objtype             = 2;//使用对象类型 0：玩家自身 1：士兵
+        required  string     param               = 3;//道具使用参数 “0”：使用对象为玩家自身；“士兵实例Id”：使用对象为玩家拥有的士兵
+        repeated  ItemInfo   item_list           = 4;//将要使用的道具集合
+
+    }
+
+    repeated  ItemUseInfo   item_list           = 4;//将要使用的道具集合
+
+
+}
+
+message CMD_ITEM_STC_USEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_USEITEM];
+
+    required  ErrorCode      result          = 2;//0：成功 1：未找到道具配置
+}
+
+
+message CMD_ITEM_CTS_USEOTHERITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_CTS_USEOTHERITEM];
+
+    repeated  ItemInfo   item_list           = 2;//将要使用的道具集合
+
+}
+
+message CMD_ITEM_STC_USEOTHERITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_USEOTHERITEM];
+
+    required  ErrorCode      result          = 2;//
+    repeated  Reward         reward_list     = 3;//生成的奖励集合
+
+}
+
+
+message CMD_ITEM_STC_SELLITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_SELLITEM];
+
+    required  ErrorCode      result          = 2;//道具出售返回
+}
+
+
+message CMD_ITEM_CTS_EXCHANGEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_CTS_EXCHANGEITEM];
+
+    required  int32      template_id         = 2;//兑换道具Id
+    required  int32      count               = 3;//兑换道具Id
+
+}
+
+message CMD_ITEM_STC_EXCHANGEITEM {
+    optional  MsgCode    msgcode             = 1     [default = ITEM_STC_EXCHANGEITEM];
+
+    required  ErrorCode  result              = 2;//兑换道具结果
+
+
+}
+
+
+////////////////////////////////////////////////////// 抽箱子模块报文 ////////////////////////////////////////////////////////////////////////////////
+
+message CMD_CARDLOTTERY_CTS_DRAW    //客户端发抽箱子请求
+{
+    optional MsgCode msgCode = 1[default = CARDLOTTERY_CTS_DRAW];
+    //    PrimaryOnce = 0;            //初级单抽
+    //    PrimaryTen  = 1;            //初级十连抽
+    //    MiddleOnce  = 2;            //中级单抽
+    //    MiddleTen   = 3;            //中级十连抽
+    //    VipOnce     = 4;            //vip单抽
+    //    TacticsOnce = 5；           //战术单抽
+    //    TacticsMult = 6；           //战术多连抽
+    // 	  vipTen	  = 7;			  //vip十连抽
+    //	  AwakenItemOnce = 8 	      //觉醒道具单抽
+    //    AwakenItemTen = 9 		  //觉醒道具十连抽
+    required uint32 Type = 2;         //抽的类型
+}
+
+message LotteryInfo
+{
+        required uint32 Type             = 1;        //抽法类型
+        optional uint32 RemianTime       = 2;        //免费抽箱子CD的剩余时间
+        optional uint32 RemainCount      = 3;        //当天免费抽的剩余次数
+        //实例信息状态
+        //0 默认状态
+        //1 处于优先抽卡状态
+        required uint32 State            = 4;
+        optional uint32 TotConsume       = 5;       //累计消费
+}
+
+message CMD_CARDLOTTERY_STC_LOTTERYINFO    //玩家登陆时，推送玩家实例信息 免抽CD 剩余免抽次数等
+{
+    optional MsgCode msgCode            = 1[default = CARDLOTTERY_STC_GOODINFO];
+    repeated LotteryInfo info           = 2;
+}
+
+message CMD_CARDLOTTERY_STC_DRAWRESPONSE
+{
+    optional MsgCode msgCode        = 1[default = CARDLOTTERY_STC_DRAWRESPOSNE];
+    required ErrorCode Result       = 2;                      //抽奖结果
+    repeated Reward rewards         = 3;                      //抽奖得到的物品
+    required LotteryInfo info       = 4;                      //实例信息  客户端用什么抽法，同步对应的抽法信息
+}
+
+message CMD_CARDLOTTERY_CTS_HOTREQUEST
+{
+    optional MsgCode msgcode        = 1[default = CARDLOTTERY_CTS_HOTREQUEST];
+}
+message HotInfo
+{
+    required int32 Type = 1;                //0日热点 1周热点
+    required int32 itemId = 2;              //物品ID
+    optional int32 tipsId = 3;              //Tips图片Id
+}
+message CMD_CARDLOTTERY_STC_HOTRESPONSE
+{
+    optional MsgCode msgCode            = 1[default = CARDLOTTERY_STC_HOTRESPONSE];
+    repeated HotInfo HotInfos           = 2;          //热点信息
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////// 商店系统报文 ////////////////////////////////////////////////////////////////////////////////
+message ShopItem {
+    required int32 template_id              = 1; // 道具模板Id
+    required int32 CostType                 = 2; // 货币类型 1：美元，2：黄金，3：竞技币，4：公会币
+    required int32 CostValue                = 3; // 消耗货币数量
+    required int32 Count                    = 4; // 道具数量
+    required int32 Position                 = 5; // 格子位置，从上往下，从左往右增加
+    required bool  Purchased                = 6;// 是否已购买 false:未购买，true:已购买
+}
+
+message Shop{
+    required int32 Shop_id                  = 1; // 商店Id   1：普通商店，2：竞技场商店，3：爬塔商店，4：公会商店
+    required bool  Permanent                = 2; // 是否是常驻商店，true：是，false：不是
+    required int32 FreshTime                = 3; // 下一次刷新或者消失的时间
+    repeated ShopItem Item_List             = 4; // 物品集合
+    required int32 FreshCount               = 5; // 刷新次数
+    required string ShowTime                = 6; // 显示时间
+}
+
+message CMD_Shop_CTS_Info {
+    optional  MsgCode    msgcode             = 1     [default = Shop_CTS_INFO];
+    required  int32      Shop_id             = 2;    //-1：请求所有商店
+}
+
+message CMD_Shop_STC_Info {
+    optional  MsgCode    msgcode             = 1     [default = Shop_STC_INFO];
+    required  int32      IsUpdate            = 2; //是否更新 0:更新 1:添加 2:初始加载
+    repeated  Shop       Shop_List           = 3; // 商店集合
+}
+
+message CMD_Shop_CTS_BUYITEM {
+    optional  MsgCode    msgcode             = 1     [default = Shop_CTS_BUYITEM];
+    required  int32      Position            = 2;//商品位子
+    required  int32      Shop_id             = 3;
+}
+
+message CMD_Shop_STC_BUYITEM {
+    optional  MsgCode    msgcode             = 1     [default = Shop_STC_BUYITEM];
+    required  ErrorCode  result              = 2; //购买结果，0：成功
+}
+
+message CMD_Shop_CTS_REFRESHBUYITEM {
+    optional  MsgCode    msgcode             = 1     [default = Shop_CTS_REFRESHBUYITEM];
+    required  int32      Shop_id             = 2;
+}
+
+message CMD_Shop_STC_REFRESHBUYITEM {
+    optional  MsgCode    msgcode             = 1     [default = Shop_STC_REFRESHBUYITEM];
+    required  ErrorCode  result              = 2; //刷新结果，0：成功
+}
+
+
+////////////////////////////////////////////////////// 商店系统报文 ////////////////////////////////////////////////////////////////////////////////
+
+
+
+

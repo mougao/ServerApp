@@ -1,0 +1,47 @@
+package PaoEntity;
+//格式要求：模块名_方向_功能描述（例如：ITEM_STC_BAGINFO 表示物品模块，服务器发往客户端，背包信息）
+//CODE说明：0x00??????表示发往网关服务器
+//          0x10??????表示发往客户端
+//          0x20??????表示发往游戏服务器
+//          0x30??????表示发往登录服务器
+//已有的报文可以不再修改，新加报文请严格执行
+
+enum MsgCode {
+    // Test Module 测试
+    TEST_REQUEST                    = 0x20001000;
+    TEST_RESPONSE                   = 0x10001000;
+
+    //Server Message 服务器间
+	SERVER_GTL_VALIDATE             = 0x3000000A; // 网关向登录服务器请求验证Token
+    SERVER_LTG_VALIDATE             = 0x0000000A; // 登录服务器返回Token验证
+    SERVER_GTS_ENTERGAME            = 0x20000001; // 网关通知服务器客户端登录
+    SERVER_GTS_LEAVEGAME            = 0x20000002; // 网关通知服务器客户端离线
+    SERVER_STG_CLOSESESSION         = 0x0000000B; // 游戏服务器通知网关关闭客户端连接
+	SERVER_STG_REPORT				= 0x00000002; // 游戏服务器通知网关服务器
+	SERVER_STG_CLIENTLOGINED		= 0x00000003; // 游戏服务器通知网关客户端登陆成功
+	SERVER_GTL_CLIENTLOGINED		= 0x30000001; // 网关通知登录服务器客户端登陆成功
+	SERVER_GTL_REGIST				= 0x30000000; // 网关注册到登陆服务器
+	SERVER_GTL_GAMESTATUS			= 0x30000002; // 网关通知登陆服务器游戏服务器状态
+
+	SERVER_BTG_REPORT               = 0x00000004; // 战斗服务器通知网关服务器
+    // Login Module 登录模块
+    LG_GTC_CLOSECONNECTION          = 0x10000000; // 服务器主动断开连接
+    LG_RG_KEY_REQ                   = 0x30001001; // 一键注册 请求
+    LG_RG_KEY_RES                   = 0x10001001; // 一键注册 回复
+    LG_CTL_REGIST                   = 0x30001002; // 注册账号请求
+    LG_LTC_REGIST                   = 0x10001002; // 注册账号返回
+    LG_CTL_MODIFYPSW                = 0x30001003; // 更换密码
+    LG_LTC_MODIFYPSW                = 0x10001003; // 更换密码返回
+    LG_CTL_REGCODE                  = 0x30001004; // 请求验证码
+    LG_LTC_REGCODE                  = 0x10001004; // 返回验证码
+    LG_CTL_LOGIN                    = 0x30001010; // 客户端请求登录
+    LG_LTC_LOGIN                    = 0x10001010; // 登录返回
+    LG_LTC_SERVERLIST               = 0x10001005; // 服务器列表信息
+    LG_CTL_SERVERLIST               = 0x30001005; // 请求服务器列表
+    LG_LTC_LATESTLOGININFO          = 0x10001006; // 最近登录信息列表
+    LG_CTG_LOGIN                    = 0x0000000C; // 客户端请求网关登录
+    LG_GTC_LOGIN                    = 0x1000000C; // 网关返回客户端登陆请求
+    LG_LTC_NOTICE					= 0x1000000D; // 登陆服务器返回通知消息
+	LG_CTG_KEEPALIVE                = 0x0000000E; // 客户端和网关的心跳包
+    LG_GTC_KEEPALIVE                = 0x1000000E;  //网关发给客户端的心跳包  
+}

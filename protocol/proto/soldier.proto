@@ -1,0 +1,349 @@
+import "msgcode.proto";
+import "common.proto";
+import "errorcode.proto";
+
+package PaoEntity;
+
+message SoldierEquipment{
+
+    required int32 index                    = 1;//士兵装备位置
+    required int32 template_id              = 2;//士兵装备模板Id
+
+}
+
+message SoldierSkill{
+    
+     required int32 index                    = 1;//士兵技能位置
+     required int32 template_id              = 2;//士兵技能模板Id
+}
+
+message SoldierInfo{
+    required  BattleInfo       battle_info    = 2;//战斗属性
+    repeated  SoldierEquipment equipment      = 3;//装备信息
+    repeated  SoldierSkill     skill_info     = 4;//技能信息
+    required  int32            quality        = 5;//品质（军衔）
+    required  int32            star           = 6;//星级
+    required  int32            level          = 7;//当前士兵等级
+    required  int32            exp            = 8;//当前经验
+    required  int32            maxexp         = 9;//升级所需最大经验
+    required  int32      HPQ                 = 10;//生命资质
+    required  int32      DFQ                 = 11;//护甲资质
+    required  int32      ATTQ                = 12;//攻击力资质
+    required  int32      CRTQ                = 13;//暴击资质
+    required  int32      EVDQ                = 14;//闪避资质
+    required  int32      HRAQ                = 15;//命中资质
+    required  int32      RHPQ                = 16;//生命回复资质
+    required  int32      BDFQ                = 17;//护甲穿透资质
+    required  int32      Fight               = 18;//士兵战力
+
+    repeated  M_OtherAbility OtherAbilitys   = 19;//额外属性加成信息
+    required  int32      smallstar           = 20;//小星级
+}
+
+message CMD_SOLR_STC_SOLDIERINFO {
+    optional  MsgCode         msgcode             = 1     [default = SOLR_STC_SOLDIERINFO];
+
+    required  int32           IsUpdate            = 2;//是否更新 0:更新 1:添加 2：清理式添加 3：初始加载时添加士兵
+
+    repeated  SoldierInfo     soldier_list        = 3;//拥有的兵种集合
+
+}
+
+message CMD_SOLR_CTS_ADDSOLDIER {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_ADDSOLDIER];
+
+    required  int32      template_id         = 2;//士兵模板Id
+}
+
+message CMD_SOLR_STC_ADDSOLDIER {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_ADDSOLDIER];
+
+    required  ErrorCode      result          = 2;//添加士兵结果
+}
+
+message CMD_SOLR_CTS_DELETESOLDIER {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_DELETESOLDIER];
+
+    repeated  string     guid                = 2;//移除士兵实例GUID
+}
+
+message CMD_SOLR_STC_DELETESOLDIER {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_DELETESOLDIER];
+
+    required  ErrorCode  result              = 2;//移除士兵结果
+    repeated  string     guid                = 3;//士兵实例GUID
+
+}
+
+message CMD_SOLR_CTS_UPQUALITY {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_UPQUALITY];
+
+    required  string     guid                = 2;//升阶士兵实例GUID
+}
+
+message CMD_SOLR_STC_UPQUALITY {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_UPQUALITY];
+
+    required  ErrorCode      result          = 2;//升阶士兵结果
+
+}
+
+message CMD_SOLR_CTS_UPSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_UPSTAR];
+
+    required  string     guid                = 2;//升星士兵实例GUID
+    required  int32      type                = 3;//0:小升星 1：大升星 2：一键升星
+}
+
+message CMD_SOLR_STC_UPSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_UPSTAR];
+
+    required  ErrorCode      result          = 2;//升星士兵结果
+
+}
+//士兵装备道具使用的返回
+message CMD_SOLR_STC_WEAREQUIPMENT {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_WEAREQUIPMENT];
+
+    required  ErrorCode      result          = 2;//士兵穿装备结果
+
+}
+
+message CMD_SOLR_STC_UPDATEEXP {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_UPDATEEXP];
+
+    required  string     guid                = 2;//士兵实例GUID
+    required  int32      exp                 = 3;//士兵更新的当前经验值
+}
+
+message SoldierStatus{
+    
+     required string guid                    = 1;//士兵id
+     required int32  type                    = 2;//更新状态类型 0：挖矿状态 1 羁绊状态
+     required int32 status                   = 3;//状态
+}
+
+message CMD_SOLR_STC_UPDATE_OTHER_STATUS {
+    optional  MsgCode    msgcode              = 1     [default = SOLR_STC_UPDATE_OTHER_STATUS];
+
+    repeated  SoldierStatus     status        = 2;
+}
+
+//获取士兵详细属性信息
+message CMD_SOLR_CTS_GETDETAILINFO {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_GETDETAILINFO];
+
+    required  string     guid                = 2;//士兵实例GUID
+}
+//返回士兵详细属性信息
+message CMD_SOLR_STC_GETDETAILINFO {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_GETDETAILINFO];
+
+    required  ErrorCode  result              = 2;//士兵结果
+    required  string     guid                = 3;//士兵实例GUID
+    repeated  M_OtherAbility     abilitys    = 4;//属性详情
+
+}
+
+/********************************************士兵资质洗练********************************************************/
+//成长(资质)类型
+enum GrowthType
+{
+    HP_Q  =1;
+    ATT_Q =2;
+    DF_Q  =3;
+}
+//成长加成
+message GrowthAddition
+{
+    required  GrowthType type   =1;
+    required  int32      Value  =2; //这是个0-10000的数，例子: 2515 表示 25.15%，客户端自行处理保留2位小数
+    required  int32      Quality =3;//品质123456白绿蓝紫紫橙
+}
+message Wash_Soldier
+{
+    required  string  SoldeirID =1;
+    repeated  GrowthAddition Additions =2; 
+    repeated  GrowthType  LockTypes =3; 
+}
+//每点一下某项资质的锁就发一条报文切换锁状态 
+message CMD_SOLR_CTS_GROWTH_LOCK
+{
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_GROWTH_LOCK];
+    required  string     soliderId           = 2;
+    required  GrowthType  type               = 3; //选择的资质类型   
+}
+message CMD_SOLR_STC_GROWTH_LOCK
+{
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_GROWTH_LOCK];
+    required ErrorCode  ReturnCode          = 2;
+    repeated GrowthType LockTypes           = 3;
+}
+message CMD_SOLR_CTS_GROWTH_WASH
+{
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_GROWTH_WASH];
+    required  string     soliderId           = 2;
+    //repeated  GrowthType   LockTypes         = 3; //锁定的资质类型
+}
+
+message CMD_SOLR_STC_GROWTH_WASH
+{
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_GROWTH_WASH];
+    required  ErrorCode  ReturnCode          = 2;
+}
+
+message CMD_SOLR_STC_GROWTHINFO
+{
+    optional MsgCode    msgcode              =1[default =SOLR_STC_GROWTHINFO];
+    required bool       IsUpdate             =2;
+    repeated Wash_Soldier Soldiers           =3;
+}
+
+////////////////////////////////////////////////士兵优化/////////////////////////////////////////////////////////
+message CMD_SOLR_CTS_UPSMALLSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_UPSMALLSTAR];
+
+    required  string     guid                = 2;//小升星士兵实例GUID
+
+}
+
+message CMD_SOLR_STC_UPSMALLSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_UPSMALLSTAR];
+
+    required  ErrorCode      result          = 2;//小升星士兵结果
+
+}
+
+message CMD_SOLR_CTS_UPSKILL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_UPSKILL];
+
+    required  string     guid                = 2;//士兵实例GUID
+    required  int32      skillid             = 3;//升级技能id
+
+}
+
+message CMD_SOLR_STC_UPSKILL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_UPSKILL];
+
+    required  ErrorCode      result          = 2;//结果
+    required  string     soldierid           = 3;//士兵guid
+    required  int32      oldskillid          = 4;//升级前的技能id
+    required  int32      newskillid          = 5;//升级后的技能id
+
+}
+
+
+message CMD_SOLR_CTS_BUYEXPITEM {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_BUYEXPITEM];
+
+    required  int32      item                = 2;//购买道具id
+    required  int32      count               = 3;//购买数量
+
+}
+
+message CMD_SOLR_STC_BUYEXPITEM {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_BUYEXPITEM];
+
+    required  ErrorCode      result          = 2;
+
+}
+//一键穿戴喜好
+message CMD_SOLR_CTS_ONEKEYWEARON {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_ONEKEYWEARON];
+
+    required  string     soldierid           = 2;//士兵guid
+}
+
+message CMD_SOLR_STC_ONEKEYWEARON {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_ONEKEYWEARON];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+/////////////////////////////////////////////士兵装备系统/////////////////////////////////
+
+message CMD_SOLR_CTS_EQUIPONEKEUPLEVEL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_EQUIPONEKEUPLEVEL];
+
+    required  string     soldierid           = 2;//士兵guid
+    required  int32      index               = 3;//装备位子
+}
+
+message CMD_SOLR_STC_EQUIPONEKEUPLEVEL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_EQUIPONEKEUPLEVEL];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+
+message CMD_SOLR_CTS_EQUIPUPLEVEL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_EQUIPUPLEVEL];
+
+    required  string     soldierid           = 2;//士兵guid
+    required  int32      index               = 3;//装备位子
+}
+
+message CMD_SOLR_STC_EQUIPUPLEVEL {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_EQUIPUPLEVEL];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+message CMD_SOLR_CTS_EQUIPUPQUALITY {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_EQUIPUPQUALITY];
+
+    required  string     soldierid           = 2;//士兵guid
+    required  int32      index               = 3;//装备位子
+}
+
+message CMD_SOLR_STC_EQUIPUPQUALITY {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_EQUIPUPQUALITY];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+message CMD_SOLR_CTS_EQUIPUPSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_EQUIPUPSTAR];
+
+    required  string     soldierid           = 2;//士兵guid
+    required  int32      index               = 3;//装备位子
+}
+
+message CMD_SOLR_STC_EQUIPUPSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_EQUIPUPSTAR];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+message CMD_SOLR_CTS_EQUIPDOWNSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_CTS_EQUIPDOWNSTAR];
+
+    required  string     soldierid           = 2;//士兵guid
+    required  int32      index               = 3;//装备位子
+}
+
+message CMD_SOLR_STC_EQUIPDOWNSTAR {
+    optional  MsgCode    msgcode             = 1     [default = SOLR_STC_EQUIPDOWNSTAR];
+
+    required  ErrorCode      result          = 2;
+
+}
+
+message M_Equipment{
+    
+     required int32 index                    = 1;//装备位子
+     required int32 levelconfigid            = 2;//装备等级配置id
+     required int32 starconfigid             = 3;//装备星级配置id
+}
+
+message CMD_SOLD_STC_EQUIPMENTS {
+    optional  MsgCode    msgcode             = 1     [default = SOLD_STC_EQUIPMENTS];
+    required  string     soldierid           = 2;//士兵guid
+    repeated  M_Equipment      equipments          = 3;
+
+}

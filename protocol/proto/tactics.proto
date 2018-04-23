@@ -1,0 +1,124 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+
+//战术孔槽信息
+message Tactic_Slot     
+{
+     required int32 nStoneId              = 1;    //镶嵌的宝石模版Id
+     required int32 nHasExp               = 2;    //已拥有多少经验
+     required int32 nPos                  = 3;    //位置信息
+}
+
+//单个战术信息
+message Tactic_Data
+{
+     required int32 nRootId               = 1;    //战术根Id
+     required int32 nActiveLevel          = 2;    //战术激活的等级
+     repeated Tactic_Slot vSlots          = 3;    //当前镶嵌了宝石的孔槽信息
+}
+
+message CMD_TACTICS_STC_UPDATETACTIC
+{
+	optional MsgCode msgcode 	       = 1[default = TACTICS_STC_UPDATETACTIC];
+     required bool  bIsUpdate             = 2;
+     repeated Tactic_Data vTactics        = 3;
+}
+
+//装备一个宝石
+message CMD_TACTICS_CTS_EQUIPSTONE
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_CTS_EQUIPSTONE];
+     required int32   nTacticRootId       = 2;     //战术根Id 对应某个战术
+     required int32   nStoneId            = 3;     //镶嵌的宝石模版Id
+     required int32   nPos                = 4;     //镶嵌的孔槽位置
+}
+
+//装备一个宝石服务器返回
+message CMD_TACTICS_STC_EQUIPSTONE_RESPONSE
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_STC_EQUIPSTONE_RESPONSE];
+     required ErrorCode errcode           = 2;     //结果 
+     required int32   nPos                = 3;     //镶嵌的孔槽位置
+}
+
+//合成一个已镶嵌宝石
+message CMD_TACTICS_CTS_COMPOUND
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_CTS_COMPOUND];
+     required int32   nTacticRootId       = 2;     //战术根Id 对应某个战术
+     required int32   nPos                = 3;     //合成的孔槽位置
+     repeated int32   nStoneIds           = 4;     //被合成的材料宝石
+}
+
+
+//合成一个已镶嵌宝石结果
+message CMD_TACTICS_STC_COMPOUND_RESPONSE 
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_STC_COMPOUND_RESPONSE];
+     required ErrorCode errcode           = 2;     //结果 
+}
+
+//卸下一个已镶嵌宝石
+message CMD_TACTICS_CTS_UNEQUIP
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_CTS_UNEQUIP];
+     required int32   nTacticRootId       = 2;     //战术根Id 对应某个战术
+     required int32   nPos                = 3;     //卸下的孔槽位置
+}
+
+//卸下一个已镶嵌宝石结果
+message CMD_TACTICS_STC_UNEQUIP_RESPONSE
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_STC_UNEQUIP_RESPONSE];
+     required ErrorCode errcode           = 2;     //结果 
+}
+
+message CMD_TACTICS_CTS_ONEKEY_EQUIPSTONE
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_CTS_ONEKEY_EQUIPSTONE];
+     required int32   nTacticRootId       = 2;     //战术根Id 对应某个战术
+}
+
+message CMD_TACTICS_STC_ONEKEY_EQUIPSTONE_RESPONSE
+{
+     optional MsgCode msgcode             = 1[default = TACTICS_STC_ONEKEY_EQUIPSTONE_RESPONSE];
+     required ErrorCode errcode           = 2;     //结果 
+     repeated int32   nPos                = 3;     //服务器返回的位置列表
+}
+
+message CMD_TACTICS_CTS_ONEKEY_COMPOUND
+{
+	optional MsgCode msgcode 			 = 1[default = TACTICS_CTS_ONEKEY_COMPOUND];
+	required int32   nTacticRootId       = 2;     //战术根Id 对应某个战术
+    required int32   nPos                = 3;     //合成的孔槽位置
+    repeated int32   nStoneIds           = 4;     //被合成的材料宝石
+    required int32	 nTargetStoneId	 = 5;	//合成后的宝石配置id
+}
+
+message CMD_TACTICS_STC_ONEKEY_COMPOUND_RESPONSE
+{
+	optional MsgCode msgcode 			= 1 [default = TACTICS_STC_ONEKEY_COMPOUND_RESPONSE];
+	required ErrorCode errcode           = 2;     //结果 
+}
+
+
+//天梯需要的战术信息
+message Tactics_ISL_Data
+{
+	required int32 nRootId 			 	= 1;  //战术id
+	required int32 nActiveLevel			= 2;  //战术等级
+}
+
+message Tactics_Commander_Buff
+{
+	required uint32 abilityType			= 1;	//0:生命 1:护甲 2:攻击力
+	required int32 value				= 2;	//buff数值
+}
+
+message CMD_TACTICS_STC_ISLDATA
+{
+	repeated Tactics_ISL_Data vTactics 					= 1;		//天梯需要的战术信息
+	repeated Tactics_Commander_Buff 	      commanderBuff 	= 2;		//指挥官BUFF
+}
+

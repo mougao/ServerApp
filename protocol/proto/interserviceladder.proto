@@ -1,0 +1,564 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "battle.proto";
+import "common.proto";
+import "tactics.proto";
+import "Fetters.proto";
+package PaoEntity;
+
+////////////////////////////////////////////跨服天梯////////////////////////////////////////////////////////////////
+
+message M_ISL_BaseInfo{
+
+	required int32 race             = 1;//赛季
+    required int32 starttime        = 2;//开始时间
+    required int32 endtime          = 3;//关闭时间
+    required int32 rank             = 4;//排名(该字段暂时废除)
+	required int32 score            = 5;//积分
+	required int32 challengetimes   = 6;//挑战次数
+	required int32 wontimes         = 7;//胜利次数
+    required int32 fightStartTime   = 8;//战斗有效开始时间***
+    required int32 fightEndTime     = 9;//战斗有效结束时间***
+    required  int32           maxcontinuewons     = 10;//最大连胜次数 
+    required  int32           continuewons        = 11;//当前连胜次数 
+    required int32 draws            = 12;//平局次数 **************
+}
+
+//基本信息（废除）
+message CMD_ISL_CTS_BASEINFO {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_BASEINFO];
+
+}
+
+//登录时、跨天、战斗结束时发送***
+message CMD_ISL_STC_BASEINFO {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_BASEINFO];
+    required  M_ISL_BaseInfo            baseinfo          = 2;//基本信息
+    required  ErrorCode       result              = 3;//获取结果
+}
+
+
+//基本排名信息
+message CMD_ISL_CTS_BASERANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_BASERANK];
+
+}
+
+//基本排名信息
+message CMD_ISL_STC_BASERANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_BASERANK];
+    required  int32           server_rank         = 2;//单服排名
+    required  int32           global_rank         = 3;//全服排名
+    required  ErrorCode       result              = 4;//获取结果
+}
+
+//日志信息
+
+message M_ISL_Log{
+
+	required string ChallengerName                  = 1;//战斗方玩家名字
+    required string ChallengeServer                 = 2;//战斗方服务器
+    required int32    Result                        = 3;//战斗结果1：成功 -1：失败
+    required int32    Time                          = 4;//战斗发生的时间
+    required int32    RankChange                    = 5;//积分变更信息 +：积分上升 -：积分下降 0：积分不变（暂时不需要）
+    required string BattleVideo                     = 6;//战斗录像信息（暂时没有）
+    required string ChallengerIcon                  = 7;//战斗方玩家头像
+    required int32 Score                            = 8;//战斗方积分***
+    required int32 Level                            = 9;//战斗方等级***
+    required int32 EnemyChallengeTimes              = 10;//敌方战斗次数
+    required int32 EnemyWons                        = 11;//敌方胜利次数
+    required int32 EnemyDraws                       = 12;//敌方平局次数******
+}
+
+message CMD_ISL_CTS_LADDERLOG {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_LADDERLOG];
+
+}
+
+message CMD_ISL_STC_LADDERLOG {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_LADDERLOG];
+    repeated  M_ISL_Log            log            = 2;//日志信息
+    required  ErrorCode       result              = 3;//获取结果
+}
+
+
+
+message M_ISL_Rank{
+	required int32           race                     = 1;//赛季(暂时没用)
+	required int32           rank                     = 2;//排名
+    required string          name                     = 3;//玩家名字
+    required int32           level                    = 4;//玩家等级
+    required int32           fight                    = 5;//玩家战力（暂时没用）
+    required string          icon                     = 8;//玩家头像id
+    required int32           wontimes                 = 9;//胜利场数
+    required int32           challengetimes           = 10;//挑战场数
+    required int32           score                    = 11;//积分
+    required string          server                   = 12;//服务器
+    required string          memberid                 = 13;//角色Id
+    required int32           draws                    = 14;//平局次数 **************
+}
+//排行榜
+message CMD_ISL_CTS_RANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_RANK];
+    required  int32           type                = 2; //0 当前比赛 1：上一届比赛 2：当前本服
+}
+
+message CMD_ISL_STC_RANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_RANK];
+    repeated  M_ISL_Rank      ranks          = 2;
+    required  int32           type                = 3; //0 当前比赛 1：上一届比赛 2：当前本服
+    required  ErrorCode       result              = 4;//获取结果
+}
+
+//荣誉榜
+message CMD_ISL_CTS_HISTORYRANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_HISTORYRANK];
+    required  int32           race                = 2;//查看赛季
+}
+
+message CMD_ISL_STC_HISTORYRANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_HISTORYRANK];
+    repeated  M_ISL_Rank           ranks          = 2;
+    required  ErrorCode       result              = 3;//获取结果
+}
+
+//开始匹配
+message CMD_ISL_CTS_STARTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_STARTMATCH];
+
+}
+
+message CMD_ISL_STC_STARTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_STARTMATCH];
+    required  ErrorCode       result              = 2;
+    required  int32           average_second      = 3; //平均匹配耗时
+}
+//取消匹配
+message CMD_ISL_CTS_STOPMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_STOPMATCH];
+
+}
+
+message CMD_ISL_STC_STOPMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_STOPMATCH];
+    required  ErrorCode       result              = 2;
+}
+
+
+
+//匹配对手信息
+message M_MatchInfo{
+
+	required string          character_id             = 1;//对手id
+	required string          server                   = 2;//服务器
+	required string          name                     = 3;//玩家名字
+    required int32           level                    = 4;//玩家等级
+    required string          icon                     = 5;//玩家头像id
+    required int32           wontimes                 = 6;//胜利场数
+    required int32           challengetimes           = 7;//挑战场数
+    required int32           gender                   = 8;//指挥官性别
+    required int32           score                    = 9;//积分
+    optional CMD_TACTICS_STC_ISLDATA  tactics         = 10;//战术信息
+    optional ISL_Fetters_Soldiers fetters             = 11;//羁绊信息
+    required int32           draws                    = 12;//平局次数 **************
+}
+
+//布阵状态（玩家根据当前状态信息进行操作）
+message M_StatusInfo{
+
+	required int32           step                     = 1;//当前处于那个步骤
+	required int32           type                     = 2;//当前处于布阵类型 1：士兵 2：指挥官 3：科技 4:布阵完成
+	required int32           action                   = 3;//行动 1：操作 2：等待
+    required int32           amount                   = 4;//如果操作，操作的数量
+    required int32           time                     = 5;//操作限定时间
+}
+//返回匹配结果
+message CMD_ISL_STC_SENDMATCHRESULT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_SENDMATCHRESULT];
+    required  M_MatchInfo     matchinfo           = 2;//匹配对手信息
+    required  M_StatusInfo    status              = 3;//布阵状态
+}
+
+//设置士兵
+message CMD_ISL_CTS_SETSOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_SETSOLDIER];
+    repeated  string          soldiers            = 2;//上阵士兵
+}
+
+message CMD_ISL_STC_SETSOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_SETSOLDIER];
+    required  ErrorCode       result              = 2;
+}
+//设置指挥官
+message CMD_ISL_CTS_SETCOMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_SETCOMMANDER];
+    required  CommanderFormType           formtype            = 2;//设置指挥官状态
+}
+
+message CMD_ISL_STC_SETCOMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_SETCOMMANDER];
+    required  ErrorCode       result              = 2;
+}
+//设置科技
+message CMD_ISL_CTS_SETSKILL {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_SETSKILL];
+    repeated  int32           skills              = 2;//设置科技
+}
+
+message CMD_ISL_STC_SETSKILL {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_SETSKILL];
+    required  ErrorCode       result              = 2;
+}
+
+
+//已布阵信息
+message M_Formation
+{
+    required string                     name                       = 1;//指挥官名称
+    required string                     icon                       = 2;//指挥官头像
+    required int32                      gender                     = 3;//指挥官性别
+	required BattleInfo                 commander                  = 4;//指挥官
+	required CommanderFormType          formtype                   = 5;//指挥官状态
+	repeated BattleInfo                 soldiers                   = 6;//上阵士兵
+	repeated M_SkillInfo                skills                     = 7;//上阵科技
+
+}
+
+//更新当前布阵状态
+message CMD_ISL_STC_UPDATESTEP {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_UPDATESTEP];
+    required  M_StatusInfo    status              = 2;//布阵状态
+    required  M_Formation     owner               = 3;//自己上阵信息
+    required  M_Formation     enemy               = 4;//敌方上阵信息
+}
+
+//停止跨服天梯业务
+message CMD_ISL_STC_STOP {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_STOP];
+    required  ErrorCode       result              = 2;//停止原因
+}
+
+//布阵结束开启战斗
+message CMD_ISL_CTS_STARTFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_STARTFIGHT];
+}
+
+//布阵结束开启战斗返回
+message CMD_ISL_STC_STARTFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_STARTFIGHT];
+    required  ErrorCode       result              = 2;
+}
+
+//离开战斗
+message CMD_ISL_CTS_OUTFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_CTS_OUTFIGHT];
+}
+
+//离开战斗返回
+message CMD_ISL_STC_OUTFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_OUTFIGHT];
+    required  ErrorCode       result              = 2;
+}
+
+//超时退出匹配
+message CMD_ISL_STC_OUTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_OUTMATCH];
+    required  ErrorCode       result              = 2;
+}
+
+
+//战斗结束结果返回
+message CMD_ISL_STC_FINISHFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STC_FINISHFIGHT];
+    required  int32           result              = 2; //-1:输 1：胜
+    required  int32           score               = 3;//积分
+    required  int32           challengetimes      = 4;//挑战次数
+    required  int32           wontimes            = 5;//胜利次数
+    required  int32           maxcontinuewons     = 6;//最大连胜次数 
+    required  int32           continuewons        = 7;//当前连胜次数 
+    required  int32           draws               = 8;//平局次数 **************
+}
+
+//////////////////////////////////////////////////////游戏服务器与跨服服务器通信////////////////////////////////////////
+
+//基本信息
+message CMD_ISL_STK_BASEINFO {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_BASEINFO];
+    required  string          omnerid             = 2;//玩家id
+}
+
+message CMD_ISL_KTS_BASEINFO {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_BASEINFO];
+    required  M_ISL_BaseInfo  baseinfo            = 2;//基本信息
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_LADDERLOG {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_LADDERLOG];
+    required  string          omnerid             = 2;//玩家id
+}
+
+message CMD_ISL_KTS_LADDERLOG {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_LADDERLOG];
+    repeated  M_ISL_Log       log                 = 2;//日志信息
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_RANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_RANK];
+    required  string          omnerid             = 2;//玩家id
+    required  int32           type                = 3; //0 当前比赛 1：上一届比赛
+}
+
+message CMD_ISL_KTS_RANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_RANK];
+    repeated  M_ISL_Rank           ranks          = 2;
+    required  string          omnerid             = 3;//玩家id
+    required  int32           type                = 4; //0 当前比赛 1：上一届比赛
+}
+
+message CMD_ISL_STK_HISTORYRANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_HISTORYRANK];
+    required  int32           race                = 2;//查看赛季
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_HISTORYRANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_HISTORYRANK];
+    repeated  M_ISL_Rank           ranks          = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_STARTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_STARTMATCH];
+    required  M_MatchInfo     matchinfo           = 2;//开始匹配的玩家自身信息
+    required  string          omnerid             = 3;//玩家id
+    required  BattleInfo      commander           = 4;//指挥官
+}
+
+message CMD_ISL_KTS_STARTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_STARTMATCH];
+    required  ErrorCode       result              = 2;
+    required  int32           average_second      = 3; //平均匹配耗时
+    required  string          omnerid             = 4;//玩家id
+}
+
+message CMD_ISL_STK_STOPMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_STOPMATCH];
+    required  string          omnerid             = 2;//玩家id
+}
+
+message CMD_ISL_KTS_STOPMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_STOPMATCH];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+//返回匹配结果
+message CMD_ISL_KTS_SENDMATCHRESULT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SENDMATCHRESULT];
+    required  M_MatchInfo     matchinfo           = 2;//匹配对手信息
+    required  M_StatusInfo    status              = 3;//布阵状态
+    required  string          omnerid             = 4;//玩家id
+    required  M_Formation     enemyformation      = 5;//敌方战斗阵型
+    required  int32           type                = 6;//0：普通实时对战 1：boss战或镜像战
+    required  int32           steptype            = 7;//0：先手布阵 1：后手布阵
+}
+
+message CMD_ISL_STK_SETSOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SETSOLDIER];
+    repeated  BattleInfo      soldiers            = 2;//上阵士兵
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SETSOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SETSOLDIER];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SETCOMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SETCOMMANDER];
+    required  CommanderFormType           formtype            = 2;//设置指挥官状态
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SETCOMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SETCOMMANDER];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SETSKILL {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SETSKILL];
+    repeated  M_SkillInfo     skills              = 2;//设置科技
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SETSKILL {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SETSKILL];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_UPDATESTEP {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_UPDATESTEP];
+    required  M_StatusInfo    status              = 2;//布阵状态
+    required  string          omnerid             = 3;//玩家id
+    required  int32           time                = 4;//布阵完成更新时间
+}
+
+
+message CMD_ISL_KTS_SET_ENEMY_SOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SET_ENEMY_SOLDIER];
+    repeated  BattleInfo      soldiers            = 2;//上阵士兵
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SET_ENEMY_SOLDIER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SET_ENEMY_SOLDIER];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SET_ENEMY_COMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SET_ENEMY_COMMANDER];
+    required  CommanderFormType           formtype            = 2;//设置指挥官状态
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SET_ENEMY_COMMANDER {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SET_ENEMY_COMMANDER];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SET_ENEMY_SKILLs {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SET_ENEMY_SKILLs];
+    repeated  M_SkillInfo     skills              = 2;//设置科技
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SET_ENEMY_SKILLs {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SET_ENEMY_SKILLs];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_SEND_ENEMY_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SEND_ENEMY_FORMATION];
+    required  M_Formation     formation           = 2;//敌方完整阵型
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_STK_SEND_ENEMY_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SEND_ENEMY_FORMATION];
+    required  ErrorCode       result              = 2;
+    required  string          omnerid             = 3;//玩家id
+}
+
+message CMD_ISL_KTS_GET_ENEMY_OFFLINE_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_GET_ENEMY_OFFLINE_FORMATION];
+    required  string          omnerid             = 2;//发起战斗玩家
+    required  string          enemyid             = 3;//被打玩家
+}
+
+message CMD_ISL_STK_GET_ENEMY_OFFLINE_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_GET_ENEMY_OFFLINE_FORMATION];
+    required  string          omnerid             = 2;//
+    required  M_Formation     formation           = 3;//敌方完整阵型
+    required  M_MatchInfo     matchinfo           = 4;//
+}
+
+message CMD_ISL_STK_SEND_OWNER_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SEND_OWNER_FORMATION];
+    required  string          omnerid             = 2;//玩家
+    required  M_Formation     formation           = 3;//玩家阵型
+}
+
+message CMD_ISL_KTS_SEND_OWNER_FORMATION {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SEND_OWNER_FORMATION];
+    required  string          omnerid             = 2;//
+    required  ErrorCode       result              = 3;
+}
+
+message CMD_ISL_STK_SEND_BATTLE_RESULT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SEND_BATTLE_RESULT];
+    required  string          omnerid             = 2;//玩家
+    required  int32           resule              = 3;//1:胜利 -1：失败
+}
+
+message CMD_ISL_KTS_SEND_BATTLE_RESULT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SEND_BATTLE_RESULT];
+    required  string          omnerid             = 2;//
+    required  ErrorCode       result              = 3;
+}
+
+message CMD_ISL_STK_SEND_BATTLE_CANCLE {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SEND_BATTLE_CANCLE];
+    required  string          omnerid             = 2;//玩家
+}
+
+message CMD_ISL_KTS_SEND_BATTLE_CANCLE {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SEND_BATTLE_CANCLE];
+    required  string          omnerid             = 2;//
+    required  ErrorCode       result              = 3;
+}
+
+message CMD_ISL_KTS_SEND_REWARD {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_SEND_REWARD];
+    required  string          omnerid             = 2;//玩家
+    required  int32           type                = 3;//奖励发放方式 0：立即发放（战斗奖励） 1：邮件发放（每周） 2：邮件发放（每季）
+    repeated  Reward          rewards             = 4;//奖励
+    required  int32           rank                = 5;//排名
+}
+
+message CMD_ISL_STK_SEND_REWARD {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_SEND_REWARD];
+    required  string          omnerid             = 2;//
+    required  ErrorCode       result              = 3;
+}
+
+message CMD_ISL_KTS_STOP {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_STOP];
+    required  ErrorCode       result              = 2;//停止原因
+    repeated  string          memberid            = 3;//受影响玩家
+}
+
+
+//基本排名信息
+message CMD_ISL_STK_BASERANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_STK_BASERANK];
+    required  string          omnerid             = 2;
+}
+
+//基本排名信息
+message CMD_ISL_KTS_BASERANK {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_BASERANK];
+    required  int32           server_rank         = 2;//单服排名
+    required  int32           global_rank         = 3;//全服排名
+    required  string          omnerid             = 4;
+}
+
+//超时退出匹配
+message CMD_ISL_KTS_OUTMATCH {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_OUTMATCH];
+    required  string          omnerid             = 2;
+    required  ErrorCode       result              = 3;
+}
+
+//战斗结束结果返回
+message CMD_ISL_KTS_FINISHFIGHT {
+    optional  MsgCode         msgcode             = 1     [default = ISL_KTS_FINISHFIGHT];
+    required  int32           result              = 2; //-1:输 1：胜
+    required  int32           score               = 3;//积分
+    required  int32           challengetimes      = 4;//挑战次数
+    required  int32           wontimes            = 5;//胜利次数
+    required  int32           scorelevel          = 6;//积分等级
+    repeated  Reward          rewards             = 7;//战斗奖励
+    required  string          omnerid             = 8;
+    required  int32           continuewons        = 9;//当前连胜次数 
+    required  string          scorename           = 10;//积分称号
+    required  int32           maxcontinuewons     = 11;//最大连胜次数 
+    required  int32           draws               = 12;//平局次数 **************
+}

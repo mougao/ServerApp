@@ -1,0 +1,132 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+
+message resourceData{
+    required int32 type = 1;//1=coin,2=gold
+    required int32 value = 2;
+}
+
+message CMD_RESOURCE_STC_INFO {
+    optional  MsgCode         msgcode             = 1     [default = RESOURCE_STC_INFO];
+
+    required  int32           IsUpdate            = 2;//是否更新 0:更新 1:添加
+
+    repeated  resourceData     datalist           = 3;//资源集合
+
+}
+
+
+message CMD_STAMINA_CTS_BUYSTAMINA
+{
+
+	optional   MsgCode msgcode 			= 1[default =STAMINA_CTS_BUYSTAMINA];
+
+}
+
+message CMD_STAMINA_STC_BUYSTAMINARESPONSE
+{
+
+    optional MsgCode msgcode 			= 1[default =STAMINA_STC_BUYSTAMINARESPONSE];
+    required ErrorCode ReturnCode       =2; //0：成功 1101黄金不够  1102购买次数上限 1104 体力超限，不能购买
+
+}
+
+message CMD_STAMINA_STC_SENDSTAMINAINFO
+{
+	optional MsgCode msgcode            =1[default = STAMINA_STC_SENDSTAMINAINFO];
+	required int32  CurrStamina         =2;//当前体力
+	required int32  CurrMaxStamina      =3;//当前最大体力
+    required int32  NextAddTime         =4; //下次恢复还需多少秒
+    required int32  HasBuyCount         =5;//已购买次数
+    required int32  TotalCount          =6;//总共可购买次数
+}
+
+
+//////////////////////////////点金报文开始/////////////////////////////////////////////////
+
+message GoldHandInfo 									//点金信息(登录时,每次点金后)
+{
+	required uint32 Count 				= 1;			//已经点金的次数
+	required uint32 TotTime				= 2;			//点金总次数
+}
+
+message CMD_GOLDHAND_STC_GOLDHANDINFO					//推送点金信息
+{
+	optional MsgCode msgcode 			= 1[default = GOLDHAND_STC_GETGOLDHANDINFO];
+	required GoldHandInfo info 			= 2;
+
+}
+
+message CMD_GOLDHAND_STC_REQUESTCOINRESPONSE			//返回点金结果
+{
+	optional MsgCode msgCode 		= 1[default = GOLDHAND_STC_REQUESTCOINRESPONSE];
+	required ErrorCode result       = 2;
+	repeated uint32 multipiles		= 3;
+	required GoldHandInfo info 		= 4;
+}
+
+enum FetchCoinType
+{
+	Once = 1;
+	Ten = 2;
+}
+
+message CMD_GOLDHAND_CTS_FETCHCOIN						//点金请求
+{
+	optional MsgCode msgCode 		= 1[default = GOLDHAND_CTS_FETCHCOIN];
+	required FetchCoinType Type 	= 2;
+}
+
+//////////////////////////////点金报文结束/////////////////////////////////////////////////
+
+message CMD_RECHARGE_STC_RECHARGERESPONSE
+{
+	optional MsgCode msgcode        =1[default = RECHARGE_STC_RECHARGERESPONSE];
+	required ErrorCode Result       =2;//0:成功 0x1401没有此玩家 0x1402没有此充值条目 0x1403金额不符 等
+    optional int32 goodsId          =3;//充值条目ID
+    optional int32 gold             =4;//获得的黄金数量
+    optional int32 vipExp           =5;//获得的VIP经验
+}
+
+message RechargeInfo
+{
+	required int32 goodsId =1;//充值条目ID
+	required int32 haveFirstReward =2; //0:无，1：有首充奖励
+
+}
+
+message CMD_RECHARGE_STC_SENDINFO
+{
+	optional MsgCode msgcode        =1[default = RECHARGE_STC_SENDINFO];
+	repeated RechargeInfo    infos       =2;//各条目首充信息
+
+}
+
+message CMD_RECHARGE_STC_SENDMONTHINFO
+{
+
+	optional MsgCode msgcode        =1[default = RECHARGE_STC_SENDMONTHINFO];
+	required int32 RemainDays       =2;//月卡剩余天数
+	required bool TodayHaveGet      =3;//今日是否领取月卡奖励
+}
+
+message CMD_RECHARGE_CTS_GETMONTHREWARD
+{
+	optional MsgCode msgcode        =1[default = RECHARGE_CTS_GETMONTHREWARD];
+
+}
+
+message CMD_RECHARGE_STC_GETMONTHREWARDRESPONSE
+{
+	optional MsgCode msgcode        =1[default = RECHARGE_STC_GETMONTHREWARDRESPONSE];
+	required ErrorCode Result       =2;//0领取成功 1404 未购买 1405已领
+
+}
+
+message CMD_RECHARGE_STC_SENDEXTREMEINFO
+{
+	optional MsgCode msgcode        =1[default = RECHARGE_STC_SENDEXTREMEINFO];
+	required bool    bHaveBuy       =2;//是否购买至尊卡
+}
+

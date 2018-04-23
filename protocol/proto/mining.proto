@@ -1,0 +1,295 @@
+import "msgcode.proto";
+import "common.proto";
+import "errorcode.proto";
+import "battle.proto";
+package PaoEntity;
+enum MineStatus
+{
+	MineStatus_Digging = 1;//开采中
+	MineStatus_Digout = 2; //开采完毕
+}
+
+message SelfMineinfo
+{
+	required string ID = 1; //矿产ID
+	required uint32 SlotID = 2;
+	required uint32 PrototypeID = 3; //矿产模板ID
+	required MineStatus Status = 4; //当前矿产状态
+	required Reward CurrentOutput  = 5; //当前产量
+	repeated string Soldiers = 6; //驻守兵种列表
+	repeated M_SkillInfo Skills = 7;	//已配置科技列表
+	required uint32 OriginalFigthAbility = 8;		//初始战力
+	required CommanderFormType CommanderType = 9; //指挥官初始形态
+	optional uint32 LeftTime = 10[default = 0]; //收获倒计时
+	optional uint32 NextGainTime = 11[default = 0];//下一次资源更新时间
+}
+enum OthersMineStatus
+{
+	OthersMineStatus_Digging = 1; //开采中
+	OthersMineStatus_Robbed = 2; //已被自己抢劫
+	OthersMineStatus_Charged = 3; //已被收获
+
+}
+message OtherPlayerMineInfo
+{
+	required OthersMineStatus Status 	= 1;//矿产状态
+	required string ID 					= 2[default=""]; //矿产ID
+	required uint32 PrototypeID			= 3; //矿产模板ID
+	required string OwnerName 			= 4[default=""]; //矿产所有者名字
+	optional Reward CurrentOutput  		= 5; //当前产量
+	repeated SoldierIconInfo Soldiers 	= 6; //已布阵士兵列表
+	repeated M_SkillInfo Skills 				= 7; //已配置科技列表
+	optional CommanderFormType CommanderType = 8; //指挥官初始形态
+	optional string EnemyCommanderIcon 		= 9;		//对手指挥官头像
+	optional uint32 EnemyCommanderGender	= 10;		//对手指挥官性别
+	optional uint32 Level					= 12;		//对手指挥官等级
+	optional uint32 FightAbility		= 13; //当前防守阵容战力
+	optional uint32 LeftTime 			= 14[default = 0]; //收获倒计时
+	optional int32 NextGainTime 		= 15[default = 0];//下一次资源更新时间
+	optional string ServerName 			= 16[default = ""];//服务器名
+
+}
+
+message OtherPlayerMineFormationInfo
+{
+	required OthersMineStatus Status 	= 1;//矿产状态
+	required string ID 					= 2; //矿产ID
+	required uint32 PrototypeID			= 3; //矿产模板ID
+	required string OwnerName 			= 4; //矿产所有者名字
+	required Reward CurrentOutput  		= 5; //当前产量
+	repeated BattleInfo Soldiers 	= 6; //已布阵士兵列表
+	repeated M_SkillInfo Skills 				= 7; //已配置科技列表
+	required BattleInfo Commander 			= 8; //指挥官属性
+	required CommanderFormType CommanderType = 9; //指挥官初始形态
+	required string EnemyCommanderIcon 		= 10;		//对手指挥官头像
+	required uint32 EnemyCommanderGender	= 11;		//对手指挥官性别
+	required uint32 Level					= 12;		//对手指挥官等级
+	required uint32 FightAbility		= 13; //当前防守阵容战力
+	required uint32 LeftTime 			= 14; //收获倒计时
+	required int32 NextGainTime 		= 15;//下一次资源更新时间
+	required string StartTime			= 16; //矿开启时间
+	required string ServerName 			= 17; //服务器名字
+	required string ServerType			= 18; //服务器类型
+	required int32 ServerId				= 19; //服务器ID
+	required Reward RobReward			= 20; //抢矿可得奖励
+}
+
+message CMD_MINING_STC_MININGINFO
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_MININGINFO];
+	required uint32 RefreshEmptyMineCount = 4;	  //今日刷新空矿次数
+	required uint32 RefreshPlayerMineCount = 5;  //今日刷新玩家矿次数
+}
+
+message CMD_MINING_STC_SELFMINES
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_SELFMINES];
+	repeated SelfMineinfo Mines = 3;		  //当前矿产信息
+}
+
+message CMD_MINING_STC_EMPTYMINES
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_EMPTYMINES];
+	repeated uint32 EmptyMines	 		= 2; //当前刷新页面的空矿
+}
+
+message CMD_MINING_STX_REFRESHOTHERSMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_STX_REFRESHOTHERSMINE];
+	required string UserID = 2;				//玩家ID
+	required int32 Level = 3;					//玩家等级	
+}
+
+message CMD_MINING_XTS_FETCHOTHERSMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_XTS_FETCHOTHERSMINE];
+	required string UserID = 2;				//玩家ID
+	required int32 Level = 3;					//玩家等级	
+}
+
+message CMD_MINING_STX_OTHERMINEINFO
+{
+	optional MsgCode msgcode = 1[default = MINING_STX_OTHERMINEINFO];
+	required string UserID = 2;				//玩家ID			
+	repeated OtherPlayerMineFormationInfo OthersMines = 3; 	//收集到的矿信息
+}
+
+message CMD_MINING_XTS_SENDOTHERSMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_XTS_SENDOTHERSMINE];
+	required string UserID = 2;				//玩家ID
+	repeated OtherPlayerMineFormationInfo OthersMines = 3;  //收集到的矿信息
+}
+
+message CMD_MINING_STX_ROBMINERESULT
+{
+	optional MsgCode msgcode = 1[default = MINING_STX_ROBMINERESULT];
+	required bool IsAttackerWin = 2;
+	required Reward RobReward = 3;
+	required string AttackerName = 4;
+	required string DefenderServerType = 5;
+	required int32 DefenderServerID = 6;
+	required string MineID = 8;
+}
+
+message CMD_MINING_XTS_ROBMINERESULT
+{
+	optional MsgCode msgcode = 1[default = MINING_XTS_ROBMINERESULT];
+	required bool IsAttackerWin = 2;
+	required Reward RobReward = 3;
+	required string AttackerName = 4;
+	required string AttackerServerName = 5;	
+	required string MineID = 6;
+}
+
+message CMD_MINING_STC_OTHERSMINES
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_OTHERSMINES];
+	optional bool IsUpdate = 2[default=false];
+	repeated OtherPlayerMineInfo OthersMines = 3; //当前抢劫页面的矿
+}
+
+message CMD_MINING_CTS_CURRENTOUTPUT
+{
+
+	optional MsgCode msgcode = 1[default = MINING_CTS_CURRENTOUTPUT];
+	repeated string MiningIDs = 2;				//查询的矿产ID列表
+}
+
+message CurrentOutputInfo
+{
+	required string ID = 1;						//矿产ID
+	required Reward CurrentOutput = 2;		    //当前产量
+	required int32 NextGainTime = 3;			//下一次更新时间
+	required MineStatus Status = 4;				//状态
+	optional uint32 LeftTime 			= 5[default = 0]; //收获倒计时
+}
+message CMD_MINING_STC_CURRENTOUTPUT
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_CURRENTOUTPUT];
+	repeated CurrentOutputInfo MingingCurrentInfos = 2;			//查询结果列表
+}
+
+message CMD_MINING_CTS_REFRESHEMPTYMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_REFRESHEMPTYMINE];
+}
+
+message CMD_MINING_STC_REFRESHEMPTYMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_REFRESHEMPTYMINE];
+	required ErrorCode code = 2;
+}
+
+message CMD_MINING_CTS_REFRESHOTHERSMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_REFRESHOTHERSMINE];
+}
+
+message CMD_MINING_STC_REFRESHOTHERSMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_REFRESHOTHERSMINE];
+	required ErrorCode code = 2;
+}
+
+message CMD_MINING_CTS_BEGINMINEDIGGING
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_BEGINMINEDIGGING];
+	required uint32 MinePrototype = 2;						//目标矿产模板ID
+	required uint32 SlotID   = 3;
+	repeated uint32 SkillIDs = 4;							//配置的科技列表
+	repeated string Soldiers = 5;							//配置的兵种列表
+	required CommanderFormType CommanderType = 6;				//指挥官初始形态
+}
+
+message CMD_MINING_STC_BEGINMINEDIGGING
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_BEGINMINEDIGGING];
+	required ErrorCode Code = 2;		//返回码
+}
+
+enum MineLogType
+{
+	Lose = 0;		//失败
+	Win = 1;		//胜利
+}
+
+message MineLog
+{
+	required uint32 ID = 1;
+	required MineLogType Type = 2;		//日志类型
+	required int32 Time = 3;			//日志时间
+	required bool HasFetched = 4;		//是否已领取
+	required string EnemyName = 5;		//敌方名字	
+	repeated Reward EnemyReward = 6;	//敌方获得奖励
+	optional string EnemyServerName = 7[default=""]; //敌方服务器名
+}
+
+message CMD_MINING_STC_MININGLOGS
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_MININGLOGS];
+	repeated MineLog MineLogs = 2; 		//日志列表
+}
+
+message CMD_MINING_CTS_FETCHREWARDINLOGS
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_FETCHREWARDINLOGS];
+	optional bool All = 2[default = false];
+	optional uint32 ID = 3[default = 0];
+}
+
+message CMD_MINING_STC_FETCHREWARDINLOGS
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_FETCHREWARDINLOGS];
+	required ErrorCode Code = 2;
+	repeated Reward Rewards = 3;   //奖励列表
+	optional bool All = 4[default = false];
+	optional uint32 ID = 5[default = 0];
+}
+
+message CMD_MINING_CTS_FETCHMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_FETCHMINE];
+	required string MineID = 2;
+}
+message CMD_MINING_STC_FETCHMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_FETCHMINE];
+	required ErrorCode Code = 2;
+	required string MineID = 3;
+	repeated Reward Rewards = 4;
+}
+message CMD_MINING_CTS_ROBMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_ROBMINE];
+	required string MineID = 2;
+}
+
+message CMD_MINING_STC_ROBMINE
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_ROBMINE];
+	required ErrorCode Code = 2;
+}
+message CMD_MINING_STC_RATIONS
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_RATIONS];
+	required uint32 Rations = 2;	//当前军粮
+	required int32 NextRefreshTime = 3; //下次更新时间,单位：秒
+}
+
+message CMD_MINING_STC_ROBMINERESULT
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_ROBMINERESULT];
+	repeated Reward Rewards = 2; //抢劫奖励
+}
+
+message CMD_MINING_CTS_REFRESHOTHERMINEINFO
+{
+	optional MsgCode msgcode = 1[default = MINING_CTS_REFRESHOTHERMINEINFO];
+}
+
+message CMD_MINING_STC_REFRESHOTHERMINEINFO
+{
+	optional MsgCode msgcode = 1[default = MINING_STC_REFRESHOTHERMINEINFO];
+	required ErrorCode Code = 2;	//返回码
+}

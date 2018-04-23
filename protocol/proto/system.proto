@@ -1,0 +1,53 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+message CMD_GLOB_STC_NEWDAY
+{
+	optional  MsgCode    msgcode             = 1     [default = GLOB_STC_NEWDAY];
+	required uint32		ServerTime			 = 2;	//当前服务器时间
+}
+
+message CMD_GLOB_STC_NEWWEEK
+{
+	optional  MsgCode    msgcode             = 1     [default = GLOB_STC_NEWWEEK];
+	required uint32 ServerTime				 = 2;	//当前服务器时间
+}
+
+
+////////////////////////////////////////////////////////////////系统设置/////////////////////////////////////////////////////////
+
+message CMD_SYSTEMSETTINGS_CTS_CHANGEICON
+{
+	optional MsgCode  msgcode                 =1 [default = SYSTEMSETTINGS_CTS_CHANGEICON];
+	required string   IconId                  =2; //要更改的头像id
+
+}
+
+message CMD_SYSTEMSETTINGS_STC_CHANGEICONRESPONSE
+{
+	optional MsgCode msgcode                  =1 [default = SYSTEMSETTINGS_STC_CHANGEICONRESPONSE];
+    required ErrorCode ReturnCode             =2;
+    optional string   IconId                  =3; //要更改的头像id
+
+}
+
+message CMD_SYSTEMSETTINGS_CTS_CHANGENAME
+{
+	optional MsgCode msgcode                  =1[default = SYSTEMSETTINGS_CTS_CHANGENAME];
+	required string  NewName                  =2;// 新名字
+}
+message CMD_SYSTEMSETTINGS_STC_CHANGENAMERESPONSE
+{
+	optional MsgCode msgcode                  =1 [default = SYSTEMSETTINGS_STC_CHANGENAMERESPONSE];
+    required ErrorCode ReturnCode             =2;
+    optional string   NewName                 =3; //要更改的名字
+}
+////////////////////////////////////////////////////////////////系统设置/////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////游戏公告////////////////////////////////////////////////////////
+message CMD_NOTICE_STC_SEND
+{
+	optional MsgCode msgcode                  =1[default = NOTICE_STC_SEND];
+	repeated string  Notices                  =2;
+}

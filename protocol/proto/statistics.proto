@@ -1,0 +1,21 @@
+import "msgcode.proto";
+package PaoEntity;
+
+message RealChannelStatistics
+{
+	required string Pid           		=1;//渠道包名
+    required int32 TotalRmb      	    =2;//总付费
+    required int32 NewTotalRmb    		=3;//新增总付费
+    required int32 LivelyCount    		=4;//活跃用户
+    required int32 LivelyRechargeCount  =5;//活跃付费用户数
+    required int32 NewUserCount   	    =6;//新增用户
+    required int32 NewRechargeUserCount =7;//新增付费用户数
+}
+
+message CMD_STATISTICS_STK_SENDRECHARGEINFO
+{
+	optional MsgCode msgcode = 1 [default = STATISTICS_STK_SENDRECHARGEINFO];
+	repeated RealChannelStatistics RealChannelStatistics=2;
+    required int32 ServerId =3;
+    required string Platform =4;//IOS,Android..
+}

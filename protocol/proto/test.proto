@@ -1,0 +1,62 @@
+import "msgcode.proto";
+import "common.proto";
+
+package PaoEntity;
+
+message CMD_MSG_STC_HEARTBEAT {
+    optional MsgCode    msgcode             = 1     [default = MSG_STC_HEARTBEAT];
+
+    required uint32     currentTime         = 2;    // 当前服务器时间
+}
+
+message TestRequest {
+    // Enumeration Test
+    optional MsgCode    msgcode             = 1     [default = TEST_REQUEST];
+
+    // Scalar Value Types Test
+    optional int32      value_int32         = 10;
+    optional int64      value_int64         = 11;
+    optional uint32     value_uint32        = 12;
+    optional uint64     value_uint64        = 13;
+    optional float      value_float         = 14;
+    optional double     value_double        = 15;
+    optional bool       value_bool          = 16;
+    optional string     value_string        = 17;
+    optional bytes      value_bytes         = 18;
+
+    // Repeated Test
+    // Import Test
+    repeated CardData   card_list           = 20;
+}
+
+message TestResponse {
+    // Enumeration Test
+    optional MsgCode    msgcode             = 1     [default = TEST_RESPONSE];
+
+    // Nested Message Test
+    message Result {
+        required bool succeed = 1;
+        optional string err_string = 2;
+    }
+    required Result     result              = 2;
+
+
+    // Scalar Value Types Test
+    required int32      value_int32         = 10;
+    required int64      value_int64         = 11;
+    required uint32     value_uint32        = 12;
+    required uint64     value_uint64        = 13;
+    required float      value_float         = 14;
+    required double     value_double        = 15;
+    required bool       value_bool          = 16;
+    required string     value_string        = 17;
+    required bytes      value_bytes         = 18;
+
+    // Repeated Test
+    // Import Test
+    repeated CardData   card_list           = 20;
+}
+
+
+
+

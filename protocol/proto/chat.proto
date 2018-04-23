@@ -1,0 +1,137 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+enum ChatType
+{
+	Public = 1; //世界频道
+	League = 2; //公会频道
+	Private = 3; //私聊频道
+}
+
+/*请求发送聊天信息*/
+message CMD_CHAT_CTS_SENDCHATINFO
+{
+	optional MsgCode  msgcode              = 1[default = CHAT_CTS_SENDCHATINFO];
+	required ChatType Type                 = 2;	//聊天类型
+	optional string TargetName             = 3; //接受者名字
+	required string Content                = 4;	//聊天内容
+}
+/*回复聊天信息请求*/
+message CMD_CHAT_STC_SENDCHATINFO
+{
+	
+	optional MsgCode  msgcode               =1[default = CHAT_STC_SENDCHATINFO];
+	required ErrorCode ReturnCode           =2;
+}
+
+
+message ChatRecord
+{
+	required string SenderIcon =1; //发送者头像
+	required string SenderName=3;  //发送者名字
+	required int32  SenderLevel=4; //发送者等级
+	optional string RecvName=5;    //接受者名字
+	required string Content =6;    // 发送内容
+	required int32  SendTime =7;   //发送时间
+	required bool   IsNew    =8;   //是否是玩家上次下线之后的新聊天记录（用于显示红点）
+}
+
+message CMD_CHAT_STC_SENDMARQUEERECORD
+{
+	optional MsgCode  msgcode               =1[default = CHAT_STC_SENDMARQUEERECORD];
+	required int32        ID                =2;
+    repeated string   Paramlist              =3;//参数
+}
+
+/*发送全服聊天记录*/
+message CMD_CHAT_STC_SENDPUBLICRECORDS
+{
+	optional MsgCode  msgcode               =1[default = CHAT_STC_SENDPUBLICRECORDS];
+	required bool     isUpdate              =2;  //是否是更新的，玩家登录游戏推送此值为false
+	repeated ChatRecord ChatRecords         =3;
+    
+}
+
+/*更新免费发言次数*/
+message CMD_CHAT_STC_FREEWORLDCHATCOUNT
+{
+	optional MsgCode msgcode                =1[default = CHAT_STC_FREEWORLDCHATCOUNT];
+	required int32   WorldChatCount         =2;//剩余免费世界聊天发言次数
+}
+/*推送公会聊天记录*/
+message CMD_CHAT_STC_SENDLEAGUERECORDS
+{
+	optional MsgCode msgcode             =1 [default = CHAT_STC_SENDLEAGUERECORDS];
+	required bool  isUpdate              =2;  //是否是更新的，玩家登录游戏推送此值为false
+    repeated ChatRecord ChatRecords      =3;
+}
+
+/*推送私聊记录*/
+message CMD_CHAT_STC_SENDPRIVATERECORDS
+{
+	optional MsgCode msgcode             =1 [default = CHAT_STC_SENDPRIVATERECORDS];
+	required bool  isUpdate              =2;  //是否是更新的，玩家登录游戏推送此值为false
+    repeated ChatRecord ChatRecords      =3;
+}
+
+
+/*购买次数*/
+message CMD_CHAT_CTS_BUYCOUNT
+{
+	optional MsgCode msgcode            =1[default = CHAT_CTS_BUYCOUNT];
+}
+
+/*购买次数返回*/
+message CMD_CHAT_STC_BUYCOUNTRESPONSE
+{
+	optional MsgCode msgcode           =1[default = CHAT_STC_BUYCOUNTRESPONSE];
+	required ErrorCode ReturnCode      =2;
+
+}
+
+/*添加黑名单*/
+message CMD_CHAT_CTS_REQUESTADDTOBLACKLIST
+{
+	
+	optional MsgCode msgcode            =1[default =CHAT_CTS_REQUESTADDTOBLACKLIST];
+	required string TargetName          =2;
+}
+
+message CMD_CHAT_STC_TOBLACKLISTRESPONSE
+{
+	optional MsgCode msgcode            =1[default = CHAT_STC_TOBLACKLISTRESPONSE];
+	required ErrorCode ReturnCode       =2;
+}
+
+/*删除黑名单*/
+message CMD_CHAT_CTS_REMOVECHARACTER
+{
+	optional MsgCode msgcode            =1[default =CHAT_CTS_REMOVECHARACTER];
+	required string TargetName          =2;
+}
+
+/*删除黑名单返回*/
+message CMD_CHAT_STC_REMOVERESPONSE
+{
+	optional MsgCode msgcode            =1[default =CHAT_STC_REMOVERESPONSE];
+    required ErrorCode ReturnCode       =2;
+    optional string TargetName          =3;//删除对象的名字
+}
+
+/*发送玩家黑名单*/
+message CMD_CHAT_STC_SENDBLACKLIST
+{
+	optional MsgCode msgcode           =1[default =CHAT_STC_SENDBLACKLIST];
+	repeated string NameList           =3;
+}
+message CMD_CHAT_CTS_SEARCH
+{
+	optional MsgCode msgcode            =1[default =CHAT_CTS_SEARCH];
+	required string TargetName          =2;
+}
+message CMD_CHAT_STC_SEARCH
+{
+	optional MsgCode msgcode            =1[default =CHAT_STC_SEARCH];
+	required ErrorCode ReturnCode       =2;
+	optional string TargetName          =3; //查找成功则返回
+}

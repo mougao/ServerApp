@@ -1,0 +1,460 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+package PaoEntity;
+
+enum ActivityType
+{
+    ActivityType_Notice             = 0;                // 公告
+    ActivityType_Redeem             = 1;                // 兑换码活动
+    ActivityType_ContinuousLogin    = 2;                // (七日)连续登录活动
+    ActivityType_NewServer          = 3;                // 开服活动
+    ActivityType_FirstRecharge      = 4;                // 首次充值活动
+    ActivityType_GrowthFund         = 5;                // 成长基金
+    Activity_Gift                       = 6;         // 礼包活动
+
+    ActivityType_Fight                  = 1001;         // 战力活动
+    ActivityType_AccumulativeLogin      = 1002;         // 累计登录活动
+    ActivityType_TotalLottery           = 1003;         // 累计抽卡
+    ActivityType_Dial                   = 1004;         // 转盘活动
+    Activity_DaySpecialTrade            = 1007;         //大特卖(单日循环)
+    ActivityType_AccumulativeConsume    = 2001;         // 多日累计消费黄金
+    ActivityType_DayAccumulativeConsume = 2002;         // 单日累计消费黄金
+    ActivityType_TotalRecharge          = 3001;         // 多日累计充值数量
+    ActivityType_TotalRechargeDay       = 3002;         // 累计充值天数
+    ActivityType_DayTotalRecharge       = 3003;         // 单日循环累计充值数量
+    ActivityType_DayTotalCountRecharge  = 3004;         // 单日循环累计充值次数
+    ActivityType_RechargeOnce           = 3005;         // 单日循环单笔充值活动
+    ActivityType_DayRepeatRechargeOnce  = 3006;         //单日循环单笔重复充值活动
+    ActivityType_PeriodMaterielExchange = 4001;			//多日物资兑换活动
+    ActivityType_DayMaterielExchange 	= 4002;			//单日物资兑换活动
+    ActivityType_MultiReward_NormalChapter = 8001;      //双倍活动：普通副本
+    ActivityType_MultiReward_SeniorChapter = 8002;      //双倍活动: 精英副本
+    ActivityType_MultiReward_Arena          = 8003;     //双倍活动：竞技场
+    ActivityType_MultiReward_ForwardBattleID = 8004;    //双倍活动：挑战副本
+    ActivityType_MultiReward_LeaderDungeonID = 8005;    //双倍活动：资源副本
+    ActivityType_MultiReward_Tower          = 8006;     //双倍活动：爬塔
+
+    OpenServer_Fight = 91001;
+    OpenServer_AccumulativeLogin = 91002;                   //开服活动之限时累计登录活动
+    OpenServer_TotalLottery = 91003;                        //开服活动之累计抽卡活动
+    OpenServer_AccumulativeConsume = 92001;                //开服活动之多日累计消费活动
+    OpenServer_DayAccumulativeConsume = 92002;         //开服活动之单日循环累计消费黄金
+    OpenServer_DayStaminaConsume = 92003;                   //开服活动之单日循环累计体力消耗活动
+    OpenServer_TotalRecharge = 93001;                       //开服活动之多日累计充值
+    OpenServer_TotalRechargeDay = 93002;                   //开服活动之累计充值天数活动
+    OpenServer_DayTotalRecharge = 93003;                    //开服活动之单日循环累计充值活动
+    OpenServer_DayTotalCountRecharge = 93004;               //开服活动之单日循环累计次数充值活动
+    OpenServer_DayRechargeOnce = 93005;                 //开服活动之单日循环单笔充值活动
+    OpenServer_MaterielExchange = 94001;                    //开服活动之多日物资兑换
+    OpenServer_DayMaterielExchange = 94002;            //开服活动之单日循环物资兑换
+    OpenServer_ActivityMultiReward_NormalChapterID = 98001; //开服活动之普通章节副本双倍奖励活动
+    OpenServer_ActivityMultiReward_SeniorChapterID = 98002; //开服活动之精英章节副本双倍奖励活动
+    OpenServer_ActivityMultiReward_ArenaID = 98003;         //开服活动之竞技场双倍奖励活动
+    OpenServer_ActivityMultiReward_ForwardBattleID = 98004; //开服活动之挑战副本奖励双倍活动
+    OpenServer_ActivityMultiReward_LeaderDungeonID = 98005; //开服活动之资源副本奖励双倍活动
+    OpenServer_ActivityMultiReward_TowerID = 98006;         //开服活动之爬塔副本奖励双倍活动
+}
+
+message ActivityInfo
+{
+    required int32 Id               = 1; // 唯一ID
+    required ActivityType Type      = 2; // 活动类型
+    required string Name            = 3; // 活动名称
+    required string Title           = 4; // 活动标题
+    required string Icon            = 5; // 活动图标
+    required int32 VisibleBeginTime = 6; // 活动显示开始时间
+    required int32 VisibleEndTime   = 7; // 活动显示结束时间
+    required int32 ValidBeginTime   = 8; // 活动实际开始时间
+    required int32 ValidEndTime     = 9; // 活动实际结束时间
+    required bool ShowNotify        = 10; // 活动第一次显示时是否需要显示红点提示
+    required string Content         = 11; // 活动描述
+    repeated int32 Tasks            = 12; // 活动关联任务列表
+    required string Tag             = 13; //
+    required int32 Order            = 14; //页签排序
+    required int32 PageTip			= 15; //页签提示
+}
+
+
+
+message CMD_ACTIVITY_STC_UPDATEINFO
+{
+    optional MsgCode msgcode = 1 [default = ACTIVITY_STC_UPDATEINFO];
+
+    required int32 CurrentTime      = 2; // 当前服务器时间
+    required bool IsUpdate          = 3; // false：进入游戏第一次下发；true：单独更新
+    repeated ActivityInfo Activities = 4;// 活动列表
+    optional int32 MainSceneSwitch = 5[default = 0]; // 0:七日送黑鹰首充工程师，1：七日送工程师首充黑鹰
+}
+
+
+/****************************************************兑换码活动**********************************/
+
+message CMD_ACTIVITY_CTS_EXCHANGEREDEEMCODE
+{
+	optional MsgCode msgcode = 1 [default = ACTIVITY_CTS_EXCHANGEREDEEMCODE];
+	required string  Code    = 2 ;//兑换码内容
+
+}
+message CMD_ACTIVITY_STC_EXCHANGEREDEEMCODERESPONSE
+{
+	optional MsgCode msgcode = 1 [default = ACTIVITY_STC_EXCHANGEREDEEMCODERESPONSE];
+	required ErrorCode ReturnCode =2;
+	repeated Reward Items = 3;
+}
+/****************************************************兑换码活动**********************************/
+
+
+/****************************************************开服活动**********************************/
+
+message NewServerPageInfo
+{
+    required uint32 PageId              = 1;    //页签id
+    required uint32 Status              = 2;    //页签状态 [0 close 1 open]
+    required string Title               = 3;    //页签标题
+    repeated uint32 QuestIds            = 4;    //页签任务id列表
+    required int32 StartTime            = 5;    //页签开启时间
+}
+
+message CMD_ACTIVITY_STC_NEWSERVERINFO
+{
+    optional MsgCode msgcode            = 1[default = ACTIVITY_STC_NEWSERVERINFO];
+    repeated NewServerPageInfo pages    = 4;    //页签列表
+    repeated uint32 tasks               = 5;    //总进度任务id列表
+    required int32 totalReward          = 6;    //完成所有任务后的奖励总数量
+}
+/****************************************************开服活动**********************************/
+
+/****************************************************单日循环活动分组信息**********************************/
+message QuestGroupInfo
+{
+    required int32 StartTime            = 1;    //分组开启时间,等同于分组中任务开启时间
+    required int32 EndTime              = 2;
+    repeated uint32 QuestIds            = 3;    //任务id
+}
+message CMD_ACTIVITY_STC_QUESTGROUPINFO
+{
+    optional MsgCode msgcode            = 1[default = ACTIVITY_STC_QUESTGROUPINFO];
+    repeated QuestGroupInfo groups      = 2;    //分组信息
+    required int32 ActivityId           = 3;    //活动ID
+}
+/****************************************************单日循环活动页签**********************************/
+
+/****************************************************首冲活动**********************************/
+
+message CMD_ACTIVITY_STC_FIRSTRECHARGEINFO          //发送首冲活动信息
+{
+    optional MsgCode msgcode        = 1[default = ACTIVITY_STC_FIRSTRECHARGEINFO];
+    required int32 Status           = 2;            //活动状态  0 进行中 还未首冲 1 已经首冲 还未领奖 2已经领取奖励
+    required int32 EndTime          = 3;            //状态0 EndTime = 活动结束时间 状态1 EndTime = 0
+    required int32 Id               = 4;            //活动ID
+
+    optional string Title           = 5;            //活动标题
+    optional string Icon            = 6;            //活动图标
+    optional string Content         = 7;            //活动内容
+    optional int32 Type             = 8;            //活动类型
+    optional string Name            = 9;            //名字
+    optional int32 Order            = 10;           //排序字段
+
+    repeated Reward rewards         = 11;           //奖励
+}
+
+message CMD_ACTIVITY_STC_FIRSTRECHARGEFETCHRESULT   //首冲活动领奖结果
+{
+    optional MsgCode msgcode        = 1[default = ACTIVITY_STC_FIRSTRECHARGEFETCHRESULT];
+    required ErrorCode result       = 2;
+}
+
+message CMD_ACTIVITY_CTS_FIRSTRECHARGEFETCH         //首冲活动领奖
+{
+    optional MsgCode msgcode        = 1[default = ACTIVITY_CTS_FIRSTRECHARGEFETCH];
+}
+
+/****************************************************首冲活动**********************************/
+
+/****************************************************战力活动**********************************/
+
+//排行奖励信息推送
+message RankRewardItem               //排行奖励单项
+{
+    required int32 Rank             = 1;
+    repeated Reward Rewards         = 2;
+}
+
+message CMD_ACTIVITY_STC_FIGHTRANKREWARDCONFIG
+{
+    optional MsgCode msgCode                = 1[default = ACTIVITY_STC_FIGHTRANKREWARDCONFIG];
+    repeated RankRewardItem RankRewards     = 2;
+    required int32 RankListCount            = 3;    //排行榜总排名人数
+    required int32 MinFightCapacity         = 4;    //最小战斗力
+}
+
+message CMD_ACTIVITY_CTS_FIGHTRANKLISTREQUEST
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_CTS_FIGHTRANKLISTREQUEST];
+}
+
+//排行榜信息单项
+message RankInfo                    //个人排行实例
+{
+    required int32 Rank             = 1;    //排名
+    required string Name            = 2;    //角色名
+    required int32 Level            = 3;    //等级
+    required int32 FightCapacity    = 4;    //战斗力
+}
+
+message CMD_ACTIVITY_STC_FIGHTRANKLIST
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_STC_FIGHTRANKLIST];
+    repeated RankInfo RankLists     = 2;    //排名从1开始
+    required RankInfo SelfRank      = 3;    //自己的排名信息
+}
+
+
+/****************************************************战力活动**********************************/
+
+/****************************************************成长基金活动**********************************/
+
+message GrowthFundQuest
+{
+    required uint32 QuestId = 1;        //任务ID
+    repeated Reward rewards = 2;        //奖励
+}
+
+message CMD_ACTICITY_STC_GROUTHFUNDINFO
+{
+    optional MsgCode msgCode            = 1[default = ACTIVITY_STC_GROUTHFUNDINFO];
+    required int32 state                = 2;    //0等待开启(没投资) 1开启(已经投资)
+    repeated GrowthFundQuest quests     = 3;   //活动任务对应的奖励
+}
+
+message CMD_ACTIVITY_CTS_INVEST
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_CTS_INVEST];
+}
+
+message CMD_ACTIVITY_STC_INVESTRESPONSE
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_STC_INVESTRESPONSE];
+    required ErrorCode result       = 2;
+}
+/****************************************************成长基金活动**********************************/
+
+/****************************************************Vip专属礼包**********************************/
+
+message M_VipGiftInfo               //排行奖励单项
+{
+    required int32 id             = 1;//礼包id
+    required int32 buystate       = 2;//玩家购买状态 0：未购买 1：已购买
+    required int32 curcost        = 3;//当前购买价格
+    required int32 maxcost        = 4;//原价
+    required int32 viplevel       = 5;//限制vip等级
+    repeated Reward rewards       = 6;//购买内容
+}
+
+//礼包购买
+message CMD_VIPGIFTS_CTS_BUY
+{
+    optional MsgCode msgCode        = 1[default = VIPGIFTS_CTS_BUY];
+    required int32 id               = 2;//购买礼包id
+}
+//礼包购买返回
+message CMD_VIPGIFTS_STC_BUY
+{
+    optional MsgCode msgCode        = 1[default = VIPGIFTS_STC_BUY];
+    required ErrorCode result       = 2;
+    required int32 id               = 3;//购买礼包id
+}
+//礼包信息推送
+message CMD_VIPGIFTS_STC_BASEINFO
+{
+    optional MsgCode msgCode        = 1[default = VIPGIFTS_STC_BASEINFO];
+    repeated M_VipGiftInfo infos    = 2;//礼包信息
+}
+/****************************************************Vip专属礼包**********************************/
+
+
+/****************************************************大转盘活动**********************************/
+message CMD_ACTIVITY_CTS_REQUESTRANKLIST
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_CTS_REQUESTRANKLIST];
+}
+
+message CMD_ACTIVITY_CTS_DIALLOTTERY
+{
+    optional MsgCode msgCode        = 1[default = ACTIVITY_CTS_DIALLOTTERY];
+    required uint32 Type            = 2;        //抽卡类型 0单抽 1十连抽
+}
+
+message ActivityDialRankInfo
+{
+    required string Name            = 1;        //玩家名字
+    required uint32 Count           = 2;        //抽卡次数
+}
+
+message ActivityDialRankReward
+{
+    required uint32 Rank            = 1;
+    repeated Reward RankRewards     = 2;        //排名奖励
+}
+
+message CMD_ACTIVITY_STC_RANKLISTRESPONSE
+{
+    optional MsgCode msgCode                    = 1 [default = ACTIVITY_STC_RANKLISTRESPONSE];
+    repeated ActivityDialRankInfo RankInfos     = 2;     //大转盘活动排行榜 已经排序
+    repeated ActivityDialRankReward RankRewards = 3;     //注意：没根据rank排序
+    required ActivityDialInfo Info              = 4;
+}
+
+message ActivityDialInfo
+{
+    required uint32 FreeCount       = 1;        //可免费抽取的次数
+    required uint32 Rank            = 2;        //当前排名 0表示没有进入排行榜
+}
+
+message LotteryReward
+{
+    required uint32 Id              = 1;        //转盘奖励id
+    required Reward Reward          = 2;        //转盘奖励内容
+    required uint32 Quality         = 3;        //品质:0 普通 1 稀有
+}
+
+message CMD_ACTIVITY_STC_DIALINFO
+{
+    optional MsgCode msgCode            = 1 [default = ACTIVITY_STC_DIALINFO];
+    required ActivityDialInfo Info      = 2;
+}
+
+message CMD_ACTIVITY_STC_DIALLOTTERYINFO
+{
+    optional MsgCode msgCode            = 1 [default = ACTIVITY_STC_DIALLOTTERYINFO];
+    repeated LotteryReward LotteryItems = 2;
+}
+
+message CMD_ACTIVITY_STC_DIALLOTTERYRESPONSE
+{
+    optional MsgCode msgCode            = 1 [default = ACTIVITY_STC_DIALLOTTERYRESPONSE];
+    repeated uint32 RewardIds           = 2; //抽到的奖励ID
+    required ErrorCode Error            = 3;
+}
+/****************************************************大转盘活动**********************************/
+
+/****************************** 单日循环重复单笔充值活动 ************************************/
+
+message RepeatRechargeOnceTask
+{
+    required uint32 TaskID              = 1;    //任务ID
+    required string Description         = 2;    //任务描述
+    required uint32 State               = 3;    //任务状态
+    required uint32 maxCount            = 4;    //最多可完成次数
+    required uint32 CompleteCount       = 5;    //完成次数
+    required uint32 FetchCount          = 6;    //已领取奖励的次数
+    repeated Reward rewards             = 7;    //任务奖励
+}
+
+message CMD_ACTIVITY_CTS_REPEAT_RECHARGE_ONCE_FETCH
+{
+    optional MsgCode msgCode            = 1[default = ACTIVITY_CTS_REPEAT_RECHARGE_ONCE_FETCH];
+    required uint32 TaskID              = 2;
+}
+
+message CMD_ACTIVITY_STC_REPEAT_RECHARGE_ONCE_FETCH_RESPONSE
+{
+    optional MsgCode msgCode            = 1[default = ACTIVITY_STC_REPEAT_RECHARGE_ONCE_FETCH_RESPONSE];
+    required ErrorCode error            = 2;
+    required uint32 TaskID              = 3;
+}
+
+message CMD_ACTIVITY_STC_REPEAT_RECHARGE_ONCE_TASK_INFO
+{
+    optional MsgCode msgCode                = 1[default = ACTIVITY_STC_REPEAT_RECHARGE_ONCE_TASK_INFO];
+    required bool IsUpdate                  = 2;    // false：当天任务的更新 true：新的一天的任务信息（包括刚登入游戏）
+    repeated RepeatRechargeOnceTask tasks   = 3;
+    required uint32 EndTime                 = 4;    //当天结束时间(unix时间)
+}
+
+/****************************** 单日循环重复单笔充值活动 ************************************/
+
+/************************************* 大特卖活动 *******************************************/
+message SpecialTradeRecord
+{
+	required uint32 Id				= 1;	//商品ID
+	required uint32 BuyCount		= 2;	//已经购买的次数
+    required uint32 MaxCount    	= 3;    //可购买的最大次数
+    required uint32 VipRequirement 	= 4;	//vip最低等级要求
+    required int32 ShowType			= 5;	//显示方式	//0：无光圈 1：有光圈
+    required uint32 OriginPirce		= 6;	//原价
+    required uint32 Price 			= 7;	//现价
+	repeated Reward Rewards 		= 8;	//商品
+}
+
+message CMD_ACTIVITY_CTS_DAY_SPECIAL_TRADE_BUY
+{
+	optional MsgCode msgCode 	= 1[default = ACTIVITY_CTS_DAY_SPECIAL_TRADE_BUY];
+	required uint32 Id 			= 2;	//商品id
+}
+
+message CMD_ACTIVITY_STC_DAY_SPECIAL_TRADE_BUY_RESPONSE
+{
+	optional MsgCode msgCode 	= 1[default = ACTIVITY_STC_DAY_SPECIAL_TRADE_BUY_RESPONSE];
+	required uint32 Id 			= 2;	//商品id
+	required ErrorCode Error  	= 3;	
+}
+
+message CMD_ACTIVITY_STC_DAY_SPECIAL_RECORD_INFO
+{
+	optional MsgCode msgCode 				= 1[default = ACTIVITY_STC_DAY_SPECIAL_RECORD_INFO];
+	repeated SpecialTradeRecord records 	= 2;
+    required uint32 EndTime                 = 3;	//当天的结束时间
+    required bool IsUpdate					= 4;	//true:购买后刷新(只发购买的物品) false:登录 跨天 活动开始
+}
+/************************************* 大特卖活动 *******************************************/
+
+/************************************* 物资兑换活动 *******************************************/
+message MaterialExchangeRecord
+{
+    required int32 ID                       = 1;      //商品id
+    required uint32 ExchangeCount           = 2;      //兑换次数
+    required uint32 MaxCount                = 3;      //个人可兑换的最大次数
+    required uint32 GlobalExchangeCount     = 4;      //全局兑换次数
+    required uint32 GlobalMaxExchangeCount  = 5;      //全局可兑换的最大次数
+}
+
+message MaterialExchangeArg
+{
+	required int32 MaterialID               = 2;      //兑换方式ID
+    required uint32 Count 					= 3; 	  //兑换次数
+}
+
+message CMD_ACTIVITY_STC_EM_RECORD_INFO
+{
+    optional MsgCode msgCode                = 1[default = ACTIVITY_STC_EM_RECORD_INFO];
+    repeated MaterialExchangeRecord Records = 2;
+    required uint32 EndTime                 = 3;    //结束时间
+    required bool IsUpdate                  = 4;
+}
+
+message CMD_ACTIVITY_CTS_PME_EXCHANGE           //多日
+{
+    optional MsgCode msgCode                = 1[default = ACTIVITY_CTS_PME_EXCHANGE];
+    required MaterialExchangeArg Arg 		= 2;
+}
+
+message CMD_ACTIVITY_STC_PME_EXCHANGE_RESPONSE  //多日
+{
+    optional MsgCode msgCode                = 1[default = ACTIVITY_STC_PME_EXCHANGE_RESPONSE];
+    required ErrorCode Error                = 2;
+}
+
+message CMD_ACTIVITY_CTS_DME_EXCHANGE			//单日
+{
+	optional MsgCode MsgCode 				= 1[default = ACTIVITY_CTS_DME_EXCHANGE];
+    required MaterialExchangeArg Arg		= 2;
+}
+
+message CMD_ACTIVITY_STC_DME_EXCHANGE_RESPONSE //单日
+{
+	optional MsgCode msgCode 				= 1[default = ACTIVITY_STC_DME_EXCHANGE_RESPONSE];
+	required ErrorCode Error 				= 2;
+}
+/************************************* 物资兑换活动 *******************************************/

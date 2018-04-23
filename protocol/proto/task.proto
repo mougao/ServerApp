@@ -1,0 +1,26 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+package PaoEntity;
+
+
+
+message CMD_Task_STC_TaskLIST{
+    optional MsgCode msgcode            = 1[default = Task_STC_TaskLIST];
+    optional bool IsUpdate              = 2[default = true];
+    repeated TaskInfo tasks             = 3;    // 任务列表
+}
+
+message CMD_Task_CTS_Fetch{
+    optional MsgCode msgcode            = 1[default = Task_CTS_Fetch];
+
+    required uint32 ID                  = 2;    // 任务模板ID
+}
+
+message CMD_Task_STC_Fetch{
+    optional MsgCode msgcode            = 1[default = Task_STC_Fetch];
+
+    required ErrorCode result           = 2;    // 领取结果
+    optional uint32 TaskID              = 3;    // 任务模板ID
+}
+

@@ -1,0 +1,394 @@
+package PaoEntity;
+
+/*
+此模块用于后端响应前端操作返回，需要后端返回错误码的报文都应当包含此模块
+由于proto-buf的enum特性，无法像传统语言语法的enum一样随意进行枚举的交换和穿插，
+因此对每个模块进行区段划分，比如角色模块从0001~0500,后续的模块都可按此分配区段
+*/
+enum ErrorCode{
+	/*公共:0 - 100*/
+	Success                                      = 0;		    //成功
+	Fail                                         = 1;      //失败
+	Offline									     = 2;		//当前角色不在线
+	/*角色:0101-0400*/
+	Character_LevelLimited                       = 101;	//角色等级不足
+	Character_LessCoin                           = 102;	//美元不足（游戏币）
+	Character_LessGold                           = 103;	//黄金不足（real 票子）
+	Character_LackItem                           = 104;	//缺少道具		
+	Character_VipLevelLimited                    = 105;	//角色Vip等级不足
+	Character_NotExist                           = 106; //角色不存在(可能改名了,通过名字获取角色失败)
+	Character_LessLadderCoin                     = 107;	//天梯币不足
+	Character_LessLeagueWarCoin                  = 108;	//联盟战争币不足
+	Character_LessExpCoin                        = 109;	//经验币不足
+
+	/*角色天赋*/
+	Character_LessTalentPoint                    = 111;    //天赋点数不足
+	Character_LackPreTalentSkill                 = 112;    //缺少前置条件
+	Character_LessTalentTotalPoint               = 113;    //缺少累计投入点数
+	Character_AlreadyHaveTalentSkill             = 114;    //已经学习技能
+	Character_MaxTalentSkillLevel                = 115;    //升级上限
+	Character_LackTalentConfig                   = 116;    //未配置天赋技能
+	Character_LackPreLevelTalentSkill            = 117;    //缺少前置等级技能条件（要升到2级，必须学会1级）
+
+	Character_LackTalentInfo                     = 118;    //未找到角色任何天赋信息（天赋信息为未生成）
+
+	/*角色装备*/
+	Character_MaxEquipmentLevel                  = 121;    //装备升级上限
+	Character_MaxEquipmentQuality                = 122;    //装备升阶上限
+	Character_LackEquipmentConfig                = 123;    //缺少装备配置
+
+	Character_LackEquipmentInfo                  = 124;    //缺少装备信息
+	Character_LessEquipmentLevel                 = 125;    //装备升阶等级不足
+
+	/*角色技能*/
+	Character_LessSkillPoint                     = 131;    //技能点不足
+	Character_LackPreSkill                       = 132;    //缺少前置技能
+	Character_MaxSkillLevel                      = 133;    //等级上限
+	Character_LackSkillConfig                    = 134;    //缺少技能配置
+	Character_LackSkillInfo                      = 135;    //缺少技能信息
+	
+
+	Character_AlreadyHave                        = 136;	//角色已创建
+	Character_NotHave                            = 137;	//角色未创建
+	Character_CreateSussess                      = 138;	//角色创建成功
+	Character_NameError                          = 139;	//角色名含有非法字符
+	Character_NameAlreadyHave                    = 140;	//角色名字有重复
+	Character_NameIllegal                        = 141;	//名字不合法
+	Character_FinishSend                         = 142;	//信息已经完全推送
+
+	Character_LessOpenUpSkillLevel               = 143; //开启技能升级的等级不足
+	Character_LackOpenUpEquipmentBattleId        = 144; //开启装备升级的副本条件未满足
+
+	Character_MaxGrade                           = 145; //达到最大品阶
+	Character_ErrorGradeConfig                   = 146; //科技品阶配置异常
+	
+	/*兵种:0401-0500*/
+	Solr_LackSoldierInfo                         = 401;    //士兵不存在
+	Solr_MaxSoldierQuality                       = 402;    //士兵升阶上限
+	Solr_MaxSoldierStar                          = 403;    //士兵升星上限
+
+	Solr_LackEquipmentConfig                     = 404;    //士兵装备配置不存在
+	Solr_AlreadyHaveEquipment                    = 405;    //士兵装备已经穿戴
+	Solr_LackEquipment                           = 406;    //士兵装备已经穿戴的装备不足，无法升阶
+	Solr_LackStar                                = 407;   //士兵星级未满，无法洗练
+	Solr_Book_NotEnough                          = 408;  //训练书不足
+	Solr_LessLevel                               = 409;  //士兵等级不足
+	Solr_MaxSoldierSmallStar                     = 410;    //士兵小升星上限
+	Solr_LackSoldierSmallStar                    = 411;    //士兵小升星未升满
+	Solr_MaxSoldierSkill                         = 412;    //士兵技能已达最大
+
+	/*阵型:0501-0600*/
+	Formation_SaveFail 							 = 502;		//阵型保存失败
+	Formation_DataError	      					 = 503;		//阵型数据错误
+	
+
+	/*副本:0601-0700*/
+	Chapter_NoChapter                            = 602;			//没有该章节
+	Chapter_NoBattleField                        = 603;		//没有该关卡
+	Chapter_PreChapterNotPassed                  = 604;		//前置章节还没有通关
+	Chapter_PreBattleFieldNotPassed              = 605; 	//前置关卡还没有通过
+	Chapter_NotEnoughStar                        = 606;			//星级还不够
+	Chapter_NoSuchReward	                     = 607;			//没有对应奖励
+	Chapter_HasFetched		                     = 608;		//已经领取过
+	Chapter_ChallengeTimeLimit                   = 609;		//已达到最大挑战次数
+	Chapter_MaxBuyTimes                          = 610;     //精英挑战次数购买
+	Chapter_LessChallengeTimes                   = 611;     //精英挑战次数有剩余
+	Chapter_BoxFetched 							 = 612;		//已经领取副本宝箱奖励
+	Chapter_BattleFieldNotPassed 				 = 613;		//关卡没打通
+	Chapter_BoxRewardFetchFail 					 = 614;		//领取宝箱奖励失败
+	Chapter_ChallengeBattlePassed 				 = 615;		//挑战章节已经通关
+	/*道具:0701-0800*/
+
+	Item_LackItemInfo                            = 701;    //指定道具不存在
+	Item_LessItemCount                           = 702;    //道具数量不足
+    
+    Item_LackExchangeConfig                      = 703;    //交换配置不存在
+	Item_LackExchangeItem                        = 704;    //交换道具数量不足
+
+	Item_LackItemConfig                          = 705;    //道具配置不存在
+
+    /*聊天：0801-0900*/
+
+    Chat_Blank                                   = 801;   //内容为空
+    Chat_WordsBeyond                             = 802;   //字数超出限制
+    Chat_PublicChatLevelNotEnough			     = 803;   //世界频道发言等级不够
+    Chat_LeagueChatLevelNotEnough                = 804;   //公会聊天等级不够
+    Chat_PrivateChatLevelNotEnough               = 805;   //私聊等级不够
+    Chat_ChatCountNotEnough                      = 806;   //发言次数不够
+    Chat_NotEnoughGoldToBuyCount                 = 807;   //购买次数黄金不够
+    Chat_TimeLimitInPublic                       = 808;   //世界频道发言时间间隔未到
+    Chat_TimeLimitInLeague						 = 809;   //公会频道发言时间间隔未到
+    Chat_NotInLeague							 = 810;   //不在公会中
+    Chat_CannotChatWithTarget                    = 811;   //黑名单对象不能聊天
+    Chat_BlackListCountLimit                     = 813;   //黑名单上限
+    Chat_TargetIsInBlackList                     = 814;   //玩家已在黑名单中
+    Chat_RemoveTargetNotExist                    = 815;   //对象不存在
+    Chat_ShutUp                                  = 816;   //角色已被禁言
+    Chat_TimeLimitInLeagueRecruit                = 817;   //公会招募时间间隔未到
+    /*邮箱：0901-1000*/
+    Mail_TimeExceed								 = 901;	 	//邮件超时，已经删除
+
+    /*点金手 1001-1100*/
+    GOLDHAND_TimeLimit     	   	 				 = 1001;   //点金次数上限，也就是VIP等级不足	先判次数
+	GOLDHAND_NotEnoughGold					     = 1002;   //点金金币不够						后判黄金
+	GOLDHAND_AddPaperMoneyFail					 = 1003;	//添加钞票失败						添加钞票失败
+
+	/*体力：1101-1200*/
+	STAMINA_NotEnoughGold                        =1101; //黄金不够
+	STAMINA_BuyCountLimit                        =1102;  //购买次数上限，建议提升vip等级
+	STAMINA_NotEnoughStamina				     =1103; //体力不足
+	STAMINA_BeyondLimit                          =1104;  //体力超出最大上限，不能购买
+
+	/*竞技场：1201-1300*/
+	Arena_MaxChallengeTimes                      =1201; //挑战次数购买上限
+	Arena_LackPKMember                           =1202; //挑战对象不存在
+	Arena_RankChange                             =1203; //挑战对象排名已变动
+	Arena_LackChallengeTimes                     =1204; //缺少挑战次数
+    Arena_CoolTime                               =1205; //冷却期间
+    Arena_InFight                                =1206; //处于战斗中
+
+    Arena_NoRankReward                           =1207;//排名奖励未达到
+    Arena_AlreadyGetRankReward                   =1208;//排名奖励已领取
+    Arena_ErrorRankReward                        =1209;//排名奖励有误
+
+    Arena_NoScoreReward                          =1210;//积分奖励未达到
+    Arena_AlreadyGetScoreReward                  =1211;//积分奖励已领取
+    Arena_ErrorScoreReward                       =1212;//积分奖励有误
+    Arena_LessRank                               =1213;//竞技场排名不足
+
+     /*抽卡：1301-1400*/						//缺黄金美元错误码 Character_LessCoin Character_LessGold
+	CardLottery_NotEnoughMoney			         = 1302;		//抽卡费用不足
+	CardLottery_Fail							 = 1303;		//抽卡失败(通常是配置原因)
+
+    /*充值：1401-1500*/
+    Recharge_UserNotExist                        = 1401;//没有此玩家
+    Recharge_NoThisGoods                         = 1402;//没有此充值条目
+    Recharge_RmbNotMatch                         = 1403;//金额不符
+    Recharge_NoMonthCard                         = 1404;//未购买月卡
+    Recharge_HaveGet                             = 1405;//月卡奖励已领
+    Recharge_ExtremeCardRepeat                   = 1407; //至尊卡已购买，不可重复购买
+    /*商店：1501-1600*/
+    Shop_LackShop                                = 1501;//指定商店不存在
+    Shop_LackSellItem                            = 1502;//未找到在售商品
+    Shop_LessArenaCoin                           = 1503;//竞技币不足
+    Shop_LessGuildCoin                           = 1504;//公会币不足
+    /*签到: 1601-1700*/
+    SignIn_HaveGet                               = 1601; //奖励已领取
+    SignIn_VipLimit                              = 1602; //领取第二份奖励Vip等级不足
+    SignIn_RewardItemNotExist                    = 1603;//奖励物品不存在（配置错误）
+    SignIn_Success_Two                           = 1604;//领取了2份奖励
+    SignIn_Success_First                         = 1605;//领取了第一份奖励
+    SignIn_Success_Second                        = 1606;//领取了第二份(VIP)奖励
+    SignIn_NoVipReward                           = 1607;//没有vip奖励
+
+     /*资源副本: 1701-1800*/
+     DupRes_MaxChallengeCount                    = 1701; //挑战次数已满
+     DupRes_DupIsClosed                          = 1702; //所挑战副本已关闭
+     DupRes_InvalidDupId                         = 1703; //无效副本Id
+     DupRes_InvalidDifLevel                      = 1704; //无效副本难度
+     DupRes_LessLevel                            = 1705; //角色等级不足
+     DupRes_SweepLessLevel                       = 1706; //扫荡等级不足
+     DupRes_SweepLessStar                        = 1707; //扫荡通关星级不足
+     DupRes_CD                                   = 1708; //副本冷却期间
+     /*爬塔:1801-1900*/
+     Tower_MaxTimes								 = 1801;	//重置次数已满
+     Tower_CantChallenge						 = 1802;	//还不能挑战
+     Tower_HasChallenged				         = 1803;	//已经挑战过   
+     Tower_NoBattleField						 = 1804;	//没有该关卡
+     Tower_HasFetched							 = 1805;	//已经领取过奖励
+     Tower_CantFetch							 = 1806;	//还不能领取
+     Tower_LackOfTowerCoin						 = 1807;	//缺少竞技场币
+     Tower_Soldier_LevelLimit                    = 1808;    //士兵等级不足
+     Tower_Miss_Opportunity                      = 1809;    //已错过扫荡时机(只能在一场未打的情况下)
+     Tower_Not_Pass_Current_Difficulty           = 1810;    //必须通关当前难度才能扫荡
+     /*任务:1901-2000*/
+     Task_HasFetched							 = 1901;	//已领取
+     Task_FetchFail								 = 1902;	//领取失败
+     Task_NotExist								 = 1903;	//任务不存在
+
+     /*系统设置:2001-2100*/
+     SystemSettings_GenderError                  = 2001;   //不允许使用异性头像
+     SystemSettings_IconError                    = 2002;   //不存在此头像
+     SystemSettings_NotHaveSoldier               = 2003;   //无法使用不拥有的士兵头像
+
+     /*兑换码:2101-2200*/
+     GIFT_CODE_NOT_EXIST                         = 2101;   //兑换码不存在
+     GIFT_CODE_CONSUMED                          = 2103;   //兑换码已使用
+     ONE_TIME_GIFT_CODE                          = 2104;   //此类型兑换码同一个角色只能使用一次
+     SERVER_LIMITED_GIFT_CODE                    = 2105;   //此类型兑换码只能在指定服务器上使用
+     GIFT_CONTENT_ERROR                          = 2106;   //礼包内容错误
+     CHANNEL_LIMITED_GIFT_CODE                   = 2107;   //此类型兑换码只能从指定渠道的客户端上使用
+     CHANNEL_NOT_EXIST                           = 2108;   //未找到对应渠道
+
+	/*首冲活动:2201-2300*/
+	ACTIVITY_FIRSTRECHARGE_CLOSED				 = 2201;   //活动已经关闭
+	ACTIVITY_FIRSTRECHARGE_NOT_COMPLETE			 = 2202;   //未完成首冲任务
+
+	/*资源获取:2301-2400*/
+	RES_GET_ARENACOIN_FAIL                       = 2301;   //获取竞技币失败提示 （等级不足【】，无法领取【竞技币】）
+	RES_GET_TOWERCOIN_FAIL                       = 2302;   //获取爬塔币失败提示 （等级不足【】，无法领取【爬塔币】）
+	RES_GET_MININGRATIONS_FAIL					 = 2303;	//获取军粮失败提示（等级不足【】，无法领取【军粮】）
+	/*联盟:2401-2500*/
+	League_Name_Repeat                           = 2401;   //联盟名称重复
+	League_Name_Illegal                          = 2402;   //联盟名称不合法
+	League_Icon_Illegal                          = 2403;   //联盟徽章不合法
+	League_MemberInLeague                        = 2404;   //角色已经有联盟
+	League_MemberInCoolTime                      = 2405;   //角色处于冷却期间
+	League_Nonexistent                           = 2406;   //联盟不存在
+	League_HasMaxMemnerCount                     = 2407;   //联盟成员已满
+	League_ConditionProblem                      = 2408;   //入盟条件未满足
+	League_HasNoLeague                           = 2409;   //当前没有联盟
+	League_LeaderCanNotLeave                     = 2410;   //盟主不能主动退会
+	League_HasNoPermission                       = 2411;   //玩家权限不足
+	League_IsNotMember                           = 2412;   //玩家不在同一个联盟
+	League_IsSelf                                = 2413;   //操作对象是自己
+	League_LeaderCanNotDropped                   = 2414;   //盟主不能被强制退盟
+	League_NoticeMaxLength                       = 2415;   //公告字数超最大限制
+	League_NotOneMember                          = 2416;   //会员人数不为1
+	League_HasMaxPositionCount                   = 2417;   //最大职位数量已满足
+	League_HasNoImpeachCondition                 = 2418;   //未达到弹劾条件
+	League_MaxApplyCount                         = 2419;   //联盟已达最大申请人数
+	League_AlreadyApply                          = 2420;   //联盟已提交申请
+	League_SamePosition                          = 2421;   //会员已经是该职位
+	League_MaxDroppedCount                       = 2422;   //开除已达上限
+	League_LessApplyLevel                        = 2423;   //联盟申请等级不足
+	League_RefuseApply                           = 2424;   //联盟拒绝申请
+
+	League_Notice_Illegal                        = 2425;   //联盟公告不合法
+	League_Logan_Illegal                         = 2426;   //联盟口号不合法
+    League_Donate_CountLimit                     = 2427;   //捐献次数已满
+    League_Donate_HasGetBox                      = 2428;   //宝箱已领
+    League_Donate_PointsNotEnough                = 2429;   //捐献点不足
+    League_Mail_LengthLimit                      = 2430;   //邮件字数超限
+    League_Mail_CountLimit                       = 2431;   //邮件次数不足
+
+	/*随机怪物*/	
+	Randommonster_Completed                      = 2501; //当前怪物已经消灭(需等待下次刷新)
+	Randommonster_DayMax                         = 2502; //当日击杀次数上限
+
+	/*挖矿*/
+	Mining_NoSuchMine							 = 2601; //没有该矿产
+	Mining_HasRobbed						     = 2602; //已经抢劫过该矿产
+	Mining_NoMineSlot							 = 2603; //没有对应的矿区
+	Mining_LogHasFetched 						 = 2604; //日志奖励已领取
+	Mining_CantFetchNow					         = 2605; //矿产还未到收获时间
+	Mining_DiggedOut						     = 2606; //矿产已经被收获了
+	Mining_NotEnoughRations						 = 2607; //军粮不足
+	Mining_SlotInDigging						 = 2608; //该矿区正在挖矿
+	Mining_SoldierInDigging						 = 2609; //有士兵被征用，无法挖矿
+	Mining_CantFetchAnyLog						 = 2610; //今日不能再领取防守奖励了
+	Mining_NoLogCanFetch						 = 2611; //没有可以领取的日志
+	Mining_MinLevelSoldier                       = 2612; //有士兵等级没有达到
+
+	/*无尽之塔*/
+	Endlesstower_InSweeping						 = 2701; //正在扫荡中
+	Endlesstower_CantFetch						 = 2702; //当前奖励还不能领取
+	Endlesstower_NoSweepFloor					 = 2703; //当前无可扫荡层
+	Endlesstower_TopFloor						 = 2704; //已到达最高层
+	Endlesstower_NoResetTimes					 = 2705; //重置次数已满
+	Endlesstower_NoSweeping						 = 2706; //当前不在扫荡中
+	Endlesstower_NoFloorReward					 = 2707; //没有可领的奖励
+	Endlesstower_NotNessesary					 = 2708; //没有必要重置
+	Endlesstower_NoRecommendFormation            = 2709; //尚未有推荐阵容
+
+	/*团本*/
+	LeagueFB_NotOpenCondition                    = 2801;//团本未达开启条件
+	LeagueFB_NoChallengeTimes                    = 2802;//团本挑战次数已满
+	LeagueFB_IsClose                             = 2803;//团本未开启挑战
+	LeagueFB_NoVitality                          = 2804;//公会活跃值不足
+	LeagueFB_NotEmptyBattle                      = 2805;//团本正在挑战中
+	LeagueFB_MaxChallengeTimes                   = 2806;//团本挑战次数已达最大值
+	LeagueFB_LevelLimit                          = 2807;//联盟等级不足，boss未开放
+	LeagueFB_CurDayCannotChallenge               = 2808;//入会当天不能挑战BOSS
+	LeagueFB_RewardHasGet                        = 2809;//奖励已经领取
+	LeagueFB_RewardCannotGet                     = 2810;//奖励不可领
+
+	/*活动*/
+	Activity_GrowthFund_HaveInvested			= 2901;//成长基金活动已投资
+	Activity_GrowthFund_HaveClosed				= 2902;//成长基金活动已经关闭
+
+	/*指挥官战术*/
+	Tactics_GemsExpExceed						= 3001;//战术宝石合成经验溢出(不需要所有的宝石就能合成到最高级宝石)
+	Tactics_SlotIdError							= 3002;//合成的插槽id不存在
+	Tactics_GemIdError							= 3003;//宝石Id错误	
+	Tactics_SlotEquiped							= 3004;//插槽已经装备
+	Tactics_GemNotExist							= 3005;//卸载的宝石不存在
+	Tactics_GemTypeError						= 3006;//宝石类型和战术类型不匹配
+	Tactics_TargetGemIdError					= 3007;//宝石一键合成的目标等级错误
+
+	/*vip专属礼包*/
+	VipGifts_ErrorConfig                        = 3101;//礼包配置有误
+	VipGifts_AlreadyBuy                         = 3102;//礼包已经购买，不可重复购买
+	VipGifts_VipLevel                           = 3103;//vip等级不足
+
+
+    /*好友系统*/
+    Friend_AlreadyExist                         = 3201;//已经是好友
+    Friend_HaveGive                             = 3202;//已赠送，请勿重复
+    Friend_CanNotGet                            = 3203;//没有体力可领                      
+    Friend_LevelLimit                           = 3204;//对方等级不足
+    Friend_TodayGetMax                          = 3205;//今日领取体力达到上限
+    Friend_AlreadyApply                         = 3206;//已经申请
+    Friend_CountLimit                           = 3207;//好友数量达到上限
+    Friend_TargetCountLimit                     = 3208;//对方好友数量达到上限
+
+    /*活动通用*/
+    Activity_HaveClosed 						= 3401;//活动已经关闭
+    Activity_GoodSoldOut						= 3402;//物品以脱销
+    Activity_ArgumentError						= 3403;//报文参数有错
+    Activity_ConfigNotExist						= 3404;//配置不存在
+    Activity_IdNotExist							= 3405;//id不存在
+
+    /*羁绊*/
+    Fetters_SlotNotOpen                         =3501;//羁绊位未开放
+
+    /*跨服天梯*/
+    ISL_LessCharacterLevel                      = 3601;//角色等级30以上
+    ISL_LackSoldierCount                        = 3602;//士兵不足10个
+    ISL_RaceClosed                              = 3603;//赛季未开启
+    ISL_FightClosed                             = 3604;//挑战时间未到
+    ISL_ErrorSetSoldier                         = 3605;//布阵士兵有误
+    ISL_ErrorSetCommander                       = 3606;//布阵指挥官有误
+    ISL_ErrorSetSkill                           = 3607;//布阵科技有误
+    ISL_ErrorStep                               = 3608;//进度操作有误
+    ISL_RepeatMatch                             = 3609;//重复匹配
+    ISL_InFightPool                             = 3610;//玩家已完成匹配，处于战斗中
+    Isl_OutFight                                = 3611;//玩家未在战斗中
+    ISL_LackAreaSoldiers                        = 3612;//缺少天空兵至少2个
+    ISL_LackGroundSoldiers                      = 3613;//缺少地面兵至少2个
+    ISL_EndRace                                 = 3614;//赛季结束
+    ISL_Disconnect                              = 3615;//与跨服服务器断开连接
+    ISL_AlreadyMatch                            = 3616;//已匹配成功
+
+    /*公会战*/
+    League_War_Apply_Already                    = 3701;		//已报名
+    League_War_Apply_NotInTime                  = 3702;		//不在时间段内
+    League_War_Apply_Permission_Denied          = 3703;     //权限不足，不是会长/副会长，或者无工会人士
+    League_War_Apply_Member_Count_Limit         = 3704;     //公会人数不足
+    League_War_DefFormation_Count_Limit			= 3751;		//防御阵型已满
+    League_War_DefFormation_NotExist			= 3752;		//阵型不存在
+    League_War_DefFormation_SoldierLess			= 3753;		//阵型士兵不足
+    League_War_DefFormation_Repeat 				= 3754;		//重复添加阵型
+    League_War_StrongHold_NotExist				= 3755;		//据点不存在
+    League_War_Leaguer_NotExist					= 3756;		//会员不存在
+    League_War_FirstStrongHold_Exist			= 3757;		//已经选择收个攻击据点
+
+   	//物资兑换活动
+    ACTIVITY_EM_PersonalCountLimit				= 3801;		//个人兑换次数不足
+    ACTIVITY_EM_GlobalCountLimit				= 3802;		//全局兑换次数不足
+    ACTIVITY_EM_MaterialLess					= 3803;		//物资不足
+
+    //每日活跃度
+    DailyVitality_BoxIdError 					= 3901;		//宝箱id错误   
+    DailyVitality_BoxSatusError					= 3902;		//宝箱状态不可领取
+    DailyVitality_ConfigNotExist				= 3903;		//宝箱配置不存在
+    DailyVitality_LessVitality					= 3934;		//活跃度不足
+
+    //据点模块
+    FortressLottery_StateError					= 4001;		//状态错误
+    FortressLottery_RewardNotExist 				= 4002;		//奖励不存在
+    Fortress_Rest_SoliderStateError             = 4003;     //该士兵在执行其他任务，无法治疗
+    Fortress_Rest_SlotFull                      = 4004;     //治疗帐篷已满，请升级
+    Fortress_Rest_HpFull                        = 4005;     //士兵已经满血，无需治疗
+}
+	

@@ -1,0 +1,109 @@
+import "msgcode.proto";
+import "errorcode.proto";
+package PaoEntity;
+
+message Friend
+{
+    required string GUID          =1; //用户GUID
+	required string Name  		  =2; //名字
+	required string Icon 	      =3; //头像
+	required int32  Level         =4; //等级
+	required int32  VipLevel      =5; //VIP等级
+	optional string LeagueName    =6; //公会名 		       在好友列表中赋值
+	optional int32  LastLoginTime =7; //最后登录时间       在好友列表中赋值
+    optional bool  CanGive        =8; //是否可以赠送体力   在好友列表中赋值
+    optional int32 GetStatus      =9; //领取状态 0:不能领 1:可以领 2:已领取
+    optional int32 ApplyTime      =10; //申请我加为好友时间 在申请列表中赋值
+}
+
+enum FriendOperate
+{
+	Friend_Apply  =1;//申请
+	Friend_Deny   =2;//拒绝
+	Friend_Add    =3;//添加
+	Friend_Delete =4;//删除
+
+}
+
+
+message CMD_FRIEND_STC_FRIENDLIST
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_FRIENDLIST];
+    repeated Friend   FriendList            =2;
+    required int32    TodayGetStamina       =3;//今日已领体力
+}
+
+message CMD_FRIEND_STC_FRIENDAPPLYLIST
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_FRIENDAPPLYLIST];
+    repeated Friend   FriendList            =2;
+}
+
+message CMD_FRIEND_CTS_FRIENDOPERATE
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_FRIENDOPERATE];
+	required FriendOperate OperateType      =2;
+	required string TargetGUID              =3;
+}
+
+message CMD_FRIEND_STC_FRIENDOPERATE
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_FRIENDOPERATE];
+	optional FriendOperate OperateType      =2;
+	required ErrorCode ReturnCode           =3;
+}
+
+message CMD_FRIEND_CTS_RECOMMEND
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_RECOMMEND];
+}
+
+message CMD_FRIEND_STC_RECOMMEND 
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_RECOMMEND];
+	repeated Friend FriendList              =2;
+}
+
+message CMD_FRIEND_CTS_GIVESTAMINA
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_GIVESTAMINA];
+	repeated string GUIDList                =2;
+}
+message CMD_FRIEND_STC_GIVESTAMINA
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_GIVESTAMINA];
+    required ErrorCode ReturnCode           =2;
+    optional Friend   Target                =3;
+}
+
+message CMD_FRIEND_CTS_GETSTAMINA
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_GETSTAMINA];
+    repeated string GUIDList                =2;
+}
+
+message CMD_FRIEND_STC_GETSTAMINA
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_GETSTAMINA];
+	required ErrorCode ReturnCode           =2;
+	optional Friend   Target                =3;
+    optional int32    GetStamina            =4;
+    optional int32    TodayGetStamina       =5;
+}
+
+message CMD_FRIEND_CTS_SEARCH
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_SEARCH];
+	required string  TargetName             =2;//目标名字（模糊）
+}
+message CMD_FRIEND_STC_SEARCH
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_STC_SEARCH]; 
+	repeated Friend FriendList              =2;
+}
+
+message CMD_FRIEND_CTS_APPLYINOTHERWAYS 
+{
+	optional MsgCode  msgcode               =1[default = FRIEND_CTS_APPLYINOTHERWAYS];
+	required string  TargetName             =2;
+}

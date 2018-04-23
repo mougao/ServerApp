@@ -1,0 +1,129 @@
+import "msgcode.proto";
+package PaoEntity;
+
+message CMD_SERVER_GTL_VALIDATE{
+    optional MsgCode msgcode = 1[default = SERVER_GTL_VALIDATE];
+    required string Token = 2; //待验证Token
+    required int64 NetHandle = 3;
+    required int32 ServerID = 4;
+}
+
+message CMD_SERVER_LTG_VALIDATE{
+    optional MsgCode msgcode = 1[default = SERVER_LTG_VALIDATE];
+    required ValidateResult Result = 2; 
+    required string Token = 3;
+    required string UserID = 4;    
+    required int64 NetHandle = 5;
+
+    enum ValidateResult{
+        Success = 1;
+        Expired = 2;
+        NontFound = 3;
+    }
+}
+
+message CMD_SERVER_GTS_ENTERGAME{
+    optional MsgCode msgcode = 1[default = SERVER_GTS_ENTERGAME];
+    required string IP = 2;
+    required int32 Port = 3;
+    required string UserID = 4;
+    required int32 ServerID = 5;
+    required string DevID = 6;
+    required string PlatID = 7;
+    required string ClientVersion = 8;
+    optional bool Reconnect = 9[default = false]; //是否断线重连
+}
+
+enum LeaveReason
+{
+    Normal = 1;
+    Kick = 2;
+    Replace = 3;
+}
+message CMD_SERVER_GTS_LEAVEGAME{
+    optional MsgCode msgcode = 1[default = SERVER_GTS_LEAVEGAME];
+    required string UserID = 2;
+    required int32 Reason = 3; 
+}
+
+message CMD_SERVER_STG_CLOSESESSION{
+    optional MsgCode msgcode = 1[default = SERVER_STG_CLOSESESSION];
+    required int64 NetHandle = 2;
+}
+
+
+
+message CMD_SERVER_STG_REPORT{
+    optional MsgCode msgcode = 1[default = SERVER_STG_REPORT];
+    required int32  ServerID = 2;
+    required string ServerType = 3;
+}
+
+message CMD_SERVER_GTL_REGIST
+{
+    optional MsgCode msgcode = 1[default = SERVER_GTL_REGIST];
+    required int32 ServerID = 2;
+    required bool GameServerOpened = 4;
+}
+
+message CMD_SERVER_GTL_GAMESTATUS
+{
+    optional MsgCode msgcode = 1[default = SERVER_GTL_GAMESTATUS];
+    required int32 ServerID = 2;
+    required string ServerType = 3;
+    optional bool GameServerOpened = 4[default=false];
+}
+
+message CMD_SERVER_BTG_REPORT{
+    optional MsgCode msgcode = 1[default = SERVER_BTG_REPORT];
+    required int32  Flag = 2;
+}
+
+message CMD_SERVER_STXG_HEARTBRETHE{
+    optional MsgCode msgcode = 1[default = SERVER_STXG_HEARTBRETHE];
+}
+
+message CMD_SERVER_XGTS_HEARTBRETHE{
+    optional MsgCode msgcode = 1[default = SERVER_XGTS_HEARTBRETHE];
+}
+
+message CMD_SERVER_STXG_REGIST{
+    optional MsgCode msgcode = 1[default = SERVER_STXG_REGIST];
+    required uint32 ServerID = 2;
+    required string ServerType = 3;
+    required string Name = 4;
+    required string OpenDate = 5;
+}
+
+message CMD_SERVER_XGTX_REGIST{
+    optional MsgCode msgcode = 1[default = SERVER_XGTX_REGIST];
+    required uint32 ServerID = 2;
+    required string ServerType = 3;
+    required string Name = 4;
+    required string OpenDate = 5;
+}
+
+message CMD_SERVER_XGTX_UNREGIST
+{
+    optional MsgCode msgcode = 1[default = SERVER_XGTX_UNREGIST];
+    required uint32 ServerID = 2;
+    required string ServerType = 3;
+
+}
+
+message CMD_SERVER_STX_TEST
+{
+    optional MsgCode msgcode = 1[default = SERVER_STX_TEST];
+    required uint32 Count = 2;
+}
+
+message CMD_SERVER_XTS_TEST
+{
+    optional MsgCode msgcode = 1[default = SERVER_XTS_TEST];
+    required uint32 Count = 2;
+}
+
+message CMD_SERVER_XTS_REGIST
+{
+    optional MsgCode msgcode = 1[default = SERVER_XTS_REGIST];
+}

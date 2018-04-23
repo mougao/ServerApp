@@ -1,0 +1,219 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+package PaoEntity;
+
+////////////////////////// 据点抽奖 ///////////////////////////////////////////
+
+message CMD_Fotress_STC_lotteryInfo		//据点抽奖实例信息
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_LOTTERY_INFO];
+	required uint32 DayCount 			= 2;
+	required uint32 TurnCount 			= 3;
+	required int32 Status				= 4;	//0 空闲状态 1 抽奖中	
+}
+
+message CMD_Fortress_CTS_Lottery
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_CTS_LOTTERY];
+}
+
+message CMD_Fortress_STC_LotteryResponse
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_LOTTERY_RESPONSE];	
+	required ErrorCode Error 			= 2;
+	repeated Reward Rewards 			= 3;
+}
+
+message CMD_Fortress_CTS_Open
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_CTS_LOTTERY_OPEN];	
+}
+
+message CMD_Fortress_STC_OpenRresponse
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_LOTTERY_OPEN_RESPONSE];
+	required ErrorCode Error 			= 2;
+	optional Reward Reward 				= 3;
+}
+////////////////////////// 据点抽奖 ///////////////////////////////////////////
+
+
+enum ConstructionType
+{
+	Construction_Coin      =1;
+	Construction_Exp   	   =2;
+	Construction_WashStone =3;
+	Construction_Hospital  =4;
+}
+
+//建筑对指挥官buff加成
+message Con_CommanderBuff
+{
+	required int32 Type =1;//0血1防2攻
+	required int32 Value =2;
+}
+//建筑升级所需物品
+message Con_UpItem
+{
+	required int32 ItemId =1;
+	required int32 Value  =2;
+}
+message ConstructionInfo
+{
+	required ConstructionType  Type 			 =1;//建筑类型
+    required int32             UsedStars         =2;//升级本建筑已消耗星数
+    required int32             CurrentProduction =3;//当前产值，伤员数量
+
+	required int32             Level 			 =4;
+	required int32             Capacity          =5;//容量 
+	required int32             AddCityDefence    =6;//当前等级城防值加成
+	repeated Con_CommanderBuff CommanderBuffs    =7;//当前等级指挥官buff加成
+	required double            Speed             =8;
+
+	required int32             NextLevel         =9;//下一级，0表示等级已满
+	required int32             NextCapacity      =10;
+	required int32             NextAddCityDefence =11;
+	repeated Con_CommanderBuff NextCommanderBuffs =12;
+	required double            NextSpeed          =13;
+
+	repeated Con_UpItem        UpNeedItems        =14;
+	required int32             UpNeedStars        =15; 
+}
+//////////////////////////据点建筑/////////////////////////////////////////////
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_GETBASETINFO
+{
+	optional MsgCode   msgCode 			= 1[default = FORTRESS_CTS_CONSTRUCTION_GETBASETINFO];
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_GETBASETINFO_RESPONSE
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_GETBASETINFO_RESPONSE];
+	required int32   CurCityDefenceValue =2;//当前城防值
+	required int32   MaxCityDefenceValue =3;//城防值上限
+	required int32   NextRegainCountDown =4;//下次恢复次数时间倒计时（秒）
+	required int32   CanFixCount         =5;//可修复城防次数
+	required bool    IsFire              =6;//是否在燃烧中
+	required int32   FireCountDown       =7;//燃烧倒计时
+	//更多字段
+}
+
+//更新副本星数(fb评星提升时)
+message CMD_FORTRESS_STC_CONSTRUCTION_UPDATE_STARS
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_UPDATE_STARS];
+	required int32  Stars               = 2;
+}
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_REFRESHRESOURCE
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_CTS_CONSTRUCTION_REFRESHRESOURCE];	
+}
+//发送建筑信息（一个或多个）
+message CMD_FORTRESS_STC_CONSTRUCTION_CONS
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_CONS];
+	required int32   Stars              = 2;//拥有fb星数
+	repeated ConstructionInfo Cons      = 3;
+}
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_UPGRADE
+{
+	optional MsgCode   msgCode 			= 1[default = FORTRESS_CTS_CONSTRUCTION_UPGRADE];	
+	required ConstructionType Type 	    = 2;
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_UPGRADE_RESPONSE
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_UPGRADE_RESPONSE];
+	required ErrorCode ReturnCode		= 2;
+}
+message CMD_FORTRESS_CTS_CONSTRUCTION_GETRESOURCE
+{
+	optional MsgCode   msgCode 			= 1[default = FORTRESS_CTS_CONSTRUCTION_GETRESOURCE];	
+	required ConstructionType Type 	    = 2;
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_GETRESOURCE_RESPONSE
+{
+	optional MsgCode msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_GETRESOURCE_RESPONSE];
+	required ErrorCode ReturnCode		= 2;
+	repeated Reward    Rewards          = 3;
+}
+message CMD_FORTRESS_CTS_CONSTRUCTION_ONEKEYGETRESOURCE
+{
+	optional MsgCode   msgCode 			= 1[default = FORTRESS_CTS_CONSTRUCTION_ONEKEYGETRESOURCE];		
+}
+
+message CMD_FORTRESS_STC_CONSTRUCTION_ONEKEYGETRESOURCE_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default = FORTRESS_STC_CONSTRUCTION_ONEKEYGETRESOURCE_RESPONSE];		
+	repeated Reward    Rewards          = 2;
+}
+message CMD_FORTRESS_CTS_CONSTRUCTION_FIX
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_FIX];   
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_FIX_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_STC_CONSTRUCTION_FIX_RESPONSE];
+	required ErrorCode ReturnCode		= 2;
+}
+
+//花费黄金快速灭火（每秒X黄金，客户端先计算提示？？）
+message CMD_FORTRESS_CTS_CONSTRUCTION_OUTFIRE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_OUTFIRE];
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_OUTFIRE_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_OUTFIRE];
+	required ErrorCode ReturnCode		= 2;
+	required int32     Consume          = 3; //消费黄金
+}
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST];
+	repeated string    Soldiers         = 2;
+}
+
+message CMD_FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_RESPONSE];
+	required ErrorCode ReturnCode		= 2;	
+}
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST_CANCEL
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_SOLDIER_REST_CANCEL];
+	repeated string    Soldiers         = 2;
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_CANCEL_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_STC_CONSTRUCTION_SOLDIER_REST_CANCEL_RESPONSE];
+	required ErrorCode ReturnCode		= 2;	
+}
+
+message CMD_FORTRESS_CTS_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_CTS_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER];
+}
+message CMD_FORTRESS_STC_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_STC_CONSTRUCTION_SOLDIER_ONEKEY_RECOVER_RESPONSE];
+	required int32       Cost           = 2;//消费黄金
+}
+
+message Foretress_Hospital_Soldier
+{
+	required string GUID =1;
+	required int32  State =2;//士兵状态
+	required int32  HpPercent=3;// 0-10000的数	
+}
+
+
+message CMD_FORTRESS_STC_CONSTRUCTION_HOSPITAL_SOLDIERS_RESPONSE
+{
+	optional MsgCode   msgCode 			= 1[default =FORTRESS_STC_CONSTRUCTION_HOSPITAL_SOLDIERS_RESPONSE];
+    repeated Foretress_Hospital_Soldier Soldiers =2;
+}
+//////////////////////////据点建筑/////////////////////////////////////////////

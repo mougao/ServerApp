@@ -1,0 +1,294 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+package PaoEntity;
+
+
+enum BattleSourceType
+{
+	BST_Chapter = 0;	//章节
+	BST_Area = 1;      // 竞技场战斗类型
+	BST_Tower = 2;      // 爬塔战斗类型
+	BST_DupRes	= 3;	//资源副本
+	BST_Mining	= 4;    //矿区掠夺
+	BST_Random	= 5;	//随机怪物
+	BST_EndlessTower = 6; //无尽之塔
+	BST_LeagueFB = 7;	//团本
+	BST_EndlessTower_Virtual = 8; //无尽之塔模拟战
+	BST_GlobalLadder = 9; //跨服爬塔
+	BST_Fortress = 10;	// 据点系统
+}
+message Monster
+{
+	required BattleInfo Info = 1; 		//战斗属性
+	repeated uint32 RewardItemList = 2; //掉落物品ID列表，数量恒为1
+}
+
+message MonsterWave{
+	repeated Monster     Monsters     = 1;//怪物列表
+}
+
+message BattleElementStatus
+{
+	required string GUID = 1;			//对象GUID
+	required int32	CurrentHP = 2;		//当前生命值
+	required uint32 MaxDamage = 3;		//最大伤害
+	required uint32 TotalDamage = 4;	//总伤害
+}
+message SkillStatus
+{
+	required uint32 SkillID = 1;		 //技能ID
+	optional uint32 CD = 2[default = 0]; //CD
+	optional uint32 gradelevel = 3 [default = 0];//技能品阶等级
+}
+message CMD_BATTLE_CTS_BATTLEEND{
+	enum BattleResult{
+		AttackerLose = -1; 	//进攻方失败
+		AttackerWin = 1;	//进攻方胜利
+	}
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_CTS_END];
+	required string		BattleGUID			= 2;	//战斗GUID
+	required BattleResult Result 			= 3; 	//战斗结果
+	optional uint32 	Star 				= 4;    //战斗评星 
+	repeated BattleElementStatus Attackers  = 5; 	//进攻方状态列表
+	repeated BattleElementStatus Defenders  = 6; 	//防守方状态列表
+	optional uint32 	AttackerEnegy		= 7;	//进攻方能量点
+	repeated SkillStatus AttackerSkills 	= 8;	//进攻方技能状态列表
+	optional uint32 	DefenderEnegy		= 9;	//防守方能量点
+	repeated SkillStatus DefenderSkills 	= 10;	//防守方技能状态列表
+	optional uint32 	AttackerFormSkillCD = 11;	//进攻方指挥官技能CD
+	optional uint32     DefenderFormSkillCD = 12;   //防守方指挥官技能CD
+}
+
+message CMD_BATTLE_STC_BATTLEENDRESPONSE{
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_STC_ENDRESPONSE]; 	
+}
+
+message PVEBattleInfo
+{
+	required string BattleGUID              = 1;	    //战斗GUID	
+	repeated  MonsterWave battle_monsters   = 2;		//怪物列表		
+}
+
+message PVPBattleInfo
+{
+	required string BattleGUID              = 1;	    //战斗GUID
+	required string EnemyCommanderIcon 		= 2;		//对手指挥官头像
+	required uint32 EnemyCommanderGender	= 3;		//对手指挥官性别
+	required CommanderFormType EnemyCommanderType = 4;  //对手指挥官初始形态
+	required BattleInfo EnemyCommander 		= 5;		//对手指挥官
+	repeated BattleInfo EnemySoldiers 		= 6;		//对手兵种列表
+	repeated SkillStatus EnemySkillList 	= 7;		//对手科技技能列表
+	optional uint32 SelfSkillEnegy				= 8[default = 0]; //初始能量点数
+	optional uint32 EnemySkillEnegy			= 9[default = 0];//对手初始能量点数
+	optional uint32 SelfFormSkillCD         = 10[default = 0]; //指挥官技能CD时间
+	optional uint32 EnemyFormSkillCD 		= 11[default = 0]; //对手指挥官技能CD时间
+
+	optional string SelfCommanderIcon 		= 12;		//指挥官头像
+	optional uint32 SelfCommanderGender	= 13;		//指挥官性别
+	optional CommanderFormType SelfCommanderType = 14;  //指挥官初始形态
+	optional BattleInfo SelfCommander 		= 15;		//指挥官
+	repeated BattleInfo SelfSoldiers 		= 16;		//兵种列表
+	repeated SkillStatus SelfSkillList 	= 17;		//科技技能列表
+
+	optional string SelfName				=18;	//指挥官名字
+	optional string EnemyName				=19;	//对手指挥官名字
+
+	optional int32 RandomSeed 				= 20;		//随机种子
+}
+
+// -------- zzb add start ----------------
+message CommanderInfo									// 指挥官信息							
+{
+	required BattleInfo			battleInfo		= 1;
+	required string				icon			= 2;	// 指挥官头像
+	required uint32				gender			= 3;
+	required CommanderFormType	form			= 4;	// 初始形态
+	repeated SkillStatus		skillList		= 6;	// 技能列表
+	optional uint32				energy			= 5;	// 初始能量
+	optional uint32				skillCD			= 7;	// 技能cd时间
+}
+
+message SquadInfo										// 战斗小分队信息
+{
+	optional CommanderInfo	commander	= 1;
+	repeated BattleInfo		soldiers	= 2;
+}
+
+message FortressBattleInfo								// 据点系统战斗信息
+{
+	required string		battleGUID	= 1;
+	repeated SquadInfo	selfArmy	= 2;				// 已方部队
+	repeated SquadInfo	enemyArmy	= 3;				// 敌方部队
+	optional int32		randomSeed	= 4;
+}
+
+message CMD_BATTLE_STC_STARTFORTRESSBATTLE				// 据点系统战斗开始时服务端发给客户端的报文
+{
+	required MsgCode			msgcode			= 1[default = BATTLE_STC_STARTFORTRESSBATTLE];
+	required FortressBattleInfo	fortressInfo	= 2;	// 据点战斗信息
+	repeated Reward				rewards			= 3;	// 胜利后的奖励(不含战斗中的掉落)
+	required BattleSourceType	BSType			= 4;	// 战斗来源类型
+}
+
+// -------- zzb add end -------------------
+
+message CMD_BATTLE_STC_STARTPVEBATTLE{
+	
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_STC_STARTPVEBATTLE];
+	required  PVEBattleInfo BattleInfo      = 2;		//PVE战斗详细信息
+	repeated  Reward	Rewards				= 3;		//胜利后可获得的奖励,不包含战斗中的掉落
+	required BattleSourceType PBType     = 4;         //PVE战斗类型
+}
+
+message CMD_BATTLE_STC_STARTPVPBATTLE{
+	optional  	MsgCode 	msgcode = 1[default = BATTLE_STC_STARTPVPBATTLE];
+	required PVPBattleInfo BattleInfo  = 2;	    	//PVP战斗详细信息
+	required BattleSourceType PBType     = 3;         //PVP战斗类型
+	repeated  Reward Rewards		   = 4;		    //胜利后可获得的奖励,不包含战斗中的掉落
+
+}
+
+message CMD_CHAPTER_CTS_CHALLENGE{
+	optional  	MsgCode 	msgcode = 1[default = CHAPTER_CTS_CHALLENGE];
+	required uint32	ChapterID = 3;			//章节ID
+	required uint32 BattleFieldID = 4;		//关卡ID
+}
+
+message CMD_CHAPTER_STC_CHALLENGE{
+	optional  	MsgCode 	msgcode = 1[default = CHAPTER_STC_CHALLENGE];
+	required ErrorCode ReturnCode  = 2;			// 结果返回值
+}
+
+message CMD_BATTLE_CTS_CANCLEBATTLE{
+	optional  	MsgCode 	msgcode = 1[default = BATTLE_CTS_CANCLEBATTLE];	
+}
+
+message CMD_BATTLE_STC_CANCLEBATTLE{
+	optional  	MsgCode 	msgcode = 1[default = BATTLE_STC_CANCLEBATTLE];	
+	required ErrorCode ReturnCode  = 2;			// 结果返回值
+}
+
+enum BattleCancleReason
+{
+	TimeUp = 1; //超过战斗最大有效时间
+	LeagueFB_Leave = 2;//团本站中，玩家离开公会
+}
+message CMD_BATTLE_STC_CANCLEBATTLEBYSERVER{
+	optional  	MsgCode 	msgcode = 1[default = BATTLE_STC_CANCLEBATTLEBYSERVER];	
+	required  BattleCancleReason Reason = 2;  //战斗取消原因
+}
+
+/************************随机怪物*****************************/
+message CMD_RANDOMMONSTER_CTS_CHALLENGE
+{
+	optional  	MsgCode 	msgcode = 1[default = RANDOMMONSTER_CTS_CHALLENGE];
+}
+message CMD_RANDOMMONSTER_STC_CHALLENGE
+{
+	optional  	MsgCode 	msgcode = 1[default = RANDOMMONSTER_STC_CHALLENGE];
+	required    ErrorCode ReturnCode  = 2;			// 结果返回值
+}
+
+//********************阵型**************************************************
+enum FormationType
+{
+	PVE = 0;
+	PVP = 1;
+}
+enum CommanderFormType
+{
+    LIFE_GROUND = 0;
+    LIFE_SKY = 1;
+    MACHINE_GROUND = 2;
+    MACHINE_SKY = 3;    
+}
+message CMD_BATTLE_CTS_SETFORMATIONSKILL{
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_CTS_SETFORMATIONSKILL];
+	required FormationType Type = 2;		//阵型类型
+	repeated uint32 SkillList = 3;			//技能ID列表
+}
+
+message CMD_BATTLE_CTS_SETFORMATIONSOLDIER{
+	optional  MsgCode   msgcode             = 1[default = BATTLE_CTS_SETFORMATIONSOLDIER];
+	required FormationType Type = 2;		//阵型类型
+	required CommanderFormType CommanderForm = 3; //指挥官形态
+	repeated string SoldierList = 4;        //兵种ID列表 
+}
+
+message CMD_BATTLE_STC_SETFORMATIONRESPONSE{
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_STC_SETFORMATIONRESPONSE];
+	required ErrorCode  ReturnCode			= 2; //阵型设置返回
+}
+
+message FormationInfo
+{
+	required FormationType Type  = 1;		//阵型类型
+	required CommanderFormType CommanderForm = 2; //指挥官形态
+	repeated string SoldierList = 3;	 	//兵种ID列表
+	repeated uint32 SkillList = 4;			//技能列表
+}
+
+message CMD_BATTLE_STC_FORMATION{
+	optional  MsgCode 	msgcode             = 1[default = BATTLE_STC_FORMATION];
+	repeated FormationInfo formations = 2;		//阵型列表
+}
+
+//************************************************
+
+
+//************************战斗录像报文************************
+
+message BR_Grids                             //一维格子Id数组
+{
+	repeated int32 id          = 1;          //格子Id列表
+}
+
+
+message BR_BaseData                          //战斗录像基础数据
+{
+	required int32 type        = 1;          //记录的类型 1.释放技能 2.接收Buffer 3.冒血
+	required int32 bloodtype   = 2;          //冒血类型 跟随着正常的冒血类型
+	required int32 skilltype   = 3;          //技能的类型(1.普通攻击 2.士兵特殊技能 3.指挥官专属技能 4.指挥官科技技能)
+	required int32 skilllv     = 4;          //技能的等级(类型为1和3的等级默认都为1, 兼容冒血是否暴击 1暴击 0非暴击)
+	required int32 bloodnum    = 5;          //冒血的数值
+	required int32 actionerid  = 6;          //发起者Id，对应战场DBId，对所有事件类型都有效
+	required int32 freebloodid = 7;          //造成伤害或者加血者的ID
+	required int32 skillgevalue = 8;         //科技技能进阶等级数值 传输用int 实际通过乘除1000来转换
+	required int32 skillid     = 9;          //释放的技能Id, 对技能释放事件和buff添加事件有效(对于buff添加来说此Id是 BaseSkillId)
+	required int32 bufferid    = 10;         //释放的bufferId，只对Buffer事件有效
+
+	repeated BR_Grids eecivergridids = 11;    //格子2维数据列表
+}
+
+message BR_Axis                              //录像时间节点数据
+{
+	repeated BR_BaseData datas = 1;          //事件列表
+	required int32       time  = 2;          //时间节点
+}
+
+message CMD_BR_CTS_RECORDDATA{
+	optional MsgCode msgcode                 = 1[default = BR_CTS_RECORDDATA];
+	required string battleguid               = 2;   //战场唯一id
+	repeated BR_Axis axisdatas               = 7;   //时间节点数据列表
+}
+
+message CMD_BR_STC_RECORDDATA{
+	optional MsgCode msgcode                 = 1[default = BR_STC_RECORDDATA];
+	required string battleguid               = 2;   //战场唯一id
+	repeated BattleInfo selfunits            = 3;   //左边战斗单位数据
+	repeated BattleInfo rivalunits           = 4;   //右边战斗单位数据
+	required BattleInfo selfcommander        = 5;   //左方指挥官
+	required BattleInfo rivalcommander       = 6;   //右方指挥官
+	repeated int32      selfskills           = 7;   //左边技能Icon对应的技能Id
+	required bool       isrecordbyself       = 8;   //是否跟自己有关
+	repeated BR_Axis axisdatas               = 9;   //时间节点数据列表
+}
+
+
+
+
+
+//************************************************
+
+

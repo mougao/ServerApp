@@ -1,0 +1,408 @@
+import "msgcode.proto";
+import "common.proto";
+import "errorcode.proto";
+import "battle.proto";
+import "rankinglist.proto";
+package PaoEntity;
+
+/////////////////////////////////////章节副本/////////////////////////////////////////////////////////
+message ChapterInfo{
+	message StarReward
+	{		
+		repeated Reward Rewards = 1;
+	}
+	required uint32	ID = 1; //模板ID
+	repeated BattleField BattleFields = 5; // 关卡列表信息
+	repeated uint32 FetchedRewardList = 6; // 已领章节奖励索引列表
+	repeated StarReward Rewards = 7;	   // 章节奖励
+}
+message CMD_CHAPTER_STC_BATTLEFIELD{
+	optional  MsgCode 	msgcode             = 1[default = CHAPTER_STC_BATTLEFIELD];
+	repeated BattleField BattleFields = 5; //关卡列表信息
+}
+
+message CMD_CHAPTER_STC_CHAPTERLIST{
+	optional  	MsgCode 	msgcode              = 1[default = CHAPTER_STC_CHAPTERLIST];
+	optional    bool 	IsUpdate	= 2[default = true]; //是否更新
+	repeated	ChapterInfo Chapters = 3; //章节信息列表
+}
+
+message CMD_CHAPTER_CTS_FETCHREWARD{
+	optional  	MsgCode 	msgcode              = 1[default = CHAPTER_CTS_FETCHREWARD];
+	required uint32 ChapterID = 2;			//章节模板ID
+	required uint32 RewardIndex = 3;		// 领取奖励的序号
+}
+
+message CMD_CHAPTER_STC_FETCHREWARDRESPONSE{
+	optional  	MsgCode 	msgcode              = 1[default = CHPATER_STC_FETCHREWARDRESPONSE];
+	required ErrorCode ReturnCode = 2;
+	required uint32 ChapterID = 3;			//章节模板ID
+	required uint32 RewardIndex = 4;		// 领取奖励的序号
+}
+
+message CMD_CHAPTER_CTS_BUYCHALLENGETIMES{
+	optional  	MsgCode 	msgcode              = 1[default = CHAPTER_CTS_BUYCHALLENGETIMES];
+	required uint32 BattleFieldID                = 2;//关卡模板ID
+}
+
+message CMD_CHPATER_STC_BUYCHALLENGETIMES{
+	optional  	MsgCode 	msgcode              = 1[default = CHPATER_STC_BUYCHALLENGETIMES];
+	required ErrorCode ReturnCode                = 2;
+	required uint32 BattleFieldID                = 3;//关卡模板ID
+	required uint32 ChallengeTimes               = 4;//当前挑战次数
+	required uint32 BuyTimes                     = 5;//当前购买次数
+}
+
+message CMD_CHAPTER_CTS_SWEEP{
+	optional  	MsgCode 	msgcode              = 1[default = CHAPTER_CTS_SWEEP];
+	required uint32 ChapterID                    = 2;//章节模板ID
+	required uint32 BattleFieldID                = 3;//关卡模板ID
+	required uint32 type                         = 4;//0:单次扫荡 1：多次扫荡 
+	required uint32 costtype                     = 5;//0:道具 1：黄金
+}
+
+message ChapterReward
+{
+	required uint32 Exp                          = 1;//经验
+	required uint32 Coin                         = 2;//奖励美元
+	repeated Reward ItemRewards                  = 3;//道具奖励信息
+}
+
+message CMD_CHPATER_STC_SWEEP{
+	optional  	MsgCode 	msgcode               = 1[default = CHPATER_STC_SWEEP];
+	required ErrorCode      ReturnCode            = 2;
+	required uint32         BattleFieldID         = 3;//关卡模板ID
+	repeated ChapterReward  Reward                = 4;//关卡奖励
+	repeated Reward         ExtraRewards          = 5;//其他奖励
+}
+
+message CMD_CHAPTER_CTS_OPENBOX			
+{
+	optional MsgCode msgCode 					= 1[default = CHAPTER_CTS_OPENBOX];
+	required uint32 BattleFieldID 				= 2;	//副本战场ID
+}
+
+message CMD_CHAPTER_STC_OPENBOXRESPONSE
+{
+	optional MsgCode msgCode 					= 1[default = CHAPTER_STC_OPENBOXRESPOSNE];
+	required ErrorCode Error 					= 2;
+	required BattleField.TreasureBoxStatus BoxStatus = 3;
+	required uint32 BattleFieldID 				= 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////爬塔副本/////////////////////////////////////////////////////////////
+message SoldiersHPRecord
+{
+	required string GUID = 1;	//兵种信息
+	required uint32 HP = 2;		//兵种HP
+}
+message SkillCDRecord
+{
+	required uint32 ID = 1;	//技能ID
+	required uint32 CD = 2; //技能CD
+	required uint32 gradelevel = 3;//技能品阶等级
+}
+message TowerFieldInfo
+{
+	enum FieldStatus{
+		Disable = 0;	//不可挑战
+		Able = 1;		//可挑战
+		HasReward = 2;	//挑战结束，等待领取奖励
+		Close = 3;		//已领取奖励，关卡关闭
+
+	}
+	required uint32 ID = 1; //爬塔关卡ID
+	required FieldStatus Status = 2;	//关卡状态
+	required string CommanderName = 3;	//指挥官名字
+	required uint32 CommanderLevel = 4;	//指挥官等级
+	required string CommanderIConID = 5;	//指挥官头像
+	required int32 CommanderMaxHP	= 6;	//指挥官最大血量
+	required int32 CommanderCurrentHP = 7; //指挥官当前血量
+	required uint32 CommanderTempleteId = 8; //指挥官模版ID
+	required CommanderFormType CommanderType = 9; //指挥官初始形态
+	repeated SoldierIconInfo Soldiers = 10;	//士兵头像信息列表
+	repeated SkillCDRecord Skills =     11;  //对手的技能信息
+
+}
+enum TowerType{
+		Normal = 0;	//普通
+		Senior = 1; //精英
+}
+message CMD_TOWER_STC_TOWERINFO{
+	optional MsgCode msgcode    				=1[default = TOWER_STC_TOWERINFO];
+	repeated SoldiersHPRecord  HPRecords = 2; // 记录的剩余血量（包含指挥官）
+	repeated SkillCDRecord CDRecords =  3;	//记录的技能CD
+	required uint32 SkillEnegy		= 4;	//技能能量点
+	required bool SeniorEnable		= 5;	//是否可开启精英模式
+	required bool IsPassNormal      = 6;  //是否通关普通难度
+	required bool IsPassSenior      = 7;  //是否通关精英难度
+}
+
+message CMD_TOWER_STC_TOWERTYPE{
+	optional MsgCode msgcode       =1[default = TOWER_STC_TOWERTYPE];
+	required TowerType CurrentType = 2;		  // 当前挑战难度
+}
+
+message CMD_TOWER_STC_FIELDINFO{
+	optional MsgCode msgcode       =1[default = TOWER_STC_FIELDINFO];
+	required bool    IsUpdate      = 2;     //是否更新(0 初始下发 1 更新下发)
+	repeated TowerFieldInfo Towers = 3; 	//已开启或通关的关卡列表
+}
+
+message CMD_TOWER_STC_TOWERRESETCOUNT{
+	optional MsgCode msgcode    				=1[default = TOWER_STC_TOWERRESETCOUNT];
+	required bool RewardCoin = 2;				//当前爬塔是否奖励爬塔币
+	required uint32 Times = 3;				  // 今日剩余重置次数
+}
+
+message CMD_TOWER_CTS_OPENTOWER{
+	optional MsgCode msgcode = 1[default = TOWER_CTS_OPENTOWER];
+}
+
+message CMD_TOWER_CTS_RESETTOWER{
+	optional MsgCode msgcode = 1[default = TOWER_CTS_RESETTOWER];
+	required TowerType Type = 2;	//难度
+}
+
+message CMD_TOWER_STC_RESETTOWER{
+	optional MsgCode msgcode = 1[default = TOWER_STC_RESETTOWER];
+	required ErrorCode code = 2;	//返回值
+}
+
+message CMD_TOWER_CTS_CHALLENGETOWER{
+	optional MsgCode msgcode = 1[default = TOWER_CTS_CHALLENGETOWER];
+	required 	uint32		Id 					 = 2;//挑战关卡的ID
+	repeated    string      soldiers             = 3;//阵型士兵列表
+    repeated    uint32      skills               = 4;//阵型科技技能列表
+}
+
+message CMD_TOWER_STC_CHALLENGETOWER{
+	optional MsgCode msgcode = 1[default = TOWER_STC_CHALLENGETOWER];
+	required ErrorCode code = 2;	//返回值
+}
+
+message CMD_TOWER_CTS_CHANGELEVEL{
+	optional MsgCode msgcode = 1[default = TOWER_CTS_CHANGELEVEL];
+}
+
+message CMD_TOWER_STC_CHANGELEVEL{
+	optional MsgCode msgcode = 1[default = TOWER_STC_CHANGELEVEL];
+	required ErrorCode code = 2;	//返回值
+}
+
+message CMD_TOWER_CTS_FETCHREWARD{
+	optional MsgCode msgcode = 1[default = TOWER_CTS_FETCHREWARD];
+	required uint32 Id = 2;		//关卡ID
+}
+
+message CMD_TOWER_STC_FETCHREWARD{
+	optional MsgCode msgcode = 1[default = TOWER_STC_FETCHREWARD];
+	required ErrorCode code = 2;	//返回值
+	repeated Reward Rewards = 3;	//奖励信息
+}
+
+message CMD_TOWER_STC_TOWERCOIN{
+	optional MsgCode msgcode = 1[default = TOWER_STC_TOWERCOIN];
+	required uint32 TowerCoin = 2; //爬塔币
+}
+
+message CMD_TOWER_STC_CLEAR
+{
+	optional MsgCode msgcode = 1[default = TOWER_STC_CLEAR];
+}
+
+
+message CMD_TOWER_CTS_SWEEP
+{
+	optional MsgCode     msgcode    = 1[default = TOWER_CTS_SWEEP];
+	repeated string      soldiers   = 2;//阵型士兵列表
+    repeated uint32      skills     = 3;//阵型科技技能列表
+}
+
+message SweepReward
+{
+	required uint32 Id =1;//关卡id
+	repeated Reward Rewards = 2;//奖励信息
+}
+message CMD_TOWER_STC_SWEEP
+{
+	optional MsgCode msgcode      = 1[default = TOWER_STC_SWEEP];
+	required ErrorCode ReturnCode = 2;	//返回值
+	repeated SweepReward SweepRewards = 3;	//扫荡奖励
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////// 资源副本 ///////////////////////////////////////////////////////////
+
+message DuplicateResInfo{
+	required int32  Id                           = 1;//副本id
+	required int32  CurCount                     = 2;//当前挑战次数
+	required int32  Status                       = 3;//副本状态 1：开启 2：关闭
+	repeated M_StarInfo starinfos                = 4;//挑战副本通关星级信息
+	required int32  CD                           = 5;//挑战cd时间
+}
+
+message M_StarInfo
+{
+	required int32  battlefield_Id               = 1;//关卡id
+	required int32  star                         = 4;//当前通关星级
+}
+
+message CMD_DUPRES_STC_BASEINFO{
+	optional  	MsgCode 	      msgcode              = 1[default = DUPRES_STC_BASEINFO];
+	repeated	DuplicateResInfo  Duplicates           = 2; //章节信息列表
+}
+
+message CMD_DUPRES_CTS_CHALLENGE{
+	optional  	MsgCode 	msgcode              = 1[default = DUPRES_CTS_CHALLENGE];
+	required    int32       DuplicateID          = 2;//副本模板ID
+	required    int32       DifficultyLevel      = 3;//副本难度
+	repeated    string      soldiers             = 4;//阵型士兵列表
+    repeated    int32       skills               = 5;//阵型科技技能列表
+}
+
+message CMD_DUPRES_STC_CHALLENGE{
+	optional  	MsgCode 	msgcode              = 1[default = DUPRES_STC_CHALLENGE];
+	required   ErrorCode    Result               = 2;
+}
+
+
+message CMD_DUPRES_CTS_SWEEP{
+	optional  	MsgCode 	msgcode              = 1[default = DUPRES_CTS_SWEEP];
+	required    int32       DuplicateID          = 2;//扫荡副本模板ID
+	required    int32       DifficultyLevel      = 3;//副本难度
+	repeated    string      soldiers             = 4;//阵型士兵列表
+	required    int32       type                 = 5;//扫荡方式 0：单次 1：多次
+	required    int32       costtype             = 6;//0:道具 1：黄金
+}
+
+message CMD_DUPRES_STC_SWEEP{
+	optional  	MsgCode 	msgcode              = 1[default = DUPRES_STC_SWEEP];
+	required   ErrorCode    Result               = 2;
+	required   int32         BattleFieldID       = 3;//关卡模板ID
+	repeated   ChapterReward  Reward             = 4;//关卡奖励
+	repeated   Reward         ExtraRewards       = 5;//其他奖励
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////// 无尽之塔 //////////////////////////////////////////////////////
+
+message CMD_ENDLESSTOWER_STC_TOWERINFO{
+	optional  	MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_TOWERINFO];
+	required uint32 CurrentFloor 				 = 2; //当前层
+	required uint32 HighestFloor			     = 3; //已通关的最高层
+	required uint32 ResetTimes					 = 4; //剩余重置次数
+	required uint32 CurrentRewardFloor			 = 5; //当前可领奖励层 
+	
+}
+
+message CMD_ENDLESSTOWER_CTS_CHALLEGECURRENTFLOOR{
+	optional  	MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_CHALLEGECURRENTFLOOR];
+}
+
+message CMD_ENDLESSTOWER_STC_CHALLEGECURRENTFLOOR{
+	optional  	MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_CHALLEGECURRENTFLOOR];
+	required	ErrorCode    Result               = 2;
+}
+
+message CMD_ENDLESSTOWER_STC_CHALLEGECURRENTFLOORRESULT{
+	optional  	MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_CHALLEGECURRENTFLOORRESULT];
+	repeated Reward Rewards = 2; //奖励信息
+}
+
+message CMD_ENDLESSTOWER_CTS_FETCHFLOORREWARD{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_FETCHFLOORREWARD];
+}
+
+message CMD_ENDLESSTOWER_STC_FETCHFLOORREWARD{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_FETCHFLOORREWARD];
+	required ErrorCode    Result               = 2;
+	repeated Reward Rewards = 3;	//奖励信息  
+}
+
+message CMD_ENDLESSTOWER_CTS_SWEEP{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_SWEEP];
+}
+
+message CMD_ENDLESSTOWER_STC_SWEEP{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_SWEEP];
+	required ErrorCode    Result               = 2;
+}
+
+message CMD_ENDLESSTOWER_CTS_RESET{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_RESET];	
+}
+
+message CMD_ENDLESSTOWER_STC_RESET{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_RESET];	
+	required ErrorCode    Result               = 2;	
+}
+
+message CMD_ENDLESSTOWER_CTS_SWEEPSTATUS{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_SWEEPSTATUS];	
+}
+
+message CMD_ENDLESSTOWER_STC_SWEEPSTATUS{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_SWEEPSTATUS];
+	required ErrorCode Result = 2;	//结果
+	required bool Finished = 3;	//是否已完成扫荡
+	required uint32 CurrentFloor = 4; //当前层
+	repeated Reward Rewards = 5;	//奖励
+}
+
+message CMD_ENDLESSTOWER_CTS_FETCHSWEEPREWARD{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_FETCHSWEEPREWARD];
+}
+
+message CMD_ENDLESSTOWER_STC_FETCHSWEEPREWARD{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_FETCHSWEEPREWARD];
+	required ErrorCode  Result				 = 2;
+	repeated Reward Rewards = 3; //奖励
+}
+
+message CMD_ENDLESSTOWER_CTS_QUICKSWEEP{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_QUICKSWEEP];
+}
+
+message CMD_ENDLESSTOWER_STC_QUICKSWEEP{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_QUICKSWEEP];
+	required ErrorCode Result = 2;
+	repeated Reward Rewards = 3; //奖励
+}
+
+message CMD_ENDLESSTOWER_CTS_VIRTUALBATTLE{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_VIRTUALBATTLE];
+	required uint32 FloorID	 = 2;	//关卡ID
+}
+
+message CMD_ENDLESSTOWER_STC_VIRTUALBATTLE{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_VIRTUALBATTLE];
+	required ErrorCode Result = 2;
+}
+
+
+message EndlessTowerRecommendFormation
+{
+	required string 			Name 	  =1;
+    required string 			Icon      =2;
+    required int32              Fight     =3;
+    required RanklistCommander  Commander =4;
+    repeated M_SkillInfo        Skills    =5;
+    repeated RanklistSoldier    Soldiers  =6;
+}
+message CMD_ENDLESSTOWER_CTS_RECOMMENDFORMATION
+{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_CTS_RECOMMENDFORMATION];
+	required uint32     FloorId              = 2;
+}
+message CMD_ENDLESSTOWER_STC_RECOMMENDFORMATION
+{
+	optional MsgCode 	msgcode              = 1[default = ENDLESSTOWER_STC_RECOMMENDFORMATION];
+	required ErrorCode  ReturnCode           = 2;
+	optional EndlessTowerRecommendFormation Formation =3;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

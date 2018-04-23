@@ -1,0 +1,737 @@
+import "msgcode.proto";
+import "errorcode.proto";
+import "common.proto";
+import "rankinglist.proto";
+package PaoEntity;
+
+
+//申请入会的信息
+message M_LeagueApply{
+    required string sGuid = 1; // 会员guid
+    required string sName = 2; // 名字
+    required string sIcon = 3; // 头像
+    required int32 nLevel = 4; // 等级
+    required int32 nVipLevel = 5; // Vip等级
+    required int32 nApplyTime = 6; // 申请时间
+}
+
+enum LeagueMemberType
+{
+    Leader  = 1; // 会长
+    Leader_Vice = 2; // 副会长
+    NormalMember = 3; // 普通会员
+
+}
+// 联盟成员信息
+message M_LeagueMember{
+    required string sGuid = 1; // 会员guid
+    required string sName = 2; // 名字
+    required string sIcon = 3; // 头像
+    required int32 nLevel = 4; // 等级
+    required int32 nVipLevel = 5; // Vip等级
+
+    required LeagueMemberType type = 6; // 职务
+    required int32 nLastTime = 7; // 最后上线时间 （最近一次登陆到当前的时间差）
+    required int32 TotalDonate = 8; // 累计公会捐献
+    required int32 TodayDonate = 9; // 今日公会捐献
+}
+
+message M_MemberFormation
+{
+    required int32 TotalFight               =1;
+    repeated M_SkillInfo SkillIdList        =2; // 技能ID列表 （来自common.proto）
+    required RanklistCommander commander    =3; // 指挥官信息(来自rankinglist.proto，下同）
+    repeated RanklistSoldier   Soldiers     =4; // 士兵
+}
+
+enum LeagueType
+{
+    LeagueType_Any  = 0; // 任何人可加入联盟
+    LeagueType_Verify = 1; // 需要验证才可加入联盟
+    LeagueType_No  = 2; // 不可加入联盟
+}
+//联盟信息
+message M_LeagueInfo{
+    required string name              = 1; // 公会名称
+    required string sGuid             = 2; // 公会guid
+    required string slogan            = 3; // 公会口号
+    required int32 number             = 4; // 公会人员个数
+    required string iconinfo          = 5; // 公会图标，类型如下：底图|装饰|图标|外框
+    required int32  Level             = 6; //联盟等级
+    required int32  CurExp            = 7; //联盟当前等级经验
+    required int32  CurLevelUpExp     = 8; //联盟当前等级升级所需总经验
+    required LeagueType applytype     = 9; //申请限制类型 0-任何人可加入联盟 1-需要验证才可加入联盟 2-不可加入联盟
+    required int32 levelLimit         = 10; // 等级限制
+    
+    required int32 status             = 11; // 申请状态，0-未申请，1-已申请
+    required int32 Rank               = 12; //联盟排行
+}
+
+//联盟日志
+enum LeagueLogType
+{
+    Add  = 1; // 加入公会信息
+    Leave = 2; // 离开公会
+    ToBeLeader = 3; // 提升为会员
+    ToBeVice = 4; // 提升为副会长
+    ToBeMember = 5; // 降级为成员
+    Delete = 6; // 被踢出公会
+    Create = 7; //创建公会
+    Donate =8;//公会捐献
+    LevelUp =9;//工会升级
+}
+message M_LeagueLog{
+    required int32 nLastTime = 1; //日志发生时间 
+    required LeagueLogType nLogType = 2; // 日志类型
+    repeated string sContent = 3; // 操作对象
+}
+
+//获取联盟基本信息
+message CMD_LEAGUE_CTS_LEAGUEBASEINFO {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUEBASEINFO];
+
+}
+
+message CMD_LEAGUE_STC_LEAGUEBASEINFO {
+    optional  MsgCode                 msgcode             = 1     [default = LEAGUE_STC_LEAGUEBASEINFO];
+
+    required  M_LeagueInfo            leagueinfo          = 2;//联盟基本信息
+
+    required  int32                   nGuildCoin          = 3; // 公会币
+    required  int32                   nGuildWarCoin       = 4; // 公会战争币
+    required  LeagueMemberType        type                = 5; // 职务
+    required  string                  notice              = 6; // 公告
+
+}
+
+
+message CMD_LEAGUE_STC_ADD_LEAGUE_MEMBER {
+    optional  MsgCode                msgcode             = 1     [default = LEAGUE_STC_ADD_LEAGUE_MEMBER];
+
+    repeated  M_LeagueMember         member               = 2;//联盟成员信息
+
+}
+
+message CMD_LEAGUE_STC_REMOVE_LEAGUE_MEMBER {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_STC_REMOVE_LEAGUE_MEMBER];
+
+    repeated  string                member_guid               = 2;//联盟成员实例ID
+
+}
+
+message CMD_LEAGUE_STC_UPDATE_LEAGUE_MEMBER {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_UPDATE_LEAGUE_MEMBER];
+
+    repeated  M_LeagueMember       member               = 2;//联盟成员信息
+
+}
+
+//获取联盟成员信息
+message CMD_LEAGUE_CTS_LEAGUE_MEMBERINFO {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUE_MEMBERINFO];
+
+}
+
+//返回获取联盟成员信息
+message CMD_LEAGUE_STC_LEAGUE_MEMBERINFO {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUE_MEMBERINFO];
+
+    repeated  M_LeagueMember       member               = 2;//联盟成员信息
+
+}
+
+message CMD_LEAGUE_CTS_GETMEMBER_DETAIL
+{
+    optional  MsgCode     msgcode             = 1     [default = LEAGUE_CTS_GETMEMBER_DETAIL];
+    required  string       member_guid        = 2;
+}
+message CMD_LEAGUE_STC_SENDMEMBER_DETAIL
+{
+    optional  MsgCode     msgcode             = 1     [default =LEAGUE_STC_SENDMEMBER_DETAIL];
+    required  ErrorCode   ReturnCode          = 2;
+    optional  M_MemberFormation Formation     = 3;
+}
+
+//获取联盟列表
+message CMD_LEAGUE_CTS_LEAGUELIST {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUELIST];
+
+}
+
+//搜索联盟列表
+message CMD_LEAGUE_CTS_SEARCH_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_SEARCH_LEAGUE];
+
+    required  string                league_name         = 2;//联盟名称
+}
+
+//返回获取联盟列表
+message CMD_LEAGUE_STC_LEAGUELIST {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUELIST];
+
+    repeated  M_LeagueInfo         leagueinfos               = 2;//联盟信息集合
+
+}
+
+//获取联盟申请列表
+message CMD_LEAGUE_CTS_LEAGUE_APPLYLIST {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUE_APPLYLIST];
+
+}
+
+//返回获取联盟申请列表
+message CMD_LEAGUE_STC_LEAGUE_APPLYLIST {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUE_APPLYLIST];
+
+    repeated  M_LeagueApply       member               = 2;//申请成员信息
+
+}
+
+//获取联盟日志
+message CMD_LEAGUE_CTS_LEAGUE_LOG {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUE_LOG];
+
+}
+
+//返回获取联盟日志
+message CMD_LEAGUE_STC_LEAGUE_LOG {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUE_LOG];
+
+    repeated  M_LeagueLog          logs                = 2;
+
+}
+
+
+ //创建联盟
+message CMD_LEAGUE_CTS_CREATE_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_CREATE_LEAGUE];
+    required  string                league_name         = 2;//联盟名称
+    required  string                league_icon         = 3;//联盟徽章
+}
+
+//返回创建联盟
+message CMD_LEAGUE_STC_CRAETE_LEAGUE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_CRAETE_LEAGUE];
+
+	required  ErrorCode            result              = 2;
+    required  int32                cooltime            = 3;//申请冷却倒计时
+}
+
+
+ //解散联盟
+message CMD_LEAGUE_CTS_CLOSE_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_CLOSE_LEAGUE];
+    required  string                league_guid         = 2;//联盟实例ID
+}
+
+//返回解散联盟
+message CMD_LEAGUE_STC_CLOSE_LEAGUE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_CLOSE_LEAGUE];
+
+	required  ErrorCode            result              = 2;
+}
+
+
+//设置联盟
+message CMD_LEAGUE_CTS_SETING_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_SETING_LEAGUE];
+
+    required  string                league_guid         = 2;//联盟实例ID
+    required  string                league_icon         = 3;//联盟徽章
+    required  int32                 allow_type          = 4;//允许入盟条件类型
+    required  int32                 allow_level         = 5;//允许入盟等级限制
+    required  string                league_slogan       = 6;//联盟口号
+}
+
+//返回设置联盟
+message CMD_LEAGUE_STC_SETING_LEAGUE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_SETING_LEAGUE];
+
+	required  ErrorCode            result              = 2;
+}
+
+ //设置联盟公告
+message CMD_LEAGUE_CTS_LEAGUE_NOTICE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUE_NOTICE];
+
+    required  string                league_notice       = 2;//联盟公告
+}
+
+//返回设置联盟公告
+message CMD_LEAGUE_STC_LEAGUE_NOTICE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUE_NOTICE];
+
+	required  ErrorCode            result              = 2;
+	required  string               league_notice       = 3;//联盟公告
+}
+
+ //申请加入联盟
+message CMD_LEAGUE_CTS_LEAGUE_APPLY {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAGUE_APPLY];
+
+    required  string                league_guid        = 2;//联盟实例Id
+}
+
+//返回申请加入联盟
+message CMD_LEAGUE_STC_LEAGUE_APPLY {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUE_APPLY];
+
+	required  ErrorCode            result              = 2;
+	required  int32                cooltime            = 3;//申请冷却倒计时
+}
+
+
+ //批复申请
+message CMD_LEAGUE_CTS_RESPONSE_LEAGUE_APPLY {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_RESPONSE_LEAGUE_APPLY];
+
+    required  string                member_guid        = 2;//成员实例ID
+    required  int32                 nType = 3; // 0-同意，1-拒绝
+}
+
+//返回批复申请
+message CMD_LEAGUE_STC_RESPONSE_LEAGUE_APPLY {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_RESPONSE_LEAGUE_APPLY];
+
+	required  ErrorCode            result              = 2;
+    required  string                member_guid        = 3;//成员实例ID
+}
+
+
+ //主动离开联盟
+message CMD_LEAGUE_CTS_LEAVE_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_LEAVE_LEAGUE];
+
+}
+
+//返回主动离开联盟
+message CMD_LEAGUE_STC_LEAVE_LEAGUE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAVE_LEAGUE];
+
+	required  ErrorCode            result              = 2;
+}
+
+
+ //被联盟除名
+message CMD_LEAGUE_CTS_DROPPED_LEAGUE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_DROPPED_LEAGUE];
+
+    required  string                member_guid        = 2;//移除成员实例ID
+}
+
+//返回被联盟除名
+message CMD_LEAGUE_STC_DROPPED_LEAGUE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_DROPPED_LEAGUE];
+
+	required  ErrorCode            result              = 2;
+}
+
+ //会长转让
+message CMD_LEAGUE_CTS_EXCHANGE_LEAGUE_LEADER {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_EXCHANGE_LEAGUE_LEADER];
+
+    required  string                member_guid        = 2;//新会长成员实例ID
+}
+
+//返回会长转让
+message CMD_LEAGUE_STC_EXCHANGE_LEAGUE_LEADER {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_EXCHANGE_LEAGUE_LEADER];
+
+	required  ErrorCode            result              = 2;
+}
+
+ //弹劾会长
+message CMD_LEAGUE_CTS_IMPEACH_LEAGUE_LEADER {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_IMPEACH_LEAGUE_LEADER];
+
+    required  string                member_guid        = 2;// 弹劾会长成员实例ID
+}
+
+//返回弹劾会长
+message CMD_LEAGUE_STC_IMPEACH_LEAGUE_LEADER {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_IMPEACH_LEAGUE_LEADER];
+
+	required  ErrorCode            result              = 2;
+}
+
+ //职位改变
+message CMD_LEAGUE_CTS_EXCHANGE_LEAGUE_POSITION {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_EXCHANGE_LEAGUE_POSITION];
+
+    required  string                member_guid         = 2;// 弹劾会长成员实例ID
+    required  int32                 position            = 3;// 职位Id
+}
+
+//返回职位改变
+message CMD_LEAGUE_STC_EXCHANGE_LEAGUE_POSITION {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_EXCHANGE_LEAGUE_POSITION];
+
+	required  ErrorCode            result              = 2;
+}
+
+//设置联盟名称
+message CMD_LEAGUE_CTS_CHANGE_LEAGUE_NAME {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_CTS_CHANGE_LEAGUE_NAME];
+
+    required  string                league_name         = 2;//联盟名称
+}
+
+//返回联盟名称
+message CMD_LEAGUE_STC_CHANGE_LEAGUE_NAME {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_CHANGE_LEAGUE_NAME];
+
+	required  ErrorCode            result              = 2;
+	required  string               league_name         = 3;//联盟名称
+}
+
+//更新联盟活跃度
+/*
+message CMD_LEAGUE_STC_UPDATE_LEAGUE_LIVENESS {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_UPDATE_LEAGUE_LIVENESS];
+
+    required  int32                liveness            = 2;//联盟当前活跃度
+}
+*/
+
+//更新公会币
+message CMD_LEAGUE_STC_UPDATE_LEAGUE_COIN {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_UPDATE_LEAGUE_COIN];
+
+    required  int32                leaguecoin          = 2;//当前公会币
+}
+
+message CMD_LEAGUE_STC_LEAGUEMAIL_COUNT
+{
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_LEAGUEMAIL_COUNT];
+    required  int32                CanUseCount         = 2;
+    required  int32                MaxCanUseCount      = 3;
+}
+
+//公会全员邮件
+message CMD_LEAGUE_CTS_SENDLEAGUEMAIL
+{
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_CTS_SENDLEAGUEMAIL];
+    required  string               Content             = 2;//邮件内容
+}
+message CMD_LEAGUE_STC_SENDLEAGUEMAIL_RESPONSE
+{
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_STC_SENDLEAGUEMAIL_RESPONSE];
+    required ErrorCode            ReturnCode           = 2;
+}
+
+//公会招募
+message CMD_LEAGUE_CTS_RECRUIT_BYPUBLIC
+{
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_CTS_RECRUIT_BYPUBLIC];
+}
+message CMD_LEAGUE_STC_RECRUIT_BYPUBLIC_RESPONSE
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_RECRUIT_BYPUBLIC_RESPONSE];
+    required ErrorCode            ReturnCode          = 2;
+    required int32                CountDown           = 3; 
+}
+
+//招募时间倒计时，登录时发送（仅会长）
+message CMD_LEAGUE_STC_RECRUIT_TIME
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_RECRUIT_TIME];
+    required int32                CountDown           = 2;
+}
+message CMD_LEAGUE_CTS_ONEKEY_REFUSE
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_CTS_ONEKEY_REFUSE];
+}
+message CMD_LEAGUE_STC_ONEKEY_REFUSE_RESPONSE
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_ONEKEY_REFUSE_RESPONSE];
+    required ErrorCode            ReturnCode          = 2;
+}
+
+////////////////////////联盟捐献///////////////////////
+message DonateConfig
+{
+    required int32 DonateLevel =1;//捐献等级
+    required int32 CostCoin    =2;//捐献花费美元
+    required int32 CostGold    =3;//捐献花费黄金
+    required int32 LeagueExp   =4;//捐献获得联盟经验
+    required int32 RewardId    =5;
+}
+message DonateBoxConfig
+{
+    required int32 BoxLevel    =1;//宝箱等级
+    required int32 NeedPoints  =2;//领取所需捐献点
+    required int32 RewardId    =3;//宝箱奖励
+    required bool HaveGet      =4;//是否已领取
+}
+//获取捐献信息
+message CMD_LEAGUE_CTS_GETDONATEINFO
+{
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_CTS_GETDONATEINFO];
+}
+
+//推送捐献信息
+message CMD_LEAGUE_STC_SENDDONATEINFO
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_SENDDONATEINFO];
+    repeated DonateConfig         DonateConfigs       = 2; //联盟捐献档位配置
+    required int32                CurDonatePoints     = 5; //当前联盟捐献点
+    repeated DonateBoxConfig      BoxConfigs          = 6; //宝箱信息
+    required int32                HaveDonateCount     = 7; //已捐献次数 
+}
+//捐献
+message CMD_LEAGUE_CTS_DONATE
+{
+     optional MsgCode              msgcode             = 1     [default = LEAGUE_CTS_DONATE];
+     required int32                DonateLevel         = 2; //捐献等级
+}
+
+message CMD_LEAGUE_STC_DONATE
+{
+    optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_DONATE];
+    required ErrorCode            ReturnCode          = 2;
+    optional int32                LeagueLevel         = 3; //联盟等级
+    optional int32                CurExp              = 4; //联盟当前等级经验
+    optional int32                CurLevelUpExp       = 5; //联盟当前等级升级所需总经验
+    optional int32                CurDonatePoints     = 6; //当前联盟捐献点
+    optional int32                HaveDonateCount     = 7; //已捐献次数 
+    required int32                DonateLevel         = 8; 
+}
+
+message CMD_LEAGUE_CTS_GETBOX
+{
+   optional MsgCode              msgcode             = 1     [default = LEAGUE_CTS_GETBOX];
+   required int32                 BoxLevel           = 2;
+}
+message CMD_LEAGUE_STC_GETBOXRESPONSE
+{
+   optional MsgCode              msgcode             = 1     [default = LEAGUE_STC_GETBOXRESPONSE];
+   required ErrorCode            ReturnCode          = 2;
+   required int32                BoxLevel            = 3;
+   repeated Reward               Rewards             = 4; //奖励信息         
+}
+
+
+
+//////////////////联盟副本////////////////
+
+message CMD_LEAGUE_FB_STC_SENDCHALLENGEINFO
+{
+    optional  MsgCode      msgcode                    = 1     [default = LEAGUE_FB_STC_SENDCHALLENGEINFO];
+    required  bool         IsUpdate                   = 2;//登录发送为false
+    required  int32        Cur_ChallengeTimes         = 3;//玩家当前挑战次数
+    required  int32        Max_ChallengeTimes         = 4;//团本最大挑战次数   
+    required  int32        TotalDamage                = 5;//本周期累计伤害  
+    repeated  int32        HasGetRewardFBIds          = 6;//已经领取奖励的通关副本
+    repeated  int32        HasGetRewardTotalDamageIds = 7;//已经领取奖励的累计伤害目标奖励 
+    repeated  int32        HasGetSingleBossKillRankRewardFBIds= 8;//已经领取boss击杀排行奖励的FBIds
+    required  int32        JoinLeagueTime             =9;//入会时间
+}
+enum FBSoldierBuffType
+{
+    HP =1; //血量
+    ATT =2;//攻击
+    DF =3; //防御
+}
+message FBSoldierBuff
+{
+   required FBSoldierBuffType Type =1;
+   required int32             VaulePercent =2;//加成百分比
+}
+//团本基本信息
+message M_LeagueFB{
+    
+    required  int32          Id                 = 1;//团本id
+    required  int32          FB_State           = 2;//团本通关状态 0:未开启 1:开启 2：已通关
+    required  int32          Challenge_Times    = 3;//团本通关次数 0：未通关 记录通关次数
+    required  int32          CurHP              = 4;//团本当前怪物血量
+    required  int32          TotalHP            = 5;//团本怪物总血量
+    required  string         icon               = 6;//正在挑战的玩家头像 '':没有挑战
+    required  string         name               = 7;//正在挑战的玩家名字 '':没有挑战
+    repeated  Reward         Pass_Rewards       = 8;//限时通关奖励信息
+    required  int32          LastPassTime       = 9;//若未通关为0，否则为unix时间戳，若玩家入会时间比它晚，就算通关也不能领奖励
+}
+
+message M_LeagueFBIconInfo
+{
+    required  int32          Id                 = 1;//团本id
+    required  int32          FB_State           = 2;//团本通关状态 0:未开启 1:开启 2：已通关
+}
+message M_LeagueFBTotalProgress
+{
+    required  int32         Rank              = 1;
+    required  string        LeagueName        = 2;
+    required  string        LeagueIcon        = 3;
+    repeated  M_LeagueFBIconInfo FBs          = 4;
+    required  int32         CurHP             = 5;//团本当前怪物血量 
+    required  int32         TotalHP           = 6;//团本当前怪物总血量        
+}
+
+//请求联盟团本基本信息
+message CMD_LEAGUE_FB_CTS_BASEINFO {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_CTS_BASEINFO];
+}
+
+//返回联盟团本基本信息
+message CMD_LEAGUE_FB_STC_BASEINFO {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_FB_STC_BASEINFO];
+    required  ErrorCode            ReturnCode          = 2;//联盟等级不足2级的情况下不发实例
+    repeated  M_LeagueFB           infos               = 3;//所有团本实例信息
+    repeated  FBSoldierBuff        SoldierBuffs        = 4;//挑战当前boss玩家士兵属性加成
+}
+
+
+//更新副本信息
+message CMD_LEAGUE_FB_STC_UPDATE_BASEINFO {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_FB_STC_UPDATE_BASEINFO];
+
+    repeated  M_LeagueFB           infos               = 3;//团本实例信息
+    
+}
+
+
+//挑战联盟团本
+message CMD_LEAGUE_FB_CTS_CHALLENGE {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_CTS_CHALLENGE];
+    required  int32                 id                  = 2;//挑战的团本id
+}
+
+//返回挑战联盟团本
+message CMD_LEAGUE_FB_STC_CHALLENGE {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_FB_STC_CHALLENGE];
+
+    required  ErrorCode            result              = 2;
+}
+
+message CMD_LEAGUE_FB_CTS_SINGLE_KILL_RANK
+{
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_CTS_SINGLE_KILL_RANK];
+    required  int32                 id                  = 2;//挑战的团本id
+}
+
+message M_Single_Kill_Rank_League
+{
+    required int32 Rank  =1;
+    required string Name =2;
+    required string Icon =3;
+    required int32  KillTime =4;
+}
+message CMD_LEAGUE_FB_STC_SINGLE_KILL_RANK
+{
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_STC_SINGLE_KILL_RANK];
+    required int32                   id                 = 2;//团本id
+    optional  M_Single_Kill_Rank_League myLeague        = 3;
+    repeated  M_Single_Kill_Rank_League Leagues         = 4;
+}
+
+//获取公会内单boss单次最高伤害排行
+message CMD_LEAGUE_FB_CTS_SINGLE_FIGHT_LOG {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_CTS_SINGLE_FIGHT_LOG];
+    required  int32                 id                  = 2;//挑战的团本id
+}
+
+//单次伤害日志
+message M_LeagueFB_Single_Log{
+    
+    required  int32                Rank            = 1;//名次
+    required  string               name            = 2;//玩家名称
+    required  string               icon            = 3;//玩家头像
+    required  int32                level           = 4;//等级
+    required  int32                vip             = 5;//vip等级
+    required  int32                value           = 6;//单次最高伤害
+    required  int32                Id              = 7;//团本id
+
+}
+
+message CMD_LEAGUE_FB_STC_SINGLE_FIGHT_LOG {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_FB_STC_SINGLE_FIGHT_LOG];
+    optional  M_LeagueFB_Single_Log        mylog       = 2;
+    repeated  M_LeagueFB_Single_Log           logs     = 3;//
+}
+
+//获取全服伤害排名（单次最高伤害和首杀信息）
+message CMD_LEAGUE_FB_CTS_GLOBAL_FIGHT_LOG {
+    optional  MsgCode               msgcode             = 1     [default = LEAGUE_FB_CTS_GLOBAL_FIGHT_LOG];
+    required  int32                 id                  = 2;//团本id
+}
+
+//单次最高伤害日志
+message M_LeagueFB_Global_Log{
+
+    required  int32                Rank            = 1;//名次
+    required  string               name            = 2;//玩家名称
+    required  string               icon            = 3;//玩家头像
+    required  int32                level           = 4;//等级
+    required  int32                vip             = 5;//vip等级
+    required  int32                value           = 6;//单次最大伤害伤害
+    required  string               league_name     = 7;//公会名称
+    required  int32                Id              = 8;//团本id
+}
+
+//首杀日志
+message M_LeagueFB_FristKill_Log{
+
+    required  int32                Id              = 1;//团本id
+    required  string               league_name     = 2;//公会名称
+    required  string               name            = 3;//玩家名称
+    required  string               icon            = 4;//玩家头像
+    required  int32                level           = 5;//等级
+    required  int32                time            = 6;//首杀时间
+}
+
+//返回全服伤害排名
+message CMD_LEAGUE_FB_STC_GLOBAL_FIGHT_LOG {
+    optional  MsgCode              msgcode             = 1     [default = LEAGUE_FB_STC_GLOBAL_FIGHT_LOG];
+    repeated  M_LeagueFB_Global_Log           logs     = 2;//
+    required  M_LeagueFB_FristKill_Log        flog     = 3;//
+}
+
+message CMD_LEAGUE_FB_CTS_GETTOTALDAMAGEREWARD
+{
+    optional  MsgCode     msgcode   = 1[default = LEAGUE_FB_CTS_GETTOTALDAMAGEREWARD];
+    required  int32       Id        = 2;
+}
+
+message CMD_LEAGUE_FB_STC_SENDTOTALDAMAGEREWARD
+{
+   optional  MsgCode     msgcode    = 1[default =LEAGUE_FB_STC_SENDTOTALDAMAGEREWARD];
+   required  ErrorCode   ReturnCode = 2;
+   repeated  Reward      Rewards    = 3; //奖励信息       
+}
+
+message CMD_LEAGUE_FB_CTS_GETPASSREWARD
+{
+    optional  MsgCode     msgcode   = 1[default = LEAGUE_FB_CTS_GETPASSREWARD];
+    required  int32       FBId      = 2;
+}
+
+message CMD_LEAGUE_FB_STC_SENDPASSREWARD
+{
+   optional  MsgCode     msgcode    = 1[default = LEAGUE_FB_STC_SENDPASSREWARD];
+   required  ErrorCode   ReturnCode = 2;
+   repeated  Reward      Rewards    = 3; //奖励信息       
+}
+
+message CMD_LEAGUE_FB_CTS_GETSINGLEKILLRANKREWARD
+{
+    optional  MsgCode     msgcode   = 1[default = LEAGUE_FB_CTS_GETSINGLEKILLRANKREWARD];
+    required  int32       FBId      = 2;
+}
+
+message CMD_LEAGUE_FB_STC_SENDSINGLEKILLRANKREWARD
+{
+   optional  MsgCode     msgcode    = 1[default = LEAGUE_FB_STC_SENDSINGLEKILLRANKREWARD];
+   required  ErrorCode   ReturnCode = 2;
+   repeated  Reward      Rewards    = 3; //奖励信息       
+}
+
+message CMD_LEAGUE_FB_CTS_GETTOTALPROGRESSRANK
+{
+    optional  MsgCode     msgcode    = 1[default =LEAGUE_FB_CTS_GETTOTALPROGRESSRANK];   
+}
+
+message CMD_LEAGUE_FB_STC_SENDTOTALPROGRESSRANK
+{
+    optional  MsgCode     msgcode    = 1[default =LEAGUE_FB_STC_SENDTOTALPROGRESSRANK];
+    required  M_LeagueFBTotalProgress MyLeague =2;
+    repeated  M_LeagueFBTotalProgress AllLeagues =3;
+}

@@ -1,0 +1,425 @@
+import "msgcode.proto";
+import "common.proto";
+import "errorcode.proto";
+package PaoEntity;
+
+message CMD_CRT_STC_STATUS {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_STATUS];
+
+    required  ErrorCode      status              = 2;//0:角色已创建 1：角色未创建
+
+}
+
+message CMD_CRT_CTS_CREATE {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_CREATE];
+
+    required  int32      gender              = 2;
+    required  string     name                = 3;
+
+}
+
+
+message CMD_CRT_STC_CREATE {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_CREATE];
+
+    required  ErrorCode      result              = 2;//0：角色创建成功 1：角色名含有非法字符 2:角色名字有重复 3：角色已经创建 4：名字不合法
+
+}
+
+message CMD_CRT_STC_BASEINFO {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_BASEINFO];
+
+    required  string      guid               = 2;
+    required  string      icon               = 3;
+    required  string      name               = 4;
+    required  int32       level              = 5;
+    required  int32       exp                = 6;
+    required  int32       maxexp             = 7;
+    required  int32       gender             = 8;
+    required  int32       maxfight           = 9;
+    required  bool        haveChangeName     = 10;
+}
+
+message CMD_CRT_STC_ABILITYINFO {
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_ABILITYINFO];
+    required  uint32    PrototypeID          = 3;
+    required BattleInfo Ability              = 4;
+    required  int32      HPQ                 = 5;//生命资质
+    required  int32      DFQ                 = 6;//护甲资质
+    required  int32      ATTQ                = 7;//攻击力资质
+    required  int32      CRTQ                = 8;//暴击资质
+    required  int32      EVDQ                = 9;//闪避资质
+    required  int32      HRAQ                = 10;//命中资质
+    required  int32      RHPQ                = 11;//生命回复资质
+    required  int32      BDFQ                = 12;//护甲穿透资质
+    required  int32      Fight               = 13;//指挥官战力
+
+    repeated  M_OtherAbility OtherAbilitys   = 14;//额外属性加成信息
+}
+
+message CMD_CRT_STC_UPDATEBASE {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UPDATEBASE];
+
+    repeated BaseData    date_list           = 2;//信息集合 1：升级（等级，经验，最大经验）
+}
+
+
+message Equipment{
+
+    required int32 index                    = 1;//装备位置
+    required int32 template_id              = 2;//装备模板Id
+    required int32 star                     = 3;//装备星级
+
+}
+
+message CMD_CRT_STC_EQUIPMENT {
+
+    optional  MsgCode      msgcode             = 1     [default = CRT_STC_EQUIPMENT];
+
+    required  int32        IsUpdate            = 2;//是否更新 0:更新 1:添加
+    repeated  Equipment    equipment_list      = 3;//信息集合
+}
+//////////////////////////////////////////////////////指挥官科技//////////////////////////////////////////////////////////////////////////
+message Skill{
+     required int32 template_id              = 1;//技能模板Id
+     required int32 grade_level              = 2;//科技品阶等级
+}
+
+message CMD_CRT_STC_SKILL {
+
+    optional  MsgCode      msgcode             = 1     [default = CRT_STC_SKILL];
+
+    required  int32        IsUpdate            = 2;//是否更新 1:中途更新 0:初始加载
+    repeated  Skill        skill_list          = 3;//信息集合
+}
+
+message CMD_CRT_CTS_SKILL_POINT{
+    optional MsgCode msgcode  = 1 [default = CRT_CTS_SkillPointUp];
+}
+
+message CMD_CRT_STC_SKILL_POINT{
+    optional MsgCode msgcode = 1 [default = CRT_STC_SkillPointUp];
+    required int32 currPoint = 2; // 当前技能点值
+    required int32 maxPoint = 3; // 最大技能点值
+    required int32 coolDownTime = 4; // 获得下一个技能点的冷却时间
+    required int32 buytimes = 5;//技能点购买次数
+}
+
+message CMD_CRT_CTS_BUYSKILLPOINT{
+    optional MsgCode msgcode  = 1 [default = CRT_CTS_BUYSKILLPOINT];
+}
+
+message CMD_CRT_STC_BUYSKILLPOINT{
+    optional MsgCode msgcode = 1 [default = CRT_STC_BUYSKILLPOINT];
+    required ErrorCode result = 2; 
+}
+
+message CMD_CRT_CTS_UpSkillLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_UpSkillLevel];
+
+    required  int32      template_id         = 2;// 升级的技能模板Id
+
+}
+
+
+message CMD_CRT_STC_UpSkillLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UpSkillLevel];
+
+    required  ErrorCode  result              = 2;// 0：成功 1：需要投入的技能点数不足 2：前置技能条件不满足 3：升级上限 4：找不到配置 5：等级不足
+
+}
+
+//科技进阶
+message CMD_CRT_CTS_SKILLUPGRADE {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_SKILLUPGRADE];
+
+    required  int32      template_id         = 2;// 升阶的技能模板Id
+
+}
+
+//科技进阶返回
+message CMD_CRT_STC_SKILLUPGRADE {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_SKILLUPGRADE];
+
+    required  ErrorCode  result              = 2;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+message TalentSkill{
+    
+    required int32 template_id              = 2;//技能模板Id
+}
+
+message CMD_CRT_STC_TalentSKILL {
+
+    optional  MsgCode      msgcode             = 1     [default = CRT_STC_TalentSKILL];
+
+    required  int32        IsUpdate            = 2;//是否更新 0:更新 1:添加 2：技能清空（重置）
+    required  int32        Skillpoint          = 3;//当前可用天赋点
+    required  int32        attackpoint         = 4;//进攻天赋累计投入点
+    required  int32        defencepoint        = 5;//防守天赋累计投入点
+    repeated  TalentSkill  talentskill_list    = 6;//信息集合
+    required  int32        ResetCount          = 7;//当前重置次数
+}
+
+message CMD_CRT_STC_SendInfoFinish {
+
+    optional  MsgCode      msgcode             = 1     [default = CRT_STC_SendInfoFinish];
+
+    required  ErrorCode        result              = 2;// 0:信息已经完全推送
+
+}
+
+message CMD_CRT_CTS_TestAddExp {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_TestAddExp];
+
+    required  int32      exp                 = 2;
+
+}
+
+message CMD_CRT_CTS_TestAddSomeThing {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_TestAddSomeThing];
+
+    required  int32      type                = 2;
+    required  int32      value               = 3;
+
+}
+
+message CMD_CRT_CTS_UpTalentSkillLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_UpTalentSkillLevel];
+
+    required  int32      template_id         = 3;// 想要激活或者升级的天赋模板Id
+
+}
+
+
+message CMD_CRT_STC_UpTalentSkillLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UpTalentSkillLevel];
+
+    required ErrorCode   result              = 2;
+
+}
+
+
+
+message CMD_CRT_CTS_ResetTalentPoint {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_ResetTalentPoint];
+}
+
+
+message CMD_CRT_STC_ResetTalentPoint {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_ResetTalentPoint];
+
+    required ErrorCode   result              = 2;
+    required  int32      ResetCount          = 3;//当前重置次数
+
+}
+
+message CMD_CRT_CTS_UpEquipmentLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_UpEquipmentLevel];
+
+    required  int32      index               = 2;// 装备位子信息
+
+}
+
+
+message CMD_CRT_STC_UpEquipmentLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UpEquipmentLevel];
+
+    required ErrorCode   result              = 2;
+
+}
+
+message CMD_CRT_CTS_UpEquipmentQuality {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_UpEquipmentQuality];
+
+    required  int32      index               = 2;// 装备位子信息
+
+}
+
+
+message CMD_CRT_STC_UpEquipmentQuality {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UpEquipmentQuality];
+
+    required ErrorCode   result              = 2;
+
+}
+
+message CMD_CRT_CTS_OneKeyUpLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_OneKeyUpLevel];
+
+    required  int32      index               = 2;// 装备位子信息
+
+}
+
+
+message CMD_CRT_STC_OneKeyUpLevel {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_OneKeyUpLevel];
+
+    required ErrorCode   result              = 2;
+    required  int32      times               = 3;//升级次数
+    required  int32      totalcoin           = 4;//总消耗美元
+
+}
+
+
+message CMD_CRT_CTS_UPEQUIPSTAR {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_CTS_UPEQUIPSTAR];
+
+    required  int32      index               = 2;// 装备位子信息
+}
+
+
+message CMD_CRT_STC_UPEQUIPSTAR {
+
+    optional  MsgCode    msgcode             = 1     [default = CRT_STC_UPEQUIPSTAR];
+
+    required ErrorCode   result              = 2;
+}
+
+////////////////////////////////////////////////////////////////// VIP ///////////////////////////////////////////////////////////
+
+
+message CMD_VIP_STC_BASEINFO {
+
+    optional  MsgCode    msgcode             = 1     [default = VIP_STC_BASEINFO];
+
+    required  int32      viplevel            = 2;//vip等级
+    required  int32      curexp              = 3;//vip当前经验
+    required  int32      maxexp              = 4;//vip最大经验
+
+    required  int32      isupdate            = 5;//0:第一次 1：更新
+
+}
+
+////////////////////////////////////////////////////////////////// VIP ///////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////SignIn 签到/////////////////////////////////////////////////////////
+enum SignInRewardStatus
+{
+   
+    NoReward  =1; //过期奖励或今日已领完所有奖励
+    CanGetReward =2; //还没领取任何奖励
+    CanGetVipReward =3; //领取了第一份奖励但第二份奖励未领
+
+}
+
+
+message CMD_SIGNIN_CTS_GETREWARD
+{
+    
+    optional MsgCode msgcode              =1 [default = SIGNIN_CTS_GETREWARD];  
+}
+
+message CMD_SIGNIN_STC_GETREWARDRESPONSE
+{
+    optional MsgCode msgcode              =1 [default = SIGNIN_STC_GETREWARDRESPONSE]; 
+    required ErrorCode ReturnCode          =2 ;
+
+}
+
+message CMD_SIGNIN_STC_SENDSIGNININFO
+{
+     optional MsgCode msgcode                     =1 [default = SIGNIN_STC_SENDSIGNININFO];
+     required uint32 Month                        =2 ; //当前月份
+     required uint32 TotalSignInDaysInMonth       =3 ; //当月累计签到次数，若今日已领取，则累计数包括今日的
+     required SignInRewardStatus Status           =4;//当前奖励状态，作为今日是否已领取的唯一标准
+     required uint32 TotalSignInDays              =5;//历史累计签到次数
+     repeated int32 HaveGetVipRewardDays          =6;//当月已领取VIP奖励的日子
+     required int32 CurTargetRewardDays           =7;//当前目标奖励所需累计签到天数
+}
+
+//VIP奖励补签
+message CMD_SIGNIN_CTS_GETOVERDUEVIPREWARD
+{
+    optional MsgCode msgcode                     =1 [default =SIGNIN_CTS_GETOVERDUEVIPREWARD];
+    required int32   index                       =2;//领取第几天的过期vip奖励
+}
+
+message CMD_SIGNIN_STC_SENDOVERDUEVIPREWARD
+{
+    optional MsgCode msgcode                     =1 [default =SIGNIN_STC_SENDOVERDUEVIPREWARD];
+    required ErrorCode ReturnCode                =2;
+    repeated int32 HaveGetVipRewardDays          =3;//当月已领取VIP奖励的日子
+}
+
+message CMD_SIGNIN_CTS_GETSIGNINTARGETREWARD
+{
+    optional MsgCode msgcode                     =1 [default =SIGNIN_CTS_GETSIGNINTARGETREWARD];
+}
+
+message CMD_SIGNIN_STC_SENDSIGNINTARGETREWARD
+{
+    optional MsgCode msgcode                     =1 [default =SIGNIN_STC_SENDSIGNINTARGETREWARD];
+    required ErrorCode ReturnCode                =2;
+    required int32 CurTargetRewardDays           =3;//当前目标奖励所需累计签到天数
+}
+
+////////////////////////////////////////////////////////////////SignIn 签到/////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////新手引导/////////////////////////////////////////////////////////
+message CMD_CRT_STC_CURRENTGUIDES
+{
+     optional MsgCode msgcode              =1 [default = CRT_STC_CURRENTGUIDES];
+     required bool IsUpdate                 =2;
+     repeated int32 GuideIds                 =3;
+}
+message CMD_CRT_CTS_FINISHGUIDE
+{
+    optional MsgCode msgcode              =1 [default = CRT_CTS_FINISHGUIDE];
+    required int32 GuideId                 =2;
+}
+message CMD_CRT_STC_FINISHGUIDERESP
+{
+    optional MsgCode msgcode              =1 [default = CRT_STC_FINISHGUIDERESP];
+}
+message CMD_CRT_STC_SPECIALSOLDIER
+{
+    optional MsgCode msgcode              =1 [default = CRT_STC_SPECIALSOLDIER];
+    repeated int32 Soldiers               =2;
+}
+message CMD_CRT_STC_FINISHEDGUIDE
+{
+    optional MsgCode msgcode              =1 [default = CRT_STC_FINISHEDGUIDE];
+    required int32 GuidedId = 2;
+}
+//////////////////////////////////////////////////////////目标系统//////////////////////////////////////////////////////////////
+
+message CMD_CRT_STC_TARGETAPPEAR
+{
+    optional MsgCode msgcode              =1 [default = CRT_STC_TARGETAPPEAR];
+    required int32 TargetId = 2;
+}
+message CMD_CRT_STC_TARGETDISAPPEAR
+{
+    optional MsgCode msgcode              =1 [default = CRT_STC_TARGETDISAPPEAR];
+    required int32 TargetId = 2;
+}
