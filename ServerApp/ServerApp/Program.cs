@@ -30,6 +30,8 @@ namespace ServerApp
             DbSession DB = new DbSession("GameDB_Mou");
             DB.RegisterSqlLogger(SqlOg);
 
+            var arenas = DB.From<p_arena>().ToList();
+
             character cc = DB.From<character>().Where(x => x.Name == "坚韧的副排长").ToFirst();
 
             cc.Level += 1;
@@ -37,6 +39,10 @@ namespace ServerApp
             DB.Update<character>(cc);
 
             character cc2 = DB.From<character>().Where(x => x.Name == "坚韧的副排长").ToFirst();
+
+            
+
+
             //Console.WriteLine("Redis写入缓存：zhong");
 
             //RedisCacheHelper.Add("zhong", "zhongzhongzhong", DateTime.Now.AddDays(1));

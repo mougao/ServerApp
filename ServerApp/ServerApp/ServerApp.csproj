@@ -144,6 +144,7 @@
     <Compile Include="Command\MULT.cs" />
     <Compile Include="DBManager\RedisCacheHelper.cs" />
     <Compile Include="DBObject\character.cs" />
+    <Compile Include="DBObject\p_arena.cs" />
     <Compile Include="Entity\MSEntity.cs" />
     <Compile Include="ServerBase\Util\Log.cs" />
     <Compile Include="Program.cs" />

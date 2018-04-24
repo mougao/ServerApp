@@ -10,10 +10,7 @@
 
 
 using System;
-using System.Data;
-using System.Data.Common;
 using Dos.ORM;
-using Dos.ORM.Common;
 
 namespace Dos.Model
 {
