@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dos.Common;
+using Dos.Model;
+using Dos.ORM;
 using log4net.Config;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Command;
@@ -16,8 +19,24 @@ namespace ServerApp
     {
         private static IBootstrap m_Bootstrap;
 
+        static void SqlOg(string sql)
+        {
+            LogHelper.Debug(sql, "SQL日志_");
+        }
+
         static void Main(string[] args)
         {
+
+            DbSession DB = new DbSession("GameDB_Mou");
+            DB.RegisterSqlLogger(SqlOg);
+
+            character cc = DB.From<character>().Where(x => x.Name == "坚韧的副排长").ToFirst();
+
+            cc.Level += 1;
+
+            DB.Update<character>(cc);
+
+            character cc2 = DB.From<character>().Where(x => x.Name == "坚韧的副排长").ToFirst();
             //Console.WriteLine("Redis写入缓存：zhong");
 
             //RedisCacheHelper.Add("zhong", "zhongzhongzhong", DateTime.Now.AddDays(1));

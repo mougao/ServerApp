@@ -1,0 +1,22 @@
+2018-04-24 14:22:06
+Text:	 SELECT   * FROM `p_character`  WHERE `p_character`.`Name` = ?Name1  limit 0,1	
+Parameters:
+?Name1[String] = 坚韧的副排长
+
+
+-----------------------------------------------------------------------------
+2018-04-24 14:22:17
+Text:	UPDATE `p_character` SET `Level`=?Level3 WHERE `p_character`.`Index` = ?Index2	
+Parameters:
+?Level3[Int32] = 4
+?Index2[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2018-04-24 14:22:18
+Text:	 SELECT   * FROM `p_character`  WHERE `p_character`.`Name` = ?Name4  limit 0,1	
+Parameters:
+?Name4[String] = 坚韧的副排长
+
+
+-----------------------------------------------------------------------------
