@@ -1,0 +1,7 @@
+H:\project\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.exe.config
+H:\project\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.exe
+H:\project\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.pdb
+H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csprojResolveAssemblyReference.cache
+H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csproj.CoreCompileInputs.cache
+H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.exe
+H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.pdb

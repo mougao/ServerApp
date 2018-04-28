@@ -17,7 +17,7 @@ namespace ServerApp
             string error = entity.account;
 
 
-
+            
         }
 
         public override string Name

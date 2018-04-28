@@ -1,0 +1,9 @@
+H:\project\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.exe.config
+H:\project\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.exe
+H:\project\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.pdb
+H:\project\ServerApp\ServerApp\ProtobufTest\bin\Debug\protobuf-net.dll
+H:\project\ServerApp\ServerApp\ProtobufTest\bin\Debug\protobuf-net.xml
+H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csprojResolveAssemblyReference.cache
+H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csproj.CoreCompileInputs.cache
+H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.exe
+H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.pdb
