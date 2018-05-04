@@ -49,6 +49,12 @@
     <Compile Include="Config\SuperServerConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerManager\IConnectCreater.cs" />
+    <Compile Include="ServerManager\ICommand.cs" />
+    <Compile Include="ServerManager\IMessagePacketReceiver.cs" />
+    <Compile Include="ServerManager\IMessagePacketSender.cs" />
+    <Compile Include="ServerManager\ServerManager.cs" />
+    <Compile Include="ServerManager\ISessionItem.cs" />
     <Compile Include="SuperServer\Session.cs" />
     <Compile Include="SuperServer\SuperServer.cs" />
   </ItemGroup>

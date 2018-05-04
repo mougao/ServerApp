@@ -27,12 +27,13 @@ namespace SuperServer
             _Socket = socket;
             _CallBack = callback;
 
-            bool willRaiseEvent = _Socket.ReceiveAsync(_ReadEventArgs);
+            bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadEventArgs);
 
-            if (!willRaiseEvent)
+            if (!willReadRaiseEvent)
             {
                 ProcessReceive(_ReadEventArgs);
             }
+
 
         }
 

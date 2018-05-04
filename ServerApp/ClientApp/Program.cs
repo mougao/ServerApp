@@ -14,10 +14,13 @@ namespace ClientApp
 {
     class Program
     {
-        static void Main(string[] args)
+
+        static void CreatOneConnect()
         {
             try
             {
+
+
                 int port = 2012;
                 string host = "127.0.0.1";
                 IPAddress ip = IPAddress.Parse(host);
@@ -28,6 +31,8 @@ namespace ClientApp
                 MessageSender MessageSender = new MessageSender();
                 MessageSender.Init(c);
                 MessageSender.SendTestMessage();
+
+
                 //for (int i = 0; i < 3; i++)
                 //{
                 //    string sendStr = "hello!This is a socket test";
@@ -52,6 +57,13 @@ namespace ClientApp
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
+        }
+
+        static void Main(string[] args)
+        {
+
+            CreatOneConnect();
+
 
             Console.Write("客户端启动！");
             Console.Read();
