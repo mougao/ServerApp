@@ -8,5 +8,6 @@ namespace SocketTest
 {
     public interface IConnectCreater
     {
+        void Run(Action<ISessionItem> addcallback, Action<ISessionItem> removecallback);
     }
 }
