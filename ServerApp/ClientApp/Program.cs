@@ -1,4 +1,4 @@
-﻿using PaoEntity;
+﻿using MsEntity;
 using ProtoBuf;
 using System;
 using System.Collections.Generic;

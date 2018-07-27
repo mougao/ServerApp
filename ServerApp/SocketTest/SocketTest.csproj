@@ -52,7 +52,7 @@
     <Compile Include="AsyncServer\SocketAsyncEventArgsPool.cs" />
     <Compile Include="Common\BufferManager.cs" />
     <Compile Include="Config\SuperServerConfig.cs" />
-    <Compile Include="Entity\MSEntity.cs" />
+    <Compile Include="Entity\MessagePacket.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerManager\Instance\ClientCreater.cs" />

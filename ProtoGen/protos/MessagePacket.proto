@@ -1,10 +1,9 @@
-package PaoEntity;
+package MsEntity;
 
-//注册账号
 message CMD_LG_CTL_REGIST {
-
+    
     required string account = 1 ; 
-    required string psw = 2; 
+    required string psw = 2;  
     required string code = 3; 
 }
 
