@@ -5,3 +5,13 @@ H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csprojResolveAsse
 H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csproj.CoreCompileInputs.cache
 H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.exe
 H:\project\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.pdb
+D:\GitWork\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.exe.config
+D:\GitWork\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.exe
+D:\GitWork\ServerApp\ServerApp\SocketTest\bin\Debug\SocketTest.pdb
+D:\GitWork\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.exe
+D:\GitWork\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.pdb
+D:\GitWork\ServerApp\ServerApp\SocketTest\bin\Debug\protobuf-net.dll
+D:\GitWork\ServerApp\ServerApp\SocketTest\bin\Debug\protobuf-net.xml
+D:\GitWork\ServerApp\ServerApp\SocketTest\obj\Debug\SocketTest.csproj.CopyComplete

@@ -64,3 +64,13 @@ H:\project\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csprojResolveAssemb
 H:\project\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csproj.CoreCompileInputs.cache
 H:\project\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.exe
 H:\project\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.pdb
+D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\ClientApp.exe.config
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\ClientApp.exe
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\ClientApp.pdb
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\protobuf-net.dll
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\protobuf-net.xml
+D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csproj.CopyComplete
+D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.exe
+D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.pdb

@@ -32,8 +32,6 @@ namespace SuperServer
 
         public SuperServer(string strIp,int nPort)
         {
-            
-            _NumConnectedSockets = 0;
             IPAddress ip = IPAddress.Parse(strIp);
             _Ipe = new IPEndPoint(ip, nPort);
             _NumConnections = 1000;
@@ -72,16 +70,6 @@ namespace SuperServer
             Console.ReadKey();
             return true;
         }
-        /// <summary>
-        /// 服务器停止
-        /// </summary>
-        /// <returns></returns>
-        public bool Stop()
-        {
-            bool ret = false;
-
-            return ret;
-        }
 
         private void StartAccept(SocketAsyncEventArgs acceptEventArg)
         {
@@ -112,43 +100,16 @@ namespace SuperServer
 
         private void ProcessAccept(SocketAsyncEventArgs e)
         {
-            Interlocked.Increment(ref _NumConnectedSockets);
-            Console.WriteLine("Client connection accepted. There are {0} clients connected to the server",
-                _NumConnectedSockets);
+            Console.WriteLine("Client connection accepted. There are New clients connected to the server");
 
             Session session = new Session();
 
-            session.Init(_BufferPool, e.AcceptSocket, (ss) =>
-            {
-                CloseClientSocket(ss);
+            session.Init(_BufferPool, e.AcceptSocket);
 
-            });
-
-            _Sessions.Add(session);
+            _MaxNumberAcceptedClients.Release();
 
             StartAccept(e);
         }
-
-
-        public void CloseClientSocket(Session session)
-        {
-            try
-            {
-                session.Socket.Shutdown(SocketShutdown.Send);
-            }
-            catch (Exception)
-            {
-                //TODO::关闭连接异常
-            }
-
-            session.Socket.Close();
-            _Sessions.Remove(session);
-            
-            Interlocked.Decrement(ref _NumConnectedSockets);
-            _MaxNumberAcceptedClients.Release();
-            Console.WriteLine("A client has been disconnected from the server. There are {0} clients connected to the server", _NumConnectedSockets);
-        }
-
 
         const int opsToPreAlloc = 2;
         /// <summary>
@@ -171,18 +132,10 @@ namespace SuperServer
         /// 监听Socket
         /// </summary>
         private Socket _ListenSocket;         
-        /// <summary>
-        /// 当前连接数量
-        /// </summary>
-        private int _NumConnectedSockets;      
+
         /// <summary>
         /// 信号量管理
         /// </summary>
         private Semaphore _MaxNumberAcceptedClients;
-        /// <summary>
-        /// 已经连接的对象集合
-        /// </summary>
-        private List<Session> _Sessions = new List<Session>();
-
     }
 }

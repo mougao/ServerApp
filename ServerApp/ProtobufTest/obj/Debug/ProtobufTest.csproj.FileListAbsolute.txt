@@ -7,3 +7,13 @@ H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csprojResolve
 H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csproj.CoreCompileInputs.cache
 H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.exe
 H:\project\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.pdb
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.exe.config
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.exe
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\bin\Debug\ProtobufTest.pdb
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\bin\Debug\protobuf-net.dll
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\bin\Debug\protobuf-net.xml
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.csproj.CopyComplete
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.exe
+D:\GitWork\ServerApp\ServerApp\ProtobufTest\obj\Debug\ProtobufTest.pdb

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using PaoEntity;
+using ProtoBuf;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -12,35 +15,31 @@ namespace SuperServer
     /// </summary>
     public class Session
     {
-        public void Init(BufferManager buffermanager, Socket socket, Action<Session> callback)
+        public void Init(BufferManager buffermanager, Socket socket)
         {
-            _ReadEventArgs = new SocketAsyncEventArgs();
-            _ReadEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
-            _ReadEventArgs.UserToken = this;
+            _ReadAsyncEventArgs = new SocketAsyncEventArgs();
+            _ReadAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+            _ReadAsyncEventArgs.UserToken = this;
 
-            buffermanager.SetBuffer(_ReadEventArgs);
+            buffermanager.SetBuffer(_ReadAsyncEventArgs);
 
-            _WriteEventArgs = new SocketAsyncEventArgs();
-            _WriteEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
-            _WriteEventArgs.UserToken = this;
+            _WriteAsyncEventArgs = new SocketAsyncEventArgs();
+            _WriteAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+            _WriteAsyncEventArgs.UserToken = this;
 
             _Socket = socket;
-            _CallBack = callback;
 
-            bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadEventArgs);
+            bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadAsyncEventArgs);
 
             if (!willReadRaiseEvent)
             {
-                ProcessReceive(_ReadEventArgs);
+                ProcessReceive(_ReadAsyncEventArgs);
             }
-
-
         }
 
         public void Clear(BufferManager buffermanager)
         {
-            buffermanager.FreeBuffer(_ReadEventArgs);
-            buffermanager.FreeBuffer(_WriteEventArgs);
+            buffermanager.FreeBuffer(_ReadAsyncEventArgs);
         }
 
         void IO_Completed(object sender, SocketAsyncEventArgs e)
@@ -59,7 +58,6 @@ namespace SuperServer
 
         }
 
- 
         /// <summary>
         /// 开始收取报文信息
         /// </summary>
@@ -78,17 +76,42 @@ namespace SuperServer
         {
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
-                string recvStr = Encoding.ASCII.GetString(e.Buffer, e.Offset, e.BytesTransferred);
-                Console.WriteLine("收到信息内容：{0} ", recvStr);
+                //string recvStr = Encoding.ASCII.GetString(e.Buffer, e.Offset, e.BytesTransferred);
+                Console.WriteLine("收到信息内容");
 
-                Send(e.Buffer, e.Offset, e.BytesTransferred);
+                byte[] sendbuffer = ProcessReceiveWork(e.Buffer, e.Offset, e.BytesTransferred);
 
-                Receive(e);
+                if(sendbuffer == null)
+                {
+                    Receive(e);
+                }
+                else
+                {
+                    Send(sendbuffer, 0, sendbuffer.Length);
+                }
             }
             else
             {
                 CloseSession();
             }
+        }
+
+        public byte[] ProcessReceiveWork(byte[] buffer, int offset, int count)
+        {
+            byte[] ret = null;
+
+            MemoryStream ms = new MemoryStream(buffer, offset, count);
+
+            CMD_LG_CTL_REGIST mss2 = Serializer.Deserialize<CMD_LG_CTL_REGIST>(ms);
+
+            MemoryStream wms = new MemoryStream();
+            mss2.psw = "1234567890";
+
+            Serializer.Serialize<CMD_LG_CTL_REGIST>(wms, mss2);
+
+            ret = wms.ToArray();
+
+            return ret;
         }
 
         /// <summary>
@@ -97,12 +120,12 @@ namespace SuperServer
         /// <param name="e"></param>
         public void Send(Byte[] buff, Int32 offset, Int32 count)
         {
-            _WriteEventArgs.SetBuffer(buff, offset, count);
+            _WriteAsyncEventArgs.SetBuffer(buff, offset, count);
 
-            bool willRaiseEvent = _Socket.SendAsync(_WriteEventArgs);
+            bool willRaiseEvent = _Socket.SendAsync(_WriteAsyncEventArgs);
             if (!willRaiseEvent)
             {
-                ProcessSend(_WriteEventArgs);
+                ProcessSend(_WriteAsyncEventArgs);
             }
         }
 
@@ -111,45 +134,33 @@ namespace SuperServer
             if (e.SocketError == SocketError.Success)
             {
                 Console.WriteLine("发送数据！");
+                Receive(e);
             }
             else
             {
                 CloseSession();
+                Console.WriteLine("关闭连接！");
             }
-            
         }
 
         public void CloseSession()
         {
-            _CallBack(this);
+            try
+            {
+                _Socket.Shutdown(SocketShutdown.Send);
+            }
+            catch (Exception)
+            {
+                //TODO::关闭连接异常
+            }
+
+            _Socket.Close();
         }
         
         private Socket _Socket = null;
 
+        private SocketAsyncEventArgs _ReadAsyncEventArgs = null;
+        private SocketAsyncEventArgs _WriteAsyncEventArgs = null;
 
-        private SocketAsyncEventArgs _ReadEventArgs = null;
-
-        private SocketAsyncEventArgs _WriteEventArgs = null;
-
-        private Action<Session> _CallBack = null;
-            
-
-        public Socket Socket
-        {
-            get { return _Socket; }
-            set { _Socket = value; }
-        }
-
-        public SocketAsyncEventArgs ReadEventArgs
-        {
-            get { return _ReadEventArgs; }
-            set { _ReadEventArgs = value; }
-        }
-
-        public SocketAsyncEventArgs WriteEventArgs
-        {
-            get { return _WriteEventArgs; }
-            set { _WriteEventArgs = value; }
-        }
     }
 }

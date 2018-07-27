@@ -1,14 +1,13 @@
-﻿using System;
+﻿using PaoEntity;
+using ProtoBuf;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using SuperSocket.ClientEngine;
-using SuperSocket.Facility.Protocol;
-using SuperSocket.ProtoBase;
-using SuperSocket.SocketBase.Protocol;
 
 namespace ClientApp
 {
@@ -28,11 +27,23 @@ namespace ClientApp
                 Socket c = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//创建一个Socket
                 Console.WriteLine("Conneting...");
                 c.Connect(ipe);//连接到服务器
-                MessageSender MessageSender = new MessageSender();
-                MessageSender.Init(c);
-                MessageSender.SendTestMessage();
 
 
+                CMD_LG_CTL_REGIST rep = new CMD_LG_CTL_REGIST();
+                rep.account = "1234324";
+                rep.code = "eret";
+                rep.psw = "12";
+
+                MemoryStream ms = new MemoryStream();
+                Serializer.Serialize<CMD_LG_CTL_REGIST>(ms, rep);
+
+                byte[] entityData = ms.ToArray();
+                int entityLen = entityData.Length;
+
+                c.Send(entityData, entityLen, 0);
+                c.Send(entityData, entityLen, 0);
+
+                
                 //for (int i = 0; i < 3; i++)
                 //{
                 //    string sendStr = "hello!This is a socket test";
