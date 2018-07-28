@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common">
+      <HintPath>..\Common\bin\Debug\Common.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.3.14.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.3.14\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -66,8 +69,11 @@
     <Compile Include="ServerManager\Instance\ServerCreater.cs" />
     <Compile Include="ServerManager\ServerManager.cs" />
     <Compile Include="ServerManager\ISessionItem.cs" />
+    <Compile Include="SuperServer\MessageProcessManage.cs" />
+    <Compile Include="SuperServer\ProcessItem.cs" />
     <Compile Include="SuperServer\Session.cs" />
     <Compile Include="SuperServer\SuperServer.cs" />
+    <Compile Include="SuperServer\TcpServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

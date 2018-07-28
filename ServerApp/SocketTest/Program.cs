@@ -23,10 +23,9 @@ namespace SocketTest
 
             //server.Start(ipe);
 
-            SuperServer.SuperServer server = new SuperServer.SuperServer("127.0.0.1", 2012);
+            TcpServer server = new TcpServer("127.0.0.1", 2012);
 
             server.Start();
-
 
             Console.Read();
         }

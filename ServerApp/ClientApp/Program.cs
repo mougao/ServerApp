@@ -1,4 +1,5 @@
-﻿using MsEntity;
+﻿using Common;
+using MsEntity;
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ClientApp
@@ -18,8 +20,6 @@ namespace ClientApp
         {
             try
             {
-
-
                 int port = 2012;
                 string host = "127.0.0.1";
                 IPAddress ip = IPAddress.Parse(host);
@@ -30,18 +30,26 @@ namespace ClientApp
 
 
                 CMD_LG_CTL_REGIST rep = new CMD_LG_CTL_REGIST();
-                rep.account = "1234324";
-                rep.code = "eret";
-                rep.psw = "12";
+                rep.account = "root";
+                rep.code = "bsadsdfasf";
+                rep.psw = "123456";
 
                 MemoryStream ms = new MemoryStream();
                 Serializer.Serialize<CMD_LG_CTL_REGIST>(ms, rep);
 
                 byte[] entityData = ms.ToArray();
-                int entityLen = entityData.Length;
 
-                c.Send(entityData, entityLen, 0);
-                c.Send(entityData, entityLen, 0);
+
+                byte[] messagedate = MessageCoding.MessageEncoding(entityData);
+                
+
+                c.Send(messagedate, messagedate.Length, 0);
+                c.Send(messagedate, messagedate.Length, 0);
+                c.Send(messagedate, messagedate.Length, 0);
+                c.Send(messagedate, messagedate.Length, 0);
+                c.Send(messagedate, messagedate.Length, 0);
+                c.Send(messagedate, messagedate.Length, 0);
+
 
                 
                 //for (int i = 0; i < 3; i++)
@@ -58,7 +66,8 @@ namespace ClientApp
                 //    Console.WriteLine("Client Get Message:{0}", recvStr);//显示服务器返回信息
                 //}
 
-                c.Close();
+                Console.Write("断开连接");
+                //c.Close();
             }
             catch (ArgumentNullException e)
             {
@@ -73,6 +82,7 @@ namespace ClientApp
         static void Main(string[] args)
         {
 
+            CreatOneConnect();
             CreatOneConnect();
 
 

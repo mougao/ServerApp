@@ -74,3 +74,5 @@ D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\protobuf-net.xml
 D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.csproj.CopyComplete
 D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.exe
 D:\GitWork\ServerApp\ServerApp\ClientApp\obj\Debug\ClientApp.pdb
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\Common.dll
+D:\GitWork\ServerApp\ServerApp\ClientApp\bin\Debug\Common.pdb
