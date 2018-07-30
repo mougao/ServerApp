@@ -1,0 +1,14 @@
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\HelloWorld.deps.json
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\HelloWorld.runtimeconfig.json
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\HelloWorld.runtimeconfig.dev.json
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\HelloWorld.dll
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\HelloWorld.pdb
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.AssemblyInfoInputs.cache
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.AssemblyInfo.cs
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.dll
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.pdb
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\XY.MessageEntity.dll
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Release\netcoreapp2.1\XY.MessageEntity.pdb
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Release\netcoreapp2.1\HelloWorld.csproj.CopyComplete

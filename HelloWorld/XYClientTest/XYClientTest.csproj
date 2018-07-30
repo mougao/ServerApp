@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.3.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="XY.CommonBase">
+      <HintPath>..\XY.CommonBase\bin\Debug\netcoreapp2.1\XY.CommonBase.dll</HintPath>
+    </Reference>
+    <Reference Include="XY.MessageEntity">
+      <HintPath>..\XY.MessageEntity\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

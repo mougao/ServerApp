@@ -122,6 +122,11 @@ namespace SuperServer
 
         private void PushLocalBuffer(byte[] buffer, int offset, int count)
         {
+            if((_ReceiveOffset + count) > _ReceiveBuffer.Length)
+            {
+                throw new Exception("客户端信息数据超出当前接收缓存大小！");
+            }
+
             Array.Copy(buffer, offset, _ReceiveBuffer, _ReceiveOffset, count);
 
             _ReceiveOffset += count;
@@ -148,7 +153,6 @@ namespace SuperServer
 
             return ret;
         }
-
 
         /// <summary>
         /// 发送报文信息

@@ -1,0 +1,16 @@
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XYClientTest.deps.json
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XYClientTest.runtimeconfig.json
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XYClientTest.runtimeconfig.dev.json
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XYClientTest.dll
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XYClientTest.pdb
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.AssemblyInfoInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.AssemblyInfo.cs
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.dll
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.pdb
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.CommonBase.dll
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.CommonBase.pdb
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.csproj.CopyComplete

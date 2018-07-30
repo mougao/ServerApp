@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="protobuf-net" Version="2.3.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="XY.MessageEntity">
+      <HintPath>..\XY.MessageEntity\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

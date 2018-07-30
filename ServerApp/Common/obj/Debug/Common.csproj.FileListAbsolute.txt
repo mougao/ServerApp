@@ -1,6 +1,5 @@
 D:\GitWork\ServerApp\ServerApp\Common\bin\Debug\Common.dll
 D:\GitWork\ServerApp\ServerApp\Common\bin\Debug\Common.pdb
-D:\GitWork\ServerApp\ServerApp\Common\obj\Debug\Common.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\ServerApp\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 D:\GitWork\ServerApp\ServerApp\Common\obj\Debug\Common.dll
 D:\GitWork\ServerApp\ServerApp\Common\obj\Debug\Common.pdb

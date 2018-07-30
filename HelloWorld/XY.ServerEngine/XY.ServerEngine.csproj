@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="XY.CommonBase">
+      <HintPath>..\XY.CommonBase\bin\Debug\netcoreapp2.1\XY.CommonBase.dll</HintPath>
+    </Reference>
+    <Reference Include="XY.MessageEntity">
+      <HintPath>..\XY.MessageEntity\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

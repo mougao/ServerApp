@@ -1,0 +1,14 @@
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.ServerEngine.deps.json
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.ServerEngine.dll
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.ServerEngine.pdb
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.CommonBase.dll
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.MessageEntity.dll
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.CommonBase.pdb
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Release\netcoreapp2.1\XY.MessageEntity.pdb
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.AssemblyInfoInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.AssemblyInfo.cs
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.csproj.CopyComplete
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.dll
+D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Release\netcoreapp2.1\XY.ServerEngine.pdb

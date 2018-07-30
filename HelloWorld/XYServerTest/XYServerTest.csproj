@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.3.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="XY.ServerEngine">
+      <HintPath>..\XY.ServerEngine\bin\Debug\netcoreapp2.1\XY.ServerEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
