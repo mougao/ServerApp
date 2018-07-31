@@ -7,7 +7,7 @@ namespace XYServerTest
     {
         static void Main(string[] args)
         {
-            TcpServer server = new TcpServer("127.0.0.1", 2012);
+            XYServerEngine server = new XYServerEngine("127.0.0.1", 2012);
 
             server.Start();
 

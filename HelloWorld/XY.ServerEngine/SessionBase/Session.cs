@@ -9,9 +9,12 @@ using XY.MessageEntity;
 
 namespace XY.ServerEngine
 {
+    /// <summary>
+    /// TODO::有效session认证 指定时间内进行报文信息认证，超时连接主动断开
+    /// </summary>
     public class Session
     {
-        public void Init(BufferManager buffermanager, Socket socket)
+        public void Init(BufferManager buffermanager, Socket socket, IServerEngine serverengine)
         {
             _ReadAsyncEventArgs = new SocketAsyncEventArgs();
             _ReadAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
@@ -24,6 +27,7 @@ namespace XY.ServerEngine
             _WriteAsyncEventArgs.UserToken = this;
 
             _Socket = socket;
+            _CurServerEngine = serverengine;
 
             bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadAsyncEventArgs);
 
@@ -98,19 +102,6 @@ namespace XY.ServerEngine
 
             PushLocalBuffer(buffer, offset, count);
 
-            //MemoryStream ms = new MemoryStream(buffer, offset, count);
-
-            //CMD_LG_CTL_REGIST mss2 = Serializer.Deserialize<CMD_LG_CTL_REGIST>(ms);
-
-            //Console.WriteLine("account:{0},code:{1},psd:{2}", mss2.account,mss2.code,mss2.psw);
-
-            //MemoryStream wms = new MemoryStream();
-            //mss2.psw = "1234567890";
-
-            //Serializer.Serialize<CMD_LG_CTL_REGIST>(wms, mss2);
-
-            //ret = wms.ToArray();
-
             return ret;
         }
 
@@ -135,17 +126,12 @@ namespace XY.ServerEngine
 
                 MemoryStream ms = new MemoryStream(mm, 0, mm.Length);
 
-                CMD_LG_CTL_REGIST mss2 = MessageTransformation.Deserialize<CMD_LG_CTL_REGIST>(ms);
+                _CurServerEngine.AddReceiveCommand(ms);
 
-                Console.WriteLine("account:{0},code:{1},psd:{2}", mss2.account, mss2.code, mss2.psw);
+                //CMD_LG_CTL_REGIST mss2 = MessageTransformation.Deserialize<CMD_LG_CTL_REGIST>(ms);
+
+                //Console.WriteLine("account:{0},code:{1},psd:{2}", mss2.account, mss2.code, mss2.psw);
             }
-        }
-
-        private MemoryStream PopLocalBuffer()
-        {
-            MemoryStream ret = null;
-
-            return ret;
         }
 
         /// <summary>
@@ -221,7 +207,7 @@ namespace XY.ServerEngine
         }
 
         private Socket _Socket = null;
-
+        private IServerEngine _CurServerEngine;
 
         private SocketAsyncEventArgs _ReadAsyncEventArgs = null;
         private SocketAsyncEventArgs _WriteAsyncEventArgs = null;

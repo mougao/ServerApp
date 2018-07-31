@@ -8,7 +8,6 @@ D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Debug\netcoreapp2.1\XY.Serve
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Debug\netcoreapp2.1\XY.ServerEngine.pdb
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Debug\netcoreapp2.1\XY.CommonBase.dll
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Debug\netcoreapp2.1\XY.CommonBase.pdb
-D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Debug\netcoreapp2.1\XY.ServerEngine.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\obj\Debug\netcoreapp2.1\XY.ServerEngine.csproj.CopyComplete
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll
 D:\GitWork\ServerApp\HelloWorld\XY.ServerEngine\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb

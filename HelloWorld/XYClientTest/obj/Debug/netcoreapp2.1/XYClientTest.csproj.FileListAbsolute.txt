@@ -12,5 +12,4 @@ D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.CommonBa
 D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll
 D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.CommonBase.pdb
 D:\GitWork\ServerApp\HelloWorld\XYClientTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb
-D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\HelloWorld\XYClientTest\obj\Debug\netcoreapp2.1\XYClientTest.csproj.CopyComplete

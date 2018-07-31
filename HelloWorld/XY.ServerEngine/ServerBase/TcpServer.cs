@@ -11,7 +11,7 @@ namespace XY.ServerEngine
     public class TcpServer
     {
 
-        public TcpServer(string strIp, int nPort)
+        public TcpServer(string strIp, int nPort, IServerEngine serverengine = null)
         {
             IPAddress ip = IPAddress.Parse(strIp);
             _Ipe = new IPEndPoint(ip, nPort);
@@ -22,6 +22,8 @@ namespace XY.ServerEngine
                 _ReceiveBufferSize);
 
             _MaxNumberAcceptedClients = new Semaphore(_NumConnections, _NumConnections);
+
+            _CurServerEngine = serverengine;
         }
         /// <summary>
         /// 服务器初始化
@@ -47,8 +49,8 @@ namespace XY.ServerEngine
 
             StartAccept(null);
 
-            Console.WriteLine("开启服务，监听Tcp端口 ThreadId;{0}", Thread.CurrentThread.ManagedThreadId.ToString());
-            Console.ReadKey();
+            //Console.WriteLine("开启服务，监听Tcp端口 ThreadId;{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+            //Console.ReadKey();
             return true;
         }
 
@@ -85,7 +87,7 @@ namespace XY.ServerEngine
 
             Session session = new Session();
 
-            session.Init(_BufferPool, e.AcceptSocket);
+            session.Init(_BufferPool, e.AcceptSocket, _CurServerEngine);
 
             _MaxNumberAcceptedClients.Release();
 
@@ -118,6 +120,8 @@ namespace XY.ServerEngine
         /// 信号量管理
         /// </summary>
         private Semaphore _MaxNumberAcceptedClients;
+
+        private IServerEngine _CurServerEngine;
 
     }
 }
