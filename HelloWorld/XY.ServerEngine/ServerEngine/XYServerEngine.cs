@@ -22,6 +22,11 @@ namespace XY.ServerEngine
             _BaseServer = new TcpServer(strIp, nPort, this);
         }
 
+        public XYServerEngine( int nPort)
+        {
+            _BaseServer = new TcpServer(nPort, this);
+        }
+
         public void Start()
         {
             if (_BaseServer.Start())

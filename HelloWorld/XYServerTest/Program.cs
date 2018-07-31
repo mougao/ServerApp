@@ -7,11 +7,22 @@ namespace XYServerTest
     {
         static void Main(string[] args)
         {
-            XYServerEngine server = new XYServerEngine("127.0.0.1", 2012);
+            XYServerEngine server = new XYServerEngine(2012);
 
             server.Start();
 
-            Console.Read();
+            while(true)
+            {
+                string cmd = Console.ReadLine();
+
+                if(cmd == "stop")
+                {
+                    server.Stop();
+                    break;
+                }
+            }
+
+            
         }
     }
 }

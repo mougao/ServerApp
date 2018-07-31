@@ -15,6 +15,8 @@ namespace XYClientTest
             {
                 int port = 2012;
                 string host = "127.0.0.1";
+                //string host = "134.175.17.67";
+                
                 IPAddress ip = IPAddress.Parse(host);
                 IPEndPoint ipe = new IPEndPoint(ip, port);//把ip和端口转化为IPEndPoint实例
                 Socket c = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//创建一个Socket

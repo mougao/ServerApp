@@ -122,8 +122,6 @@ namespace XY.ServerEngine
 
             foreach (var mm in messagebuffers)
             {
-                Console.WriteLine("提取报文信息");
-
                 MemoryStream ms = new MemoryStream(mm, 0, mm.Length);
 
                 _CurServerEngine.AddReceiveCommand(ms);

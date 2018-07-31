@@ -25,6 +25,21 @@ namespace XY.ServerEngine
 
             _CurServerEngine = serverengine;
         }
+
+        public TcpServer(int nPort, IServerEngine serverengine = null)
+        {
+            IPAddress ip = IPAddress.Any;
+            _Ipe = new IPEndPoint(ip, nPort);
+            _NumConnections = 1000;
+            _ReceiveBufferSize = 2048;
+
+            _BufferPool = new BufferManager(_ReceiveBufferSize * _NumConnections * opsToPreAlloc,
+                _ReceiveBufferSize);
+
+            _MaxNumberAcceptedClients = new Semaphore(_NumConnections, _NumConnections);
+
+            _CurServerEngine = serverengine;
+        }
         /// <summary>
         /// 服务器初始化
         /// </summary>
@@ -43,7 +58,10 @@ namespace XY.ServerEngine
             if (_Ipe == null)
                 return false;
 
+
+
             _ListenSocket = new Socket(_Ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
             _ListenSocket.Bind(_Ipe);
             _ListenSocket.Listen(_Ipe.Port);
 
