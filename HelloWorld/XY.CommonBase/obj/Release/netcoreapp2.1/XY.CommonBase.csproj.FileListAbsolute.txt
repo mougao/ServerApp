@@ -1,0 +1,10 @@
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\bin\Release\netcoreapp2.1\NLog.config
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\bin\Release\netcoreapp2.1\XY.CommonBase.deps.json
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\bin\Release\netcoreapp2.1\XY.CommonBase.dll
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\bin\Release\netcoreapp2.1\XY.CommonBase.pdb
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.AssemblyInfoInputs.cache
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.AssemblyInfo.cs
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.dll
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Release\netcoreapp2.1\XY.CommonBase.pdb

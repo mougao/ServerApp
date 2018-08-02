@@ -26,8 +26,11 @@ namespace XY.ServerEngine
             _WriteAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
             _WriteAsyncEventArgs.UserToken = this;
 
+            _Id = Guid.NewGuid().ToString();
             _Socket = socket;
             _CurServerEngine = serverengine;
+
+            LogHelper.Info("创建新的连接 SessionId:"+ _Id);
 
             bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadAsyncEventArgs);
 
@@ -92,6 +95,7 @@ namespace XY.ServerEngine
             }
             else
             {
+                _CurServerEngine.RemoveSession(this);
                 CloseSession();
             }
         }
@@ -167,12 +171,13 @@ namespace XY.ServerEngine
             }
             else
             {
+                _CurServerEngine.RemoveSession(this);
                 CloseSession();
 
             }
         }
 
-        private void CloseSession()
+        public void CloseSession()
         {
             try
             {
@@ -200,9 +205,12 @@ namespace XY.ServerEngine
             {
                 ret = true;
             }
+            
 
             return ret;
         }
+
+        private string _Id;
 
         private Socket _Socket = null;
         private IServerEngine _CurServerEngine;
@@ -212,5 +220,7 @@ namespace XY.ServerEngine
 
         private byte[] _ReceiveBuffer = new byte[2048 * 2];
         private int _ReceiveOffset = 0;
+
+        public string Id { get => _Id; set => _Id = value; }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 using XY.MessageEntity;
@@ -9,6 +12,59 @@ namespace HelloWorld
 {
     class Program
     {
+        /// <summary>
+        /// 将对象序列化后保存到文件中
+        /// </summary>
+        public static void SerializeToFile<T>(T obj, string dataFile)
+        {
+            using (FileStream fileStream = File.Create(dataFile))
+            {
+                BinaryFormatter binSerializer = new BinaryFormatter();
+
+                try
+                {
+                    binSerializer.Serialize(fileStream, obj);
+                }
+                catch (SerializationException e)
+                {
+                    Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    fileStream.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 从文件中读取数据并反序列化成对象
+        /// </summary>
+        public static T Deserialize<T>(string dataFile)
+        {
+            T obj = default(T);
+
+            using (FileStream fileStream = File.OpenRead(dataFile))
+            {
+                try
+                {
+                    BinaryFormatter binDeserializer = new BinaryFormatter();
+
+                    obj = (T)binDeserializer.Deserialize(fileStream);
+                }
+                catch (SerializationException e)
+                {
+                    Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    fileStream.Close();
+                }
+            }
+            return obj;
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -25,62 +81,22 @@ namespace HelloWorld
             //Console.WriteLine("{0}", mss2.ToString());
 
 
-            BlockingCollection<int> bc = new BlockingCollection<int>();
-
-
-            // Spin up a Task to populate the BlockingCollection 
-            Task t1 = Task.Factory.StartNew(() =>
+            Dictionary<string, object> transactionData = new Dictionary<string, object>() {
+        { "Account","6226221601798333"},
+        { "Name","张三"},
+        { "TradeType","存款"},
+        { "Amount",100.00d}
+    };
+            SerializeToFile(transactionData, "TD.txt");
+            var currentData = Deserialize<Dictionary<string, object>>("TD.txt");
+            foreach (var item in currentData)
             {
-                for(int i=0;i<10;i++)
-                {
-                    bc.Add(i);
-                }
-                
-            });
+                Console.WriteLine("{0}-{1}", item.Key, item.Value);
+            }
 
-            Task t3 = Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(1000);
-                for (int i = 0; i < 10; i++)
-                {
-                    bc.Add(i+1);
-                }
-
-            });
-
-            // Spin up a Task to consume the BlockingCollection
-            Task t2 = Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    // Consume bc
-                    while (true) Console.WriteLine(bc.Take());
-                }
-                catch (InvalidOperationException)
-                {
-                    // IOE means that Take() was called on a completed collection
-                    Console.WriteLine("That's All!");
-                }
-            });
-
-
-
-            Task.WaitAll(t1, t2,t3);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Fatal("发生致命错误");
+            logger.Warn("警告信息");
 
             Console.Read();
         }

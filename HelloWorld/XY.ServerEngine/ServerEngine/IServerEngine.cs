@@ -10,5 +10,9 @@ namespace XY.ServerEngine
         bool AddReceiveCommand(MemoryStream messagestream);
 
         bool AddReceiveCommand(IWorkItem workitem);
+
+        void AddNewSession(Session session);
+
+        void RemoveSession(Session session);
     }
 }

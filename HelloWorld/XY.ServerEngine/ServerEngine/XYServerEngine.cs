@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using XY.CommonBase;
 
 namespace XY.ServerEngine
 {
@@ -15,10 +16,13 @@ namespace XY.ServerEngine
 
         private bool _IsStart = false;
 
+        private ConcurrentDictionary<string,Session> _CurSessions = new ConcurrentDictionary<string,Session>();
+
         private BlockingCollection<IWorkItem> _WorkItems = new BlockingCollection<IWorkItem>();
 
         public XYServerEngine(string strIp, int nPort)
         {
+
             _BaseServer = new TcpServer(strIp, nPort, this);
         }
 
@@ -66,6 +70,13 @@ namespace XY.ServerEngine
                 _IsStart = false;
 
                 //TODO::清空服务器信息
+                foreach(var session in _CurSessions.Values)
+                {
+                    session.CloseSession();
+                }
+
+                _CurSessions.Clear();
+
             }
             
         }
@@ -97,6 +108,26 @@ namespace XY.ServerEngine
 
             ret = true;
             return ret;
+        }
+
+        public void AddNewSession(Session session)
+        {
+            if (session != null)
+            {
+                if(_CurSessions.TryAdd(session.Id, session))
+                {
+                    LogHelper.Info("添加新的连接SessionId:"+ session.Id);
+                }
+            }
+        }
+
+        public void RemoveSession(Session session)
+        {
+            Session removesession;
+            if(_CurSessions.TryRemove(session.Id,out removesession))
+            {
+                LogHelper.Info("移除的连接SessionId:" + removesession.Id);
+            }
         }
     }
 }

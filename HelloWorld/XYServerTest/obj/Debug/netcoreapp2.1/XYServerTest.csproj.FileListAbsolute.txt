@@ -16,3 +16,4 @@ D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.ServerEn
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.CommonBase.pdb
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTest.csproj.CopyComplete
+D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\NLog.config

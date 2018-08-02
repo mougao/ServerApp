@@ -107,6 +107,8 @@ namespace XY.ServerEngine
 
             session.Init(_BufferPool, e.AcceptSocket, _CurServerEngine);
 
+            _CurServerEngine.AddNewSession(session);
+
             _MaxNumberAcceptedClients.Release();
 
             StartAccept(e);

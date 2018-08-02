@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NLog" Version="4.5.7" />
+    <PackageReference Include="NLog.Config" Version="4.5.7" />
     <PackageReference Include="protobuf-net" Version="2.3.14" />
   </ItemGroup>
 
@@ -14,6 +17,12 @@
     <Reference Include="XY.MessageEntity">
       <HintPath>..\XY.MessageEntity\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\mougao\.nuget\packages\nlog.config\4.5.7\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

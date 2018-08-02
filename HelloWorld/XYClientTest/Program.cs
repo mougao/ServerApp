@@ -11,6 +11,7 @@ namespace XYClientTest
     {
         static void CreatOneConnect()
         {
+            
             try
             {
                 int port = 2012;
@@ -60,7 +61,7 @@ namespace XYClientTest
 
             CreatOneConnect();
             CreatOneConnect();
-
+     
 
             Console.Write("客户端启动！");
             Console.Read();

@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.12" />
+    <PackageReference Include="NLog" Version="4.5.7" />
+    <PackageReference Include="NLog.Config" Version="4.5.7" />
+  </ItemGroup>
+
 </Project>

@@ -12,3 +12,4 @@ D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.MessageEnt
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.csproj.CopyComplete
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\NLog.config
