@@ -8,6 +8,29 @@ using XY.CommonBase;
 
 namespace XY.ServerEngine
 {
+    class NewMailEventArgs : EventArgs
+    {
+        private string from;
+        private string to;
+        private string content;
+
+        public string From { get { return from; } }
+        public string To { get { return to; } }
+        public string Content { get { return content; } }
+
+        public NewMailEventArgs(string from, string to, string content)
+        {
+            this.from = from;
+            this.to = to;
+            this.content = content;
+        }
+    }
+
+    public class Sender
+    {
+
+    }
+
     public class XYServerEngine : IServerEngine
     {
         protected object SyncRoot = new object();
@@ -21,6 +44,14 @@ namespace XY.ServerEngine
         private ConcurrentDictionary<string,Session> _CurSessions = new ConcurrentDictionary<string,Session>();
 
         private BlockingCollection<IWorkItem> _WorkItems = new BlockingCollection<IWorkItem>();
+
+        private EventHandler<NewMailEventArgs> _newMail;
+
+        private void FaxMsg(object sender, NewMailEventArgs e)
+        {
+            Console.WriteLine(string.Format("fax receive，from:{0} to:{1} content is:{2}", e.From, e.To, e.Content));
+        }
+
 
         public XYServerEngine(string strIp, int nPort)
         {
@@ -52,6 +83,13 @@ namespace XY.ServerEngine
             Task.Run(()=> {
 
                 _GameWorld.Start();
+
+                _newMail += FaxMsg;
+
+                Sender ss = new Sender();
+                NewMailEventArgs e = new NewMailEventArgs("123", "321", "事件测试");
+
+                _newMail(ss, e);
 
                 while (_IsStart)
                 {

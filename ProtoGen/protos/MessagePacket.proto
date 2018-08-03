@@ -1,9 +1,8 @@
-package MsEntity;
+package XY.MessageEntity;
 
-message CMD_LG_CTL_REGIST {
+message CMD_BASE_MESSAGE {
     
-    required string account = 1 ; 
-    required string psw = 2;  
-    required string code = 3; 
+    required int32 Cmd = 1 ; 
+    required string Message = 2;  
 }
 

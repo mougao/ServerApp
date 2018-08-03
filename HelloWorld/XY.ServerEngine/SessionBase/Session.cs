@@ -84,31 +84,15 @@ namespace XY.ServerEngine
                 //string recvStr = Encoding.ASCII.GetString(e.Buffer, e.Offset, e.BytesTransferred);
                 Console.WriteLine("收到信息内容 ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
 
-                byte[] sendbuffer = ProcessReceiveWork(e.Buffer, e.Offset, e.BytesTransferred);
+                PushLocalBuffer(e.Buffer, e.Offset, e.BytesTransferred);
 
-                if (sendbuffer == null)
-                {
-                    Receive(e);
-                }
-                else
-                {
-                    Send(sendbuffer, 0, sendbuffer.Length);
-                }
+                Receive(e);
             }
             else
             {
                 _CurServerEngine.RemoveSession(this);
                 CloseSession();
             }
-        }
-
-        private byte[] ProcessReceiveWork(byte[] buffer, int offset, int count)
-        {
-            byte[] ret = null;
-
-            PushLocalBuffer(buffer, offset, count);
-
-            return ret;
         }
 
         private void PushLocalBuffer(byte[] buffer, int offset, int count)
@@ -132,17 +116,11 @@ namespace XY.ServerEngine
 
                 _CurServerEngine.AddReceiveCommand(ms);
 
-                //CMD_LG_CTL_REGIST mss2 = MessageTransformation.Deserialize<CMD_LG_CTL_REGIST>(ms);
-
-                //Console.WriteLine("account:{0},code:{1},psd:{2}", mss2.account, mss2.code, mss2.psw);
+                Send(mm);
             }
         }
 
-        /// <summary>
-        /// 发送报文信息
-        /// </summary>
-        /// <param name="e"></param>
-        public bool Send(Byte[] buff, Int32 offset, Int32 count)
+        public bool Send(Byte[] buff)
         {
             bool ret = false;
 
@@ -151,6 +129,28 @@ namespace XY.ServerEngine
                 Console.WriteLine("发送信息失败！连接已经断开");
                 return ret;
             }
+
+            byte[] messagedate = MessageCoder.MessageEncoding(buff);
+            _Socket.Send(messagedate);
+
+            ret = true;
+            return ret;
+        }
+
+        /// <summary>
+        /// 发送报文信息
+        /// </summary>
+        /// <param name="e"></param>
+        public bool SendAsync(Byte[] buff, Int32 offset, Int32 count)
+        {
+            bool ret = false;
+
+            if (_Socket == null)
+            {
+                Console.WriteLine("发送信息失败！连接已经断开");
+                return ret;
+            }
+            Console.WriteLine("尝试发送信息");
 
             _WriteAsyncEventArgs.SetBuffer(buff, offset, count);
 

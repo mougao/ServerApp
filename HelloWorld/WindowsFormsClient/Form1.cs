@@ -38,12 +38,12 @@ namespace WindowsFormsClient
                 c.Connect(ipe);//连接到服务器
 
 
-                CMD_LG_CTL_REGIST rep = new CMD_LG_CTL_REGIST();
-                rep.account = "root";
-                rep.code = "bsadsdfasf";
-                rep.psw = "123456";
+                CMD_BASE_MESSAGE rep = new CMD_BASE_MESSAGE();
+                rep.Cmd = 11;
+                rep.Message = "bsadsdfasf";
 
-                MemoryStream ms = MessageTransformation.Serialize<CMD_LG_CTL_REGIST>(rep);
+
+                MemoryStream ms = MessageTransformation.Serialize<CMD_BASE_MESSAGE>(rep);
 
                 byte[] entityData = ms.ToArray();
 
@@ -71,9 +71,22 @@ namespace WindowsFormsClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CreatOneConnect();
+            ClientManage.CreatConnect();
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ClientManage.SendMessage();
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ClientManage.Disconnect();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = ClientManage.GetCurMessage();
         }
     }
 }

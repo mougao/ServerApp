@@ -29,8 +29,6 @@ namespace XY.ServerEngine
             _BattleActors.Add(actor.ActorId, actor);
         }
 
-
-
         private Dictionary<string, BattleActor> _BattleActors = new Dictionary<string, BattleActor>();
     }
 }

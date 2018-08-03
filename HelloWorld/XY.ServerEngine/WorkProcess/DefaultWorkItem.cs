@@ -18,9 +18,9 @@ namespace XY.ServerEngine
 
         public void DoWork()
         {
-            CMD_LG_CTL_REGIST mss2 = MessageTransformation.Deserialize<CMD_LG_CTL_REGIST>(_Ms);
+            CMD_BASE_MESSAGE mss2 = MessageTransformation.Deserialize<CMD_BASE_MESSAGE>(_Ms);
 
-            Console.WriteLine("account:{0},code:{1},psd:{2} ThreadId:{3}", mss2.account, mss2.code, mss2.psw, Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.WriteLine("cmd:{0},message:{1} ThreadId:{2}", mss2.Cmd, mss2.Message, Thread.CurrentThread.ManagedThreadId.ToString());
 
             //TODO::报文解析业务实现
         }

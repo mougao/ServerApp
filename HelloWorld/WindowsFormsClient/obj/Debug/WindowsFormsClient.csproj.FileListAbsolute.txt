@@ -1,7 +1,6 @@
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.exe.config
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.exe
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.pdb
-D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.Properties.Resources.resources
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.GenerateResource.cache
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.CoreCompileInputs.cache

@@ -10,31 +10,24 @@
 // Generated from: protos/MessagePacket.proto
 namespace XY.MessageEntity
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"CMD_LG_CTL_REGIST")]
-  public partial class CMD_LG_CTL_REGIST : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"CMD_BASE_MESSAGE")]
+  public partial class CMD_BASE_MESSAGE : global::ProtoBuf.IExtensible
   {
-    public CMD_LG_CTL_REGIST() {}
+    public CMD_BASE_MESSAGE() {}
     
-    private string _account;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"account", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string account
+    private int _Cmd;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"Cmd", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int Cmd
     {
-      get { return _account; }
-      set { _account = value; }
+      get { return _Cmd; }
+      set { _Cmd = value; }
     }
-    private string _psw;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"psw", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string psw
+    private string _Message;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"Message", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string Message
     {
-      get { return _psw; }
-      set { _psw = value; }
-    }
-    private string _code;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"code", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string code
-    {
-      get { return _code; }
-      set { _code = value; }
+      get { return _Message; }
+      set { _Message = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

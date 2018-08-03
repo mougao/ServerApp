@@ -6,4 +6,3 @@ D:\GitWork\ServerApp\HelloWorld\XY.MessageEntity\obj\Debug\netcoreapp2.1\XY.Mess
 D:\GitWork\ServerApp\HelloWorld\XY.MessageEntity\obj\Debug\netcoreapp2.1\XY.MessageEntity.AssemblyInfo.cs
 D:\GitWork\ServerApp\HelloWorld\XY.MessageEntity\obj\Debug\netcoreapp2.1\XY.MessageEntity.dll
 D:\GitWork\ServerApp\HelloWorld\XY.MessageEntity\obj\Debug\netcoreapp2.1\XY.MessageEntity.pdb
-D:\GitWork\ServerApp\HelloWorld\XY.MessageEntity\obj\Debug\netcoreapp2.1\XY.MessageEntity.csprojAssemblyReference.cache

@@ -25,12 +25,12 @@ namespace XYClientTest
                 c.Connect(ipe);//连接到服务器
 
 
-                CMD_LG_CTL_REGIST rep = new CMD_LG_CTL_REGIST();
-                rep.account = "root";
-                rep.code = "bsadsdfasf";
-                rep.psw = "123456";
+                CMD_BASE_MESSAGE rep = new CMD_BASE_MESSAGE();
+                rep.Cmd = 0x10000001;
+                rep.Message = "bsadsdfasf";
 
-                MemoryStream ms = MessageTransformation.Serialize<CMD_LG_CTL_REGIST>(rep);
+
+                MemoryStream ms = MessageTransformation.Serialize<CMD_BASE_MESSAGE>(rep);
 
                 byte[] entityData = ms.ToArray();
 
@@ -43,7 +43,7 @@ namespace XYClientTest
                 c.Send(messagedate, messagedate.Length, 0);
                 c.Send(messagedate, messagedate.Length, 0);
 
-                Console.Write("断开连接");
+                //Console.Write("断开连接");
                 //c.Close();
             }
             catch (ArgumentNullException e)

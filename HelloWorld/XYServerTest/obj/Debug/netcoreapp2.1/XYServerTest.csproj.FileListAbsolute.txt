@@ -8,7 +8,6 @@ D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTes
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTest.AssemblyInfo.cs
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTest.dll
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTest.pdb
-D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Debug\netcoreapp2.1\XYServerTest.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.ServerEngine.dll
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.CommonBase.dll
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll
