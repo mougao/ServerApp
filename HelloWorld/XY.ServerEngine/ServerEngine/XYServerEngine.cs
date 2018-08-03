@@ -14,6 +14,8 @@ namespace XY.ServerEngine
 
         private TcpServer _BaseServer = null;
 
+        private GameWorld _GameWorld = new GameWorld();
+
         private bool _IsStart = false;
 
         private ConcurrentDictionary<string,Session> _CurSessions = new ConcurrentDictionary<string,Session>();
@@ -22,13 +24,16 @@ namespace XY.ServerEngine
 
         public XYServerEngine(string strIp, int nPort)
         {
-
             _BaseServer = new TcpServer(strIp, nPort, this);
+
+            _GameWorld.Init();
         }
 
         public XYServerEngine( int nPort)
         {
             _BaseServer = new TcpServer(nPort, this);
+
+            _GameWorld.Init();
         }
 
         public void Start()
@@ -36,18 +41,27 @@ namespace XY.ServerEngine
             if (_BaseServer.Start())
             {
                 _IsStart = true;
-                Console.Write("服务器启动成功！");
+                Console.Write("服务器启动成功！\r\n");
             }
             else
             {
-                Console.Write("服务器启动失败！");
+                Console.Write("服务器启动失败！\r\n");
                 return;
             }
 
             Task.Run(()=> {
 
+                _GameWorld.Start();
+
                 while (_IsStart)
                 {
+                    //IWorkItem item = null;
+
+                    //if(_WorkItems.TryTake(out item))
+                    //{
+                    //    item.DoWork();
+                    //}
+
                     IWorkItem item = _WorkItems.Take();
 
                     item.DoWork();

@@ -1,0 +1,13 @@
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.exe.config
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.exe
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\WindowsFormsClient.pdb
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.Properties.Resources.resources
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.GenerateResource.cache
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.exe
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.pdb
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.Form1.resources
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\protobuf-net.dll
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\protobuf-net.xml
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.CopyComplete

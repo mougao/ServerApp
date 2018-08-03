@@ -13,4 +13,12 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Battle\BattleSkill\" />
+    <Folder Include="Battle\BattleValue\" />
+    <Folder Include="Battle\BattleArea\" />
+    <Folder Include="Battle\BattleActor\" />
+    <Folder Include="GameWorld\WorldAction\" />
+  </ItemGroup>
+
 </Project>

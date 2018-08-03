@@ -32,6 +32,8 @@ namespace XY.ServerEngine
 
             LogHelper.Info("创建新的连接 SessionId:"+ _Id);
 
+            _CurServerEngine.AddNewSession(this);
+
             bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadAsyncEventArgs);
 
             if (!willReadRaiseEvent)

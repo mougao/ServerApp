@@ -7,3 +7,4 @@ D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Debug\netcoreapp2.1\XY.CommonB
 D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Debug\netcoreapp2.1\XY.CommonBase.dll
 D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Debug\netcoreapp2.1\XY.CommonBase.pdb
 D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\bin\Debug\netcoreapp2.1\NLog.config
+D:\GitWork\ServerApp\HelloWorld\XY.CommonBase\obj\Debug\netcoreapp2.1\XY.CommonBase.csprojAssemblyReference.cache

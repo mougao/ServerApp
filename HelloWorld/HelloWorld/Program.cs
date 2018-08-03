@@ -65,6 +65,9 @@ namespace HelloWorld
             return obj;
         }
 
+
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -81,24 +84,65 @@ namespace HelloWorld
             //Console.WriteLine("{0}", mss2.ToString());
 
 
-            Dictionary<string, object> transactionData = new Dictionary<string, object>() {
-        { "Account","6226221601798333"},
-        { "Name","张三"},
-        { "TradeType","存款"},
-        { "Amount",100.00d}
-    };
-            SerializeToFile(transactionData, "TD.txt");
-            var currentData = Deserialize<Dictionary<string, object>>("TD.txt");
-            foreach (var item in currentData)
+            //        Dictionary<string, object> transactionData = new Dictionary<string, object>() {
+            //    { "Account","6226221601798333"},
+            //    { "Name","张三"},
+            //    { "TradeType","存款"},
+            //    { "Amount",100.00d}
+            //};
+            //        SerializeToFile(transactionData, "TD.txt");
+            //        var currentData = Deserialize<Dictionary<string, object>>("TD.txt");
+            //        foreach (var item in currentData)
+            //        {
+            //            Console.WriteLine("{0}-{1}", item.Key, item.Value);
+            //        }
+
+            //        NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            //        logger.Fatal("发生致命错误");
+            //        logger.Warn("警告信息");
+
+            // Create an AutoResetEvent to signal the timeout threshold in the
+            // timer callback has been reached.
+
+
+            for(int i=0;i<50;i++)
             {
-                Console.WriteLine("{0}-{1}", item.Key, item.Value);
+                Console.Write(Guid.NewGuid().GetHashCode().ToString()+"\r\n");
+
             }
 
-            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Fatal("发生致命错误");
-            logger.Warn("警告信息");
+
 
             Console.Read();
         }
+
+        class StatusChecker
+        {
+            private int invokeCount;
+            private int maxCount;
+
+            public StatusChecker(int count)
+            {
+                invokeCount = 0;
+                maxCount = count;
+            }
+
+            // This method is called by the timer delegate.
+            public void CheckStatus(Object stateInfo)
+            {
+                AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+                Console.WriteLine("{0} Checking status {1}. Threadid:{2}",
+                    DateTime.Now.ToString("h:mm:ss.fff"),
+                    (++invokeCount).ToString(),Thread.CurrentThread.ManagedThreadId);
+
+                if (invokeCount == maxCount)
+                {
+                    // Reset the counter and signal the waiting thread.
+                    invokeCount = 0;
+                    autoEvent.Set();
+                }
+            }
+        }
+
     }
 }
