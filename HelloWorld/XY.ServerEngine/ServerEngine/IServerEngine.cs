@@ -7,7 +7,7 @@ namespace XY.ServerEngine
 {
     public interface IServerEngine
     {
-        bool AddReceiveCommand(MemoryStream messagestream);
+        bool AddReceiveCommand(MemoryStream messagestream,Session session);
 
         bool AddReceiveCommand(IWorkItem workitem);
 

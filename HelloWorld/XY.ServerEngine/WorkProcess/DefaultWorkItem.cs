@@ -16,7 +16,7 @@ namespace XY.ServerEngine
             _Ms = ms;
         }
 
-        public void DoWork()
+        public void DoWork(GameWorld world)
         {
             CMD_BASE_MESSAGE mss2 = MessageTransformation.Deserialize<CMD_BASE_MESSAGE>(_Ms);
 

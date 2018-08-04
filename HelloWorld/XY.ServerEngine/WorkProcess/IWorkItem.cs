@@ -4,9 +4,16 @@ using System.Text;
 
 namespace XY.ServerEngine
 {
+    public enum WorkItemType
+    {
+        Login,
+        Logout,
+    }
+
+
     public interface IWorkItem
     {
-        void DoWork();
+        void DoWork(GameWorld world);
 
     }
 }

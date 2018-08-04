@@ -102,7 +102,7 @@ namespace XY.ServerEngine
 
                     IWorkItem item = _WorkItems.Take();
 
-                    item.DoWork();
+                    item.DoWork(_GameWorld);
                 }
 
             });
@@ -133,14 +133,14 @@ namespace XY.ServerEngine
             
         }
 
-        public bool AddReceiveCommand(MemoryStream messagestream)
+        public bool AddReceiveCommand(MemoryStream messagestream,Session session)
         {
             bool ret = false;
 
             if (messagestream == null)
                 return ret;
 
-            DefaultWorkItem workitem = new DefaultWorkItem(messagestream);
+            MessageWorkItem workitem = new MessageWorkItem(messagestream, session);
 
             _WorkItems.Add(workitem);
 
@@ -162,12 +162,20 @@ namespace XY.ServerEngine
             return ret;
         }
 
+        public void AddEventWordItem(WorkItemType type,Session session)
+        {
+            EventWorkItem item = new EventWorkItem(type, session);
+
+            _WorkItems.Add(item);
+        }
+
         public void AddNewSession(Session session)
         {
             if (session != null)
             {
                 if(_CurSessions.TryAdd(session.Id, session))
                 {
+                    AddEventWordItem(WorkItemType.Login, session);
                     LogHelper.Info("添加新的连接SessionId:"+ session.Id);
                 }
             }
@@ -178,6 +186,7 @@ namespace XY.ServerEngine
             Session removesession;
             if(_CurSessions.TryRemove(session.Id,out removesession))
             {
+                AddEventWordItem(WorkItemType.Logout, session);
                 LogHelper.Info("移除的连接SessionId:" + removesession.Id);
             }
         }

@@ -1,0 +1,9 @@
+2018-08-04 10:07:39.6350 INFO  创建新的连接 SessionId:c0301e32-7635-4b8b-a26d-124701e77785  TcpServer.ProcessAccept => Session.Init => LogHelper.Info
+2018-08-04 10:07:39.6563 INFO  添加新的连接SessionId:c0301e32-7635-4b8b-a26d-124701e77785  Session.Init => XYServerEngine.AddNewSession => LogHelper.Info
+2018-08-04 13:24:18.9542 INFO  创建新的连接 SessionId:c587cf55-13ec-4a2e-9430-df7fac69728c  TcpServer.ProcessAccept => Session.Init => LogHelper.Info
+2018-08-04 13:24:18.9740 INFO  添加新的连接SessionId:c587cf55-13ec-4a2e-9430-df7fac69728c  Session.Init => XYServerEngine.AddNewSession => LogHelper.Info
+2018-08-04 13:25:41.4289 INFO  创建新的连接 SessionId:268b09c6-d68f-4062-b1ec-7cebc348d764  TcpServer.ProcessAccept => Session.Init => LogHelper.Info
+2018-08-04 13:25:41.4550 INFO  添加新的连接SessionId:268b09c6-d68f-4062-b1ec-7cebc348d764  Session.Init => XYServerEngine.AddNewSession => LogHelper.Info
+2018-08-04 13:42:23.8191 INFO  创建新的连接 SessionId:1f327c6e-bd63-49ff-8861-d80252e30088  TcpServer.ProcessAccept => Session.Init => LogHelper.Info
+2018-08-04 13:42:23.8398 INFO  添加新的连接SessionId:1f327c6e-bd63-49ff-8861-d80252e30088  Session.Init => XYServerEngine.AddNewSession => LogHelper.Info
+2018-08-04 13:42:35.2327 INFO  移除的连接SessionId:1f327c6e-bd63-49ff-8861-d80252e30088  Session.ProcessReceive => XYServerEngine.RemoveSession => LogHelper.Info

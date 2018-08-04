@@ -114,7 +114,7 @@ namespace XY.ServerEngine
             {
                 MemoryStream ms = new MemoryStream(mm, 0, mm.Length);
 
-                _CurServerEngine.AddReceiveCommand(ms);
+                _CurServerEngine.AddReceiveCommand(ms,this);
 
                 Send(mm);
             }
