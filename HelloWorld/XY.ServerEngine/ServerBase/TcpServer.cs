@@ -58,8 +58,6 @@ namespace XY.ServerEngine
             if (_Ipe == null)
                 return false;
 
-
-
             _ListenSocket = new Socket(_Ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             _ListenSocket.Bind(_Ipe);
@@ -106,8 +104,6 @@ namespace XY.ServerEngine
             Session session = new Session();
 
             session.Init(_BufferPool, e.AcceptSocket, _CurServerEngine);
-
-            
 
             _MaxNumberAcceptedClients.Release();
 

@@ -44,7 +44,7 @@ namespace XYClientTest
                 c.Send(messagedate, messagedate.Length, 0);
 
                 //Console.Write("断开连接");
-                //c.Close();
+                c.Close();
             }
             catch (ArgumentNullException e)
             {
@@ -59,8 +59,14 @@ namespace XYClientTest
         static void Main(string[] args)
         {
 
-            CreatOneConnect();
-            CreatOneConnect();
+            for(int i=0;i<10000;i++)
+            {
+                CreatOneConnect();
+                Console.WriteLine("test连接:{0}",i);
+            }
+
+            
+            //CreatOneConnect();
      
 
             Console.Write("客户端启动！");

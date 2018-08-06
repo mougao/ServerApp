@@ -16,10 +16,23 @@ namespace XY.CommonBase
 
         }
 
+        public static void Trace(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Trace(message,args);
+
+        }
+
         public static void Debug(string message)
         {
             Console.WriteLine(message);
             logger.Debug(message);
+        }
+
+        public static void Debug(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Debug(message, args);
         }
 
         public static void Info(string message)
@@ -28,10 +41,22 @@ namespace XY.CommonBase
             logger.Info(message);
         }
 
+        public static void Info(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Info(message, args);
+        }
+
         public static void Warn(string message)
         {
             Console.WriteLine(message);
             logger.Warn(message);
+        }
+
+        public static void Warn(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Warn(message, args);
         }
 
         public static void Error(string message)
@@ -40,11 +65,22 @@ namespace XY.CommonBase
             logger.Error(message);
         }
 
+        public static void Error(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Error(message, args);
+        }
+
         public static void Fatal(string message)
         {
             Console.WriteLine(message);
             logger.Fatal(message);
         }
 
+        public static void Fatal(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+            logger.Fatal(message, args);
+        }
     }
 }

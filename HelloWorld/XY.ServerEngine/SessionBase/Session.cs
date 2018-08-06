@@ -30,8 +30,6 @@ namespace XY.ServerEngine
             _Socket = socket;
             _CurServerEngine = serverengine;
 
-            LogHelper.Info("创建新的连接 SessionId:"+ _Id);
-
             _CurServerEngine.AddNewSession(this);
 
             bool willReadRaiseEvent = _Socket.ReceiveAsync(_ReadAsyncEventArgs);
@@ -81,8 +79,8 @@ namespace XY.ServerEngine
         {
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
-                //string recvStr = Encoding.ASCII.GetString(e.Buffer, e.Offset, e.BytesTransferred);
-                Console.WriteLine("收到信息内容 ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+
+                LogHelper.Debug("收到信息内容 ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
 
                 PushLocalBuffer(e.Buffer, e.Offset, e.BytesTransferred);
 
@@ -99,6 +97,7 @@ namespace XY.ServerEngine
         {
             if ((_ReceiveOffset + count) > _ReceiveBuffer.Length)
             {
+                LogHelper.Error("客户端信息数据超出当前接收缓存大小！");
                 throw new Exception("客户端信息数据超出当前接收缓存大小！");
             }
 
@@ -106,7 +105,7 @@ namespace XY.ServerEngine
 
             _ReceiveOffset += count;
 
-            Console.WriteLine("添加数据缓存 当前缓存长度：{0}", _ReceiveOffset);
+            LogHelper.Debug("添加数据缓存 当前缓存长度：{0}", _ReceiveOffset);
 
             List<byte[]> messagebuffers = MessageCoder.MessageDecoding(ref _ReceiveBuffer, ref _ReceiveOffset);
 
@@ -115,9 +114,34 @@ namespace XY.ServerEngine
                 MemoryStream ms = new MemoryStream(mm, 0, mm.Length);
 
                 _CurServerEngine.AddReceiveCommand(ms,this);
-
-                Send(mm);
             }
+        }
+
+        public bool Send(int cmd,string message)
+        {
+            bool ret = false;
+
+            if (_Socket == null)
+            {
+                LogHelper.Error("发送信息失败！连接已经断开");
+                return ret;
+            }
+
+            CMD_BASE_MESSAGE rep = new CMD_BASE_MESSAGE();
+            rep.Cmd = cmd;
+            rep.Message = message;
+
+            MemoryStream ms = MessageTransformation.Serialize<CMD_BASE_MESSAGE>(rep);
+
+            byte[] entityData = ms.ToArray();
+
+            byte[] messagedate = MessageCoder.MessageEncoding(entityData);
+
+            _Socket.Send(messagedate);
+
+            ret = true;
+
+            return ret;
         }
 
         public bool Send(Byte[] buff)
@@ -126,7 +150,7 @@ namespace XY.ServerEngine
 
             if (_Socket == null)
             {
-                Console.WriteLine("发送信息失败！连接已经断开");
+                LogHelper.Error("发送信息失败！连接已经断开");
                 return ret;
             }
 
@@ -147,10 +171,9 @@ namespace XY.ServerEngine
 
             if (_Socket == null)
             {
-                Console.WriteLine("发送信息失败！连接已经断开");
+                LogHelper.Error("发送信息失败！连接已经断开");
                 return ret;
             }
-            Console.WriteLine("尝试发送信息");
 
             _WriteAsyncEventArgs.SetBuffer(buff, offset, count);
 
@@ -168,7 +191,7 @@ namespace XY.ServerEngine
         {
             if (e.SocketError == SocketError.Success)
             {
-                Console.WriteLine("发送数据成功！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+                LogHelper.Debug("发送数据成功！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
                 Receive(e);
             }
             else
@@ -183,12 +206,13 @@ namespace XY.ServerEngine
         {
             try
             {
-                Console.WriteLine("关闭连接！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+                LogHelper.Debug("关闭连接！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
                 _Socket.Shutdown(SocketShutdown.Send);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO::关闭连接异常
+                //关闭连接异常
+                LogHelper.Error(ex.Message);
             }
 
             _Socket.Close();

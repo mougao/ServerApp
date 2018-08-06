@@ -176,7 +176,7 @@ namespace XY.ServerEngine
                 if(_CurSessions.TryAdd(session.Id, session))
                 {
                     AddEventWordItem(WorkItemType.Login, session);
-                    LogHelper.Info("添加新的连接SessionId:"+ session.Id);
+                    LogHelper.Debug("添加新的连接SessionId:"+ session.Id);
                 }
             }
         }
@@ -187,7 +187,7 @@ namespace XY.ServerEngine
             if(_CurSessions.TryRemove(session.Id,out removesession))
             {
                 AddEventWordItem(WorkItemType.Logout, session);
-                LogHelper.Info("移除的连接SessionId:" + removesession.Id);
+                LogHelper.Debug("移除的连接SessionId:" + removesession.Id);
             }
         }
     }
