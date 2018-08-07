@@ -84,12 +84,12 @@ namespace XY.ServerEngine
 
                 _GameWorld.Start();
 
-                _newMail += FaxMsg;
+                //_newMail += FaxMsg;
 
-                Sender ss = new Sender();
-                NewMailEventArgs e = new NewMailEventArgs("123", "321", "事件测试");
+                //Sender ss = new Sender();
+                //NewMailEventArgs e = new NewMailEventArgs("123", "321", "事件测试");
 
-                _newMail(ss, e);
+                //_newMail(ss, e);
 
                 while (_IsStart)
                 {

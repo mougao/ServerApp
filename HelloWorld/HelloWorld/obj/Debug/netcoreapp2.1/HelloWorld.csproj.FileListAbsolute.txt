@@ -11,5 +11,7 @@ D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.pd
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.MessageEntity.pdb
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.csproj.CopyComplete
-D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\NLog.config
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.CommonBase.dll
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\bin\Debug\netcoreapp2.1\XY.CommonBase.pdb
+D:\GitWork\ServerApp\HelloWorld\HelloWorld\obj\Debug\netcoreapp2.1\HelloWorld.csprojAssemblyReference.cache

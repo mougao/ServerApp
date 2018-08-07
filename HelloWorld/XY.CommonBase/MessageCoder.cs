@@ -6,6 +6,7 @@ namespace XY.CommonBase
 {
     public class MessageCoder
     {
+        private static int bufferlength = 2048;
         /// <summary>
         /// 编码
         /// </summary>
@@ -15,6 +16,12 @@ namespace XY.CommonBase
 
             if (entityData == null)
                 return ret;
+
+            if(entityData.Length+4 > bufferlength)
+            {
+                LogHelper.Error("发送报文长度太长 length:{0}", entityData.Length);
+                return ret;
+            }
 
             int entityLen = entityData.Length;
 

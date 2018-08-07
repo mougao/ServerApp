@@ -192,7 +192,7 @@ namespace XY.ServerEngine
             if (e.SocketError == SocketError.Success)
             {
                 LogHelper.Debug("发送数据成功！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
-                Receive(e);
+                //Receive(e);
             }
             else
             {

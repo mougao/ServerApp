@@ -35,6 +35,8 @@ namespace XY.ServerEngine
         {
             Console.WriteLine("收到报文cmd:{0} message:{1} session:{2} threadid:{3}",cmdid,message,sesson.Id,Thread.CurrentThread.ManagedThreadId);
 
+
+
             sesson.Send(cmdid, message);
 
         }

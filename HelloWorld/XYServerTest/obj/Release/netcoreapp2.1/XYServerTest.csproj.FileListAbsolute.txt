@@ -16,3 +16,4 @@ D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Release\netcoreapp2.1\XYServerT
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Release\netcoreapp2.1\XYServerTest.dll
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Release\netcoreapp2.1\XYServerTest.pdb
 D:\GitWork\ServerApp\HelloWorld\XYServerTest\obj\Release\netcoreapp2.1\XYServerTest.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\XYServerTest\bin\Release\netcoreapp2.1\NLog.config

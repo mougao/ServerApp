@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="Dos.ORM.MySql" Version="2.1.0" />
     <PackageReference Include="MySql.Data" Version="8.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NLog" Version="4.5.7" />
@@ -14,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="XY.CommonBase">
+      <HintPath>..\XY.CommonBase\bin\Debug\netcoreapp2.1\XY.CommonBase.dll</HintPath>
+    </Reference>
     <Reference Include="XY.MessageEntity">
       <HintPath>..\XY.MessageEntity\bin\Debug\netcoreapp2.1\XY.MessageEntity.dll</HintPath>
     </Reference>

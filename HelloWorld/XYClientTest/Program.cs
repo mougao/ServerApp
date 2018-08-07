@@ -2,8 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using XY.CommonBase;
-using XY.MessageEntity;
+
+
 
 namespace XYClientTest
 {
@@ -15,8 +15,8 @@ namespace XYClientTest
             try
             {
                 int port = 2012;
-                string host = "127.0.0.1";
-                //string host = "134.175.17.67";
+                //string host = "127.0.0.1";
+                string host = "134.175.17.67";
                 
                 IPAddress ip = IPAddress.Parse(host);
                 IPEndPoint ipe = new IPEndPoint(ip, port);//把ip和端口转化为IPEndPoint实例
@@ -58,18 +58,26 @@ namespace XYClientTest
 
         static void Main(string[] args)
         {
+            FormClient Client = new FormClient();
+            Client.Connect();
 
-            for(int i=0;i<10000;i++)
+            while (true)
             {
-                CreatOneConnect();
-                Console.WriteLine("test连接:{0}",i);
+                string cmd = Console.ReadLine();
+
+                if(cmd=="q")
+                {
+                    Client.CloseConnect();
+                    break;
+                }
+                else
+                {
+                    Client.SendServerMessage(11, cmd);
+                }
+                
             }
 
-            
-            //CreatOneConnect();
-     
-
-            Console.Write("客户端启动！");
+            Console.Write("客户端关闭！");
             Console.Read();
 
         }
