@@ -1,0 +1,13 @@
+E:\web\JDWeb\JDWebBase\bin\Debug\JDWebBase.dll
+E:\web\JDWeb\JDWebBase\bin\Debug\JDWebBase.pdb
+E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.csprojAssemblyReference.cache
+E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.csproj.CoreCompileInputs.cache
+E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.dll
+E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.pdb
+E:\web\JDWeb\JDWebBase\bin\Debug\Google.Protobuf.dll
+E:\web\JDWeb\JDWebBase\bin\Debug\log4net.dll
+E:\web\JDWeb\JDWebBase\bin\Debug\MySql.Data.dll
+E:\web\JDWeb\JDWebBase\bin\Debug\Google.Protobuf.xml
+E:\web\JDWeb\JDWebBase\bin\Debug\log4net.xml
+E:\web\JDWeb\JDWebBase\bin\Debug\MySql.Data.xml
+E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.csproj.CopyComplete

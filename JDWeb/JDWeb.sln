@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JDWeb", "JDWeb\JDWeb.csproj", "{C8A300CA-EBA9-4547-860A-71A19875FFE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JDWebBase", "JDWebBase\JDWebBase.csproj", "{8CB86DD5-4A7B-4E05-B39E-C60A6B686C13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8A300CA-EBA9-4547-860A-71A19875FFE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A300CA-EBA9-4547-860A-71A19875FFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A300CA-EBA9-4547-860A-71A19875FFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A300CA-EBA9-4547-860A-71A19875FFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB86DD5-4A7B-4E05-B39E-C60A6B686C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB86DD5-4A7B-4E05-B39E-C60A6B686C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB86DD5-4A7B-4E05-B39E-C60A6B686C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB86DD5-4A7B-4E05-B39E-C60A6B686C13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A68AB4E-3205-4230-9683-48E61650A67C}
+	EndGlobalSection
+EndGlobal
