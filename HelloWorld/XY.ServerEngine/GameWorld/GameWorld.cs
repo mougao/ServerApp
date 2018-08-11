@@ -7,13 +7,14 @@ namespace XY.ServerEngine
 {
     public class GameWorld
     {
-        private string _WorldName = "";
+        private Dictionary<int, IWorldCmd> _Cmds = new Dictionary<int, IWorldCmd>();
+
         /// <summary>
         /// 初始化
         /// </summary>
         public void Init()
         {
-            _WorldName = "yyyyyyy";
+
         }
 
         /// <summary>
@@ -21,6 +22,7 @@ namespace XY.ServerEngine
         /// </summary>
         public void Start()
         {
+            RegisterCmd();
             Console.Write("启动世界对象");
         }
 
@@ -31,19 +33,39 @@ namespace XY.ServerEngine
             _BattleActors.Add(actor.ActorId, actor);
         }
 
+        public void RegisterCmd()
+        {
+
+        }
+
         public void ExecuteCmd(int cmdid,string message, Session sesson)
         {
             Console.WriteLine("收到报文cmd:{0} message:{1} session:{2} threadid:{3}",cmdid,message,sesson.Id,Thread.CurrentThread.ManagedThreadId);
 
-
+            if(_Cmds.ContainsKey(cmdid))
+            {
+                _Cmds[cmdid].Execute(message, sesson);
+            }
 
             sesson.Send(cmdid, message);
-
         }
 
         public void ExecuteEvent(WorkItemType type, Session sesson)
         {
-            Console.WriteLine("收到event type:{0} session:{1} threadid:{2}", type, sesson.Id, Thread.CurrentThread.ManagedThreadId);
+
+            if(type == WorkItemType.Login)
+            {
+                Console.WriteLine("有客户端登陆 session:{0} threadid:{1}", sesson.Id, Thread.CurrentThread.ManagedThreadId);
+
+                sesson.Send(1, "你是谁？");
+            }
+            else if(type == WorkItemType.Logout)
+            {
+                Console.WriteLine("有客户端登出 session:{0} threadid:{1}", sesson.Id, Thread.CurrentThread.ManagedThreadId);
+            }
+
+            
+
         }
 
 

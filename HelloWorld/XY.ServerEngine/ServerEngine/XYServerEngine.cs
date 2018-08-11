@@ -41,7 +41,7 @@ namespace XY.ServerEngine
 
         private bool _IsStart = false;
 
-        private ConcurrentDictionary<string,Session> _CurSessions = new ConcurrentDictionary<string,Session>();
+        private ConcurrentDictionary<long,Session> _CurSessions = new ConcurrentDictionary<long,Session>();
 
         private BlockingCollection<IWorkItem> _WorkItems = new BlockingCollection<IWorkItem>();
 
@@ -171,24 +171,40 @@ namespace XY.ServerEngine
 
         public void AddNewSession(Session session)
         {
-            if (session != null)
+            try
             {
-                if(_CurSessions.TryAdd(session.Id, session))
+                if (session != null)
                 {
-                    AddEventWordItem(WorkItemType.Login, session);
-                    LogHelper.Debug("添加新的连接SessionId:"+ session.Id);
+                    if (_CurSessions.TryAdd(session.Id, session))
+                    {
+                        AddEventWordItem(WorkItemType.Login, session);
+                        //LogHelper.Debug("添加新的连接SessionId:" + session.Id);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                LogHelper.Error(ex.Message);
             }
         }
 
         public void RemoveSession(Session session)
         {
-            Session removesession;
-            if(_CurSessions.TryRemove(session.Id,out removesession))
+            try
             {
-                AddEventWordItem(WorkItemType.Logout, session);
-                LogHelper.Debug("移除的连接SessionId:" + removesession.Id);
+                Session removesession;
+                if (_CurSessions.TryRemove(session.Id, out removesession))
+                {
+                    AddEventWordItem(WorkItemType.Logout, session);
+                    //LogHelper.Debug("移除的连接SessionId:" + removesession.Id);
+                }
             }
+            catch(Exception ex)
+            {
+                LogHelper.Error(ex.Message);
+            }
+
+            
         }
     }
 }

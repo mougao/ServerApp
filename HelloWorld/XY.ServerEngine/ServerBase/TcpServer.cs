@@ -99,7 +99,7 @@ namespace XY.ServerEngine
 
         private void ProcessAccept(SocketAsyncEventArgs e)
         {
-            Console.WriteLine("Client connection accepted. There are New clients connected to the server ThreadId;{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+            //Console.WriteLine("Client connection accepted. There are New clients connected to the server ThreadId;{0}", Thread.CurrentThread.ManagedThreadId.ToString());
 
             Session session = new Session();
 

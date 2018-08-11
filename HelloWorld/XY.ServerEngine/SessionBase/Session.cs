@@ -26,7 +26,7 @@ namespace XY.ServerEngine
             _WriteAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
             _WriteAsyncEventArgs.UserToken = this;
 
-            _Id = Guid.NewGuid().ToString();
+            _Id = CreateSessionId();
             _Socket = socket;
             _CurServerEngine = serverengine;
 
@@ -38,6 +38,19 @@ namespace XY.ServerEngine
             {
                 ProcessReceive(_ReadAsyncEventArgs);
             }
+        }
+
+        public long CreateSessionId()
+        {
+            long ret = 0;
+
+            var ran = new Random(Guid.NewGuid().GetHashCode());
+
+            string iii = string.Format("{0}{1}", DateTime.Now.ToString("yyyyMMddHHmmss"), ran.Next(999));
+
+            long.TryParse(iii, out ret);
+
+            return ret;
         }
 
         private void Clear(BufferManager buffermanager)
@@ -80,7 +93,7 @@ namespace XY.ServerEngine
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
 
-                LogHelper.Debug("收到信息内容 ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+                //LogHelper.Debug("收到信息内容 ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
 
                 PushLocalBuffer(e.Buffer, e.Offset, e.BytesTransferred);
 
@@ -105,7 +118,7 @@ namespace XY.ServerEngine
 
             _ReceiveOffset += count;
 
-            LogHelper.Debug("添加数据缓存 当前缓存长度：{0}", _ReceiveOffset);
+            //LogHelper.Debug("添加数据缓存 当前缓存长度：{0}", _ReceiveOffset);
 
             List<byte[]> messagebuffers = MessageCoder.MessageDecoding(ref _ReceiveBuffer, ref _ReceiveOffset);
 
@@ -206,7 +219,7 @@ namespace XY.ServerEngine
         {
             try
             {
-                LogHelper.Debug("关闭连接！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
+                //LogHelper.Debug("关闭连接！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
                 _Socket.Shutdown(SocketShutdown.Send);
             }
             catch (Exception ex)
@@ -236,7 +249,7 @@ namespace XY.ServerEngine
             return ret;
         }
 
-        private string _Id;
+        private long _Id;
 
         private Socket _Socket = null;
         private IServerEngine _CurServerEngine;
@@ -247,6 +260,6 @@ namespace XY.ServerEngine
         private byte[] _ReceiveBuffer = new byte[2048 * 2];
         private int _ReceiveOffset = 0;
 
-        public string Id { get => _Id; set => _Id = value; }
+        public long Id { get => _Id; set => _Id = value; }
     }
 }

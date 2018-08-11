@@ -83,7 +83,7 @@ namespace XYClientTest
 
                 CMD_BASE_MESSAGE mss2 = MessageTransformation.Deserialize<CMD_BASE_MESSAGE>(ms);
 
-                Console.WriteLine("message:{0}",mss2.Message);
+                Console.WriteLine("AI:{0}",mss2.Message);
             }
         }
 
