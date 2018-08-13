@@ -15,8 +15,8 @@ namespace XYClientTest
             try
             {
                 int port = 2012;
-                string host = "127.0.0.1";
-                //string host = "134.175.17.67";
+                //string host = "127.0.0.1";
+                string host = "134.175.17.67";
                 
                 IPAddress ip = IPAddress.Parse(host);
                 IPEndPoint ipe = new IPEndPoint(ip, port);//把ip和端口转化为IPEndPoint实例
@@ -59,29 +59,29 @@ namespace XYClientTest
         static void Main(string[] args)
         {
 
-            //for(int i=0;i<5000;i++)
-            //{
-            //    CreatOneConnect();
-            //}
-
-            FormClient Client = new FormClient();
-            Client.Connect();
-
-            while (true)
+            for (int i = 0; i < 5000; i++)
             {
-                string cmd = Console.ReadLine();
-
-                if (cmd == "q")
-                {
-                    Client.CloseConnect();
-                    break;
-                }
-                else
-                {
-                    Client.SendServerMessage(1, cmd);
-                }
-
+                CreatOneConnect();
             }
+
+            //FormClient Client = new FormClient();
+            //Client.Connect();
+
+            //while (true)
+            //{
+            //    string cmd = Console.ReadLine();
+
+            //    if (cmd == "q")
+            //    {
+            //        Client.CloseConnect();
+            //        break;
+            //    }
+            //    else
+            //    {
+            //        Client.SendServerMessage(0x10000001, cmd);
+            //    }
+
+            //}
 
             Console.Write("客户端关闭！");
             Console.Read();

@@ -10,3 +10,4 @@ D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\protobuf-net.dll
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\bin\Debug\protobuf-net.xml
 D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csproj.CopyComplete
+D:\GitWork\ServerApp\HelloWorld\WindowsFormsClient\obj\Debug\WindowsFormsClient.csprojAssemblyReference.cache

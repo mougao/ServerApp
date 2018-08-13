@@ -2,10 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using XY.CommonBase;
 
 namespace XY.ServerEngine
 {
-    public class GameWorld
+    public interface IGame
+    {
+        void AddActor(BattleActor actor);
+
+        void RemoveActor(string actorid);
+
+        BattleActor GetActor(string actorid);
+    }
+
+    public class GameWorld: IGame
     {
         private Dictionary<int, IWorldCmd> _Cmds = new Dictionary<int, IWorldCmd>();
 
@@ -35,6 +45,24 @@ namespace XY.ServerEngine
 
         public void RegisterCmd()
         {
+            WorldNormalCmd NCmd = new WorldNormalCmd();
+
+            AddCmd(NCmd);
+        }
+
+        private void AddCmd(IWorldCmd cmd )
+        {
+            if(cmd != null)
+            {
+                if(_Cmds.ContainsKey(cmd.GetCmdKey()))
+                {
+                    LogHelper.Error("CmdKey:{0} 重复注册！", cmd.GetCmdKey());
+                }
+                else
+                {
+                    _Cmds.Add(cmd.GetCmdKey(), cmd);
+                }
+            }
 
         }
 
@@ -44,7 +72,11 @@ namespace XY.ServerEngine
 
             if(_Cmds.ContainsKey(cmdid))
             {
-                _Cmds[cmdid].Execute(message, sesson);
+                _Cmds[cmdid].Execute(message, sesson,this);
+            }
+            else
+            {
+                LogHelper.Error("无效Cmdkey:{0}", cmdid);
             }
 
             sesson.Send(cmdid, message);
@@ -64,10 +96,25 @@ namespace XY.ServerEngine
                 Console.WriteLine("有客户端登出 session:{0} threadid:{1}", sesson.Id, Thread.CurrentThread.ManagedThreadId);
             }
 
-            
-
         }
 
+        public void AddActor(BattleActor actor)
+        {
+            _BattleActors.Add(actor.ActorId, actor);
+        }
+
+        public void RemoveActor(string actorid)
+        {
+            _BattleActors.Remove(actorid);
+        }
+
+        public BattleActor GetActor(string actorid)
+        {
+            BattleActor ret = null;
+            _BattleActors.TryGetValue(actorid, out ret);
+
+            return ret;
+        }
 
         private Dictionary<string, BattleActor> _BattleActors = new Dictionary<string, BattleActor>();
     }

@@ -8,6 +8,9 @@ namespace XY.ServerEngine
     {
         int GetCmdKey();
 
-        string Execute(string message,Session session);
+        void Execute(string message,Session session,IGame game);
+
+        
+
     }
 }

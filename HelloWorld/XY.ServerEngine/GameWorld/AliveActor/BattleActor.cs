@@ -9,6 +9,7 @@ namespace XY.ServerEngine
     /// </summary>
     public class BattleActor
     {
+
         private string _ActorId;
 
         private int _Hp;
