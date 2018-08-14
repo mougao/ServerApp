@@ -59,29 +59,29 @@ namespace XYClientTest
         static void Main(string[] args)
         {
 
-            for (int i = 0; i < 5000; i++)
-            {
-                CreatOneConnect();
-            }
-
-            //FormClient Client = new FormClient();
-            //Client.Connect();
-
-            //while (true)
+            //for (int i = 0; i < 5000; i++)
             //{
-            //    string cmd = Console.ReadLine();
-
-            //    if (cmd == "q")
-            //    {
-            //        Client.CloseConnect();
-            //        break;
-            //    }
-            //    else
-            //    {
-            //        Client.SendServerMessage(0x10000001, cmd);
-            //    }
-
+            //    CreatOneConnect();
             //}
+
+            FormClient Client = new FormClient();
+            Client.Connect();
+
+            while (true)
+            {
+                string cmd = Console.ReadLine();
+
+                if (cmd == "q")
+                {
+                    Client.CloseConnect();
+                    break;
+                }
+                else
+                {
+                    Client.SendServerMessage(0x10000001, cmd);
+                }
+
+            }
 
             Console.Write("客户端关闭！");
             Console.Read();
