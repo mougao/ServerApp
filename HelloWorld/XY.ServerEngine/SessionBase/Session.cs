@@ -101,8 +101,9 @@ namespace XY.ServerEngine
             }
             else
             {
-                _CurServerEngine.RemoveSession(this);
-                CloseSession();
+                
+                _CurServerEngine.AddEventWordItem(WorkItemType.Logout, this);
+
             }
         }
 
@@ -150,27 +151,12 @@ namespace XY.ServerEngine
 
             byte[] messagedate = MessageCoder.MessageEncoding(entityData);
 
-            _Socket.Send(messagedate);
+            //_Socket.Send(messagedate);
+
+            SendAsync(messagedate, 0, messagedate.Length);
 
             ret = true;
 
-            return ret;
-        }
-
-        public bool Send(Byte[] buff)
-        {
-            bool ret = false;
-
-            if (_Socket == null)
-            {
-                LogHelper.Error("发送信息失败！连接已经断开");
-                return ret;
-            }
-
-            byte[] messagedate = MessageCoder.MessageEncoding(buff);
-            _Socket.Send(messagedate);
-
-            ret = true;
             return ret;
         }
 
@@ -205,13 +191,10 @@ namespace XY.ServerEngine
             if (e.SocketError == SocketError.Success)
             {
                 LogHelper.Debug("发送数据成功！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
-                //Receive(e);
             }
             else
             {
-                _CurServerEngine.RemoveSession(this);
-                CloseSession();
-
+                LogHelper.Debug("发送数据失败！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
             }
         }
 
@@ -219,6 +202,7 @@ namespace XY.ServerEngine
         {
             try
             {
+                _CurServerEngine.RemoveSession(this);
                 //LogHelper.Debug("关闭连接！ ThreadId:{0}", Thread.CurrentThread.ManagedThreadId.ToString());
                 _Socket.Shutdown(SocketShutdown.Send);
             }

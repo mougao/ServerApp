@@ -80,6 +80,9 @@ namespace XY.ServerEngine
                 return;
             }
 
+            
+
+
             Task.Run(()=> {
 
                 _GameWorld.Start();
@@ -93,16 +96,16 @@ namespace XY.ServerEngine
 
                 while (_IsStart)
                 {
-                    //IWorkItem item = null;
+                    IWorkItem item = null;
 
-                    //if(_WorkItems.TryTake(out item))
-                    //{
-                    //    item.DoWork();
-                    //}
+                    if (_WorkItems.TryTake(out item))
+                    {
+                        item.DoWork(_GameWorld);
+                    }
 
-                    IWorkItem item = _WorkItems.Take();
+                    //IWorkItem item = _WorkItems.Take();
 
-                    item.DoWork(_GameWorld);
+                    //item.DoWork(_GameWorld);
                 }
 
             });
@@ -167,6 +170,8 @@ namespace XY.ServerEngine
             EventWorkItem item = new EventWorkItem(type, session);
 
             _WorkItems.Add(item);
+
+            LogHelper.Debug("添加新事件事件事件SessionId:" + session.Id);
         }
 
         public void AddNewSession(Session session)
@@ -178,7 +183,7 @@ namespace XY.ServerEngine
                     if (_CurSessions.TryAdd(session.Id, session))
                     {
                         AddEventWordItem(WorkItemType.Login, session);
-                        //LogHelper.Debug("添加新的连接SessionId:" + session.Id);
+                        LogHelper.Debug("添加新的连接SessionId:" + session.Id);
                     }
                 }
             }
@@ -195,8 +200,8 @@ namespace XY.ServerEngine
                 Session removesession;
                 if (_CurSessions.TryRemove(session.Id, out removesession))
                 {
-                    AddEventWordItem(WorkItemType.Logout, session);
-                    //LogHelper.Debug("移除的连接SessionId:" + removesession.Id);
+                    //AddEventWordItem(WorkItemType.Logout, session);
+                    LogHelper.Debug("移除的连接SessionId:" + removesession.Id);
                 }
             }
             catch(Exception ex)

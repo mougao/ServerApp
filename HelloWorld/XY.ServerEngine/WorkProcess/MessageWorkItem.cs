@@ -21,15 +21,16 @@ namespace XY.ServerEngine
 
         public void DoWork(GameWorld world)
         {
+
             try
             {
                 CMD_BASE_MESSAGE mss2 = MessageTransformation.Deserialize<CMD_BASE_MESSAGE>(_Ms);
 
                 world.ExecuteCmd(mss2.Cmd, mss2.Message, _Session);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogHelper.Error(ex.Message);
+                LogHelper.Error("MessageWorkItem:DoWork error:{0}", ex.Message);
             }
         }
 

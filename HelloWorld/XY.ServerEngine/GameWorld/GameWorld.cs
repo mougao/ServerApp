@@ -94,6 +94,8 @@ namespace XY.ServerEngine
             else if(type == WorkItemType.Logout)
             {
                 Console.WriteLine("有客户端登出 session:{0} threadid:{1}", sesson.Id, Thread.CurrentThread.ManagedThreadId);
+
+                sesson.CloseSession();
             }
 
         }

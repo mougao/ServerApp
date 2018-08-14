@@ -11,6 +11,8 @@ namespace XY.ServerEngine
 
         bool AddReceiveCommand(IWorkItem workitem);
 
+        void AddEventWordItem(WorkItemType type, Session session);
+
         void AddNewSession(Session session);
 
         void RemoveSession(Session session);
