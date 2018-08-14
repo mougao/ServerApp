@@ -36,6 +36,8 @@
         });
 
         UpdateListCount();
+
+        GetLastRandomList();
     }
 
     function UpdateListCount() {
@@ -191,6 +193,28 @@
             return;
 
         list[0].append(option);
+    }
+
+    function randomsort(a, b) {
+
+        return Math.random() > .5 ? -1 : 1;
+
+        //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
+
+    }
+
+
+    //获取剩余牌堆的随机数列
+    function GetLastRandomList() {
+
+        var curcards = $("#box1View option").map(function () {
+            return $(this).val();
+        }).get();
+
+        var arr2 = curcards.sort(randomsort);
+
+        return arr2.join(",");
+
     }
 
 
@@ -541,7 +565,13 @@
 
         if (GetListCurCount(list2) > 0) {
 
-            curcards += ",";
+            if (curcards != null) {
+
+                curcards += ",";
+            } else {
+
+                curcards = "";
+            }
 
             curcards += $("#box3View option").map(function () {
                 return $(this).val();
@@ -552,7 +582,13 @@
 
         if (GetListCurCount(list3) > 0) {
 
-            curcards += ",";
+            if (curcards != null) {
+
+                curcards += ",";
+            } else {
+
+                curcards = "";
+            }
 
             curcards += $("#box4View option").map(function () {
                 return $(this).val();
@@ -563,7 +599,13 @@
 
         if (GetListCurCount(list4) > 0) {
 
-            curcards += ",";
+            if (curcards != null) {
+
+                curcards += ",";
+            } else {
+
+                curcards = "";
+            }
 
             curcards += $("#box5View option").map(function () {
                 return $(this).val();
@@ -573,12 +615,31 @@
 
         if (GetListCurCount(list5) > 0) {
 
-            curcards += ",";
+            if (curcards != null) {
+
+                curcards += ",";
+            } else {
+
+                curcards = "";
+            }
 
             curcards += $("#box6View option").map(function () {
                 return $(this).val();
             }).get().join(",");
 
+        }
+
+        if (GetListCurCount(list0) > 0) {
+
+            if (curcards != null) {
+
+                curcards += ",";
+            } else {
+
+                curcards = "";
+            }
+
+            curcards += GetLastRandomList(0);
         }
         
         $.ajax({
