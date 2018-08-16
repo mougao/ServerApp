@@ -96,11 +96,14 @@ namespace XY.ServerEngine
 
                 while (_IsStart)
                 {
-                    IWorkItem item = null;
-
-                    if (_WorkItems.TryTake(out item))
+                    for(int i=0;i<100;i++)
                     {
-                        item.DoWork(_GameWorld);
+                        IWorkItem item = null;
+
+                        if (_WorkItems.TryTake(out item))
+                        {
+                            item.DoWork(_GameWorld);
+                        }
                     }
 
                     //IWorkItem item = _WorkItems.Take();

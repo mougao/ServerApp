@@ -11,6 +11,10 @@ namespace XY.ServerEngine
     {
         public MapPosition _CurPosition = null;
 
+        public MapEventType _Type = MapEventType.None;
+
+        private BattleActor _Enemy = null;
+
         public WorldLandBase(int map_index,int x_index,int y_index)
         {
             _CurPosition = new MapPosition();
@@ -19,6 +23,21 @@ namespace XY.ServerEngine
             _CurPosition.MapYIndex = y_index;
         }
 
+        public void InitLandEvent(MapEventType type)
+        {
+            switch(type)
+            {
+                case MapEventType.Fight:
+                    {
+                        //创建战斗对象
+                        _Enemy = WorldTemplateCreater.GetBattleActor();
+
+                        break;
+                    }
+            }
+
+        }
+        
         //没有事件
 
         //遇到NPC

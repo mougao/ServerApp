@@ -37,7 +37,6 @@
 
         UpdateListCount();
 
-        GetLastRandomList();
     }
 
     function UpdateListCount() {
@@ -344,22 +343,24 @@
                 $('#gametype').append(value);
             });
 
+            $.ajax({
+                type: "POST",
+                url: "Interface/GetCardConfig.ashx",
+                dataType: "json",
+                data: { gametype: $("#gametype").val() },
+                success: function (msg) {
+
+                    InitList(msg);
+
+
+                }
+            });
+
         }
     });
 
 
-    $.ajax({
-        type: "POST",
-        url: "Interface/GetCardConfig.ashx",
-        dataType: "json",
-        data: { gametype: $("#gametype").val() },
-        success: function (msg) {
-
-            InitList(msg);
-
-
-        }
-    });
+    
 
     $("#gametype").change(function () {
 
@@ -639,7 +640,7 @@
                 curcards = "";
             }
 
-            curcards += GetLastRandomList(0);
+            curcards += GetLastRandomList();
         }
         
         $.ajax({

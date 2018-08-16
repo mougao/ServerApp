@@ -4,6 +4,13 @@ using System.Text;
 
 namespace XY.ServerEngine
 {
+
+    public enum MapEventType
+    {
+        None,
+        Fight,
+    }
+
     /// <summary>
     /// 地图位子
     /// </summary>

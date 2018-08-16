@@ -26,6 +26,8 @@ namespace JDWeb.Interface
             db.Write(sqlclear);
             db.Write(sql);
 
+            db.Close();
+
             string rr = JsonConvert.SerializeObject("激活成功");
             context.Response.ContentType = "application/json";
             context.Response.Write(rr);

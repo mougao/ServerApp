@@ -35,6 +35,8 @@ namespace JDWeb.Interface
 
             });
 
+            db.Close();
+
             string rr = JsonConvert.SerializeObject(gametypes);
 
             context.Response.ContentType = "application/json";

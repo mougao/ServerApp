@@ -38,6 +38,8 @@ namespace JDWeb.Interface
 
             db.Write(sql);
 
+            db.Close();
+
             context.Response.ContentType = "application/json";
             string ss = JsonConvert.SerializeObject("设置成功");
             context.Response.Write(ss);

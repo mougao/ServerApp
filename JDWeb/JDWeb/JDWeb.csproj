@@ -2593,6 +2593,7 @@
     <Content Include="js\jquery.js" />
     <Content Include="js\mws.js" />
     <Content Include="js\mys.js" />
+    <Content Include="js\mys_poker.js" />
     <Content Include="js\themer.js" />
     <Content Include="plugins\colorpicker\colorpicker.css" />
     <Content Include="plugins\colorpicker\colorpicker.js" />
@@ -2947,6 +2948,7 @@
     <Content Include="plugins\spinner\ui.spinner.js" />
     <Content Include="plugins\tipsy\jquery.tipsy.js" />
     <Content Include="plugins\tipsy\tipsy.css" />
+    <Content Include="setpoker.aspx" />
     <Content Include="src\bootstrap-duallistbox.css" />
     <Content Include="src\jquery.bootstrap-duallistbox.js" />
     <Content Include="src\prettify.css" />
@@ -2975,25 +2977,53 @@
     <Compile Include="Interface\GetCardConfig.ashx.cs">
       <DependentUpon>GetCardConfig.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Interface\GetCardConfig_Poker.ashx.cs">
+      <DependentUpon>GetCardConfig_Poker.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Interface\GetGameCards.ashx.cs">
       <DependentUpon>GetGameCards.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\GetGameCards_Poker.ashx.cs">
+      <DependentUpon>GetGameCards_Poker.ashx</DependentUpon>
     </Compile>
     <Compile Include="Interface\GetGameTypes.ashx.cs">
       <DependentUpon>GetGameTypes.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Interface\GetGameTypes_Poker.ashx.cs">
+      <DependentUpon>GetGameTypes_Poker.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Interface\RemoveCardConfigs.ashx.cs">
       <DependentUpon>RemoveCardConfigs.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\RemoveCardConfigs_Poker.ashx.cs">
+      <DependentUpon>RemoveCardConfigs_Poker.ashx</DependentUpon>
     </Compile>
     <Compile Include="Interface\SetGameCards.ashx.cs">
       <DependentUpon>SetGameCards.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Interface\SetGameCards_Poker.ashx.cs">
+      <DependentUpon>SetGameCards_Poker.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Interface\StopCardConfigs.ashx.cs">
       <DependentUpon>StopCardConfigs.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\StopCardConfigs_Poker.ashx.cs">
+      <DependentUpon>StopCardConfigs_Poker.ashx</DependentUpon>
     </Compile>
     <Compile Include="Interface\UseCardConfigs.ashx.cs">
       <DependentUpon>UseCardConfigs.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Interface\UseCardConfigs_Poker.ashx.cs">
+      <DependentUpon>UseCardConfigs_Poker.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="setpoker.aspx.cs">
+      <DependentUpon>setpoker.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="setpoker.aspx.designer.cs">
+      <DependentUpon>setpoker.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\fonts\ptsans\PTC55F-webfont.eot" />
@@ -3040,6 +3070,13 @@
     <Content Include="Interface\GetCardConfig.ashx" />
     <Content Include="Interface\StopCardConfigs.ashx" />
     <Content Include="Interface\GetGameTypes.ashx" />
+    <Content Include="Interface\GetGameTypes_Poker.ashx" />
+    <Content Include="Interface\GetGameCards_Poker.ashx" />
+    <Content Include="Interface\RemoveCardConfigs_Poker.ashx" />
+    <Content Include="Interface\StopCardConfigs_Poker.ashx" />
+    <Content Include="Interface\UseCardConfigs_Poker.ashx" />
+    <Content Include="Interface\SetGameCards_Poker.ashx" />
+    <Content Include="Interface\GetCardConfig_Poker.ashx" />
     <None Include="packages.config" />
     <Content Include="plugins\elfinder\connectors\python\connector.py" />
     <Content Include="plugins\elfinder\connectors\python\elFinder.py" />

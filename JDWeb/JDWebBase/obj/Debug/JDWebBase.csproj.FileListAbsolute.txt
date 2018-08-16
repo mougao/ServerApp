@@ -11,3 +11,16 @@ E:\web\JDWeb\JDWebBase\bin\Debug\Google.Protobuf.xml
 E:\web\JDWeb\JDWebBase\bin\Debug\log4net.xml
 E:\web\JDWeb\JDWebBase\bin\Debug\MySql.Data.xml
 E:\web\JDWeb\JDWebBase\obj\Debug\JDWebBase.csproj.CopyComplete
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\JDWebBase.dll
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\JDWebBase.pdb
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\Google.Protobuf.dll
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\log4net.dll
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\MySql.Data.dll
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\Google.Protobuf.xml
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\log4net.xml
+D:\GitWork\ServerApp\JDWeb\JDWebBase\bin\Debug\MySql.Data.xml
+D:\GitWork\ServerApp\JDWeb\JDWebBase\obj\Debug\JDWebBase.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\JDWeb\JDWebBase\obj\Debug\JDWebBase.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\JDWeb\JDWebBase\obj\Debug\JDWebBase.csproj.CopyComplete
+D:\GitWork\ServerApp\JDWeb\JDWebBase\obj\Debug\JDWebBase.dll
+D:\GitWork\ServerApp\JDWeb\JDWebBase\obj\Debug\JDWebBase.pdb

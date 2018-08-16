@@ -23,6 +23,8 @@ namespace JDWeb.Interface
 
             db.Write(sql);
 
+            db.Close();
+
             string rr = JsonConvert.SerializeObject("移除成功");
             context.Response.ContentType = "application/json";
             context.Response.Write(rr);

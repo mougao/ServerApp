@@ -119,5 +119,8 @@ namespace XY.ServerEngine
         }
 
         private Dictionary<string, BattleActor> _BattleActors = new Dictionary<string, BattleActor>();
+
+
+
     }
 }

@@ -11,6 +11,8 @@ namespace XY.ServerEngine
     {
         public int _Index = 0;
 
+        
+
         public Dictionary<int, List<WorldLandBase>> _Lands = new Dictionary<int, List<WorldLandBase>>();
 
         /// <summary>
@@ -44,6 +46,8 @@ namespace XY.ServerEngine
 
 
         }
+
+
 
 
 

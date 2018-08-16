@@ -46,6 +46,8 @@ namespace JDWeb.Interface
 
             });
 
+            db.Close();
+
             string rr = JsonConvert.SerializeObject(ret);
 
             context.Response.ContentType = "application/json";

@@ -59,4 +59,120 @@ namespace JDWebBase
         竹 = 41,          // 竹
 
     }
+
+    /// <summary>
+    /// 扑克牌花色
+    /// </summary>
+    public enum PokerSuit : byte
+    {
+        /// <summary>
+        /// 大小王
+        /// </summary>
+        Joker = 1,
+        /// <summary>
+        /// 方块
+        /// </summary>
+        Diamond,
+        /// <summary>
+        /// 梅花
+        /// </summary>
+        Club,
+        /// <summary>
+        /// 红桃
+        /// </summary>
+        Heart,
+        /// <summary>
+        /// 黑桃
+        /// </summary>
+        Spade,
+    }
+
+    public class PokerTF
+    {
+
+        public static List<Tuple<string,int>> TestPoker()
+        {
+            var tempCards = new List<int>();
+            for (int i = 1; i < 14; i++)
+            {
+                tempCards.Add(CreatePokerInt(PokerSuit.Club, i));
+                tempCards.Add(CreatePokerInt(PokerSuit.Diamond, i));
+                tempCards.Add(CreatePokerInt(PokerSuit.Heart, i));
+                tempCards.Add(CreatePokerInt(PokerSuit.Spade, i));
+            }
+
+            tempCards.Add(CreatePokerInt(PokerSuit.Joker, 14));
+            tempCards.Add(CreatePokerInt(PokerSuit.Joker, 15));
+
+            //var randArray = Enumerable.Range(0, 52).OrderBy(c => Guid.NewGuid()).ToArray();
+
+            List<Tuple<string, int>> ret = new List<Tuple<string, int>>();
+
+            foreach(int id in tempCards)
+            {
+                ret.Add(new Tuple<string, int>(GetPokerName(id),id));
+            }
+
+            return ret;
+        }
+
+
+        public static int CreatePokerInt(PokerSuit color,int num)
+        {
+            int ret = (byte)((int)((int)color << 4) | num);
+
+            return ret;
+        }
+
+        private static PokerSuit GetSuit(int poker)
+        {
+            return (PokerSuit)(poker >> 4);
+        }
+
+        private static int GetNumber(int poker)
+        {
+            return (int)(poker & 15);
+        }
+
+        public static string GetPokerName(int pokervalue)
+        {
+            string ret = "";
+
+            PokerSuit suit = GetSuit(pokervalue);
+
+            int num = GetNumber(pokervalue);
+
+            switch(suit)
+            {
+                case PokerSuit.Club:
+                    {
+                        ret = string.Format("梅花{0}", num);
+                        break;
+                    }
+                case PokerSuit.Diamond:
+                    {
+                        ret = string.Format("方块{0}", num);
+                        break;
+                    }
+                case PokerSuit.Heart:
+                    {
+                        ret = string.Format("红桃{0}", num);
+                        break;
+                    }
+                case PokerSuit.Spade:
+                    {
+                        ret = string.Format("黑桃{0}", num);
+                        break;
+                    }
+                case PokerSuit.Joker:
+                    {
+                        ret = string.Format("王{0}", num);
+                        break;
+                    }
+            }
+
+            return ret;
+        }
+
+    }
 }

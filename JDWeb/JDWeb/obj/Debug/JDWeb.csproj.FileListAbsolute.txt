@@ -129,8 +129,8 @@ D:\GitWork\ServerApp\JDWeb\JDWeb\bin\log4net.xml
 D:\GitWork\ServerApp\JDWeb\JDWeb\bin\MySql.Data.xml
 D:\GitWork\ServerApp\JDWeb\JDWeb\bin\Newtonsoft.Json.xml
 D:\GitWork\ServerApp\JDWeb\JDWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.csprojAssemblyReference.cache
 D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.csproj.CoreCompileInputs.cache
 D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.csproj.CopyComplete
 D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.dll
 D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.pdb
+D:\GitWork\ServerApp\JDWeb\JDWeb\obj\Debug\JDWeb.csprojAssemblyReference.cache

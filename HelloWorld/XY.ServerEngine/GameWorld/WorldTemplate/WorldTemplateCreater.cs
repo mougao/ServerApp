@@ -14,6 +14,7 @@ namespace XY.ServerEngine
         {
             BattleActor ret = new BattleActor();
 
+            ret.ActorId = Guid.NewGuid().ToString();
             ret.Hp = BattleActorTemplate.GetHP();
             ret.Mp = BattleActorTemplate.GetMP();
             ret.Att = BattleActorTemplate.GetATT();

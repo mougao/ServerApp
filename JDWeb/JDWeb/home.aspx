@@ -111,8 +111,8 @@
         <div id="mws-sidebar">
             <div id="mws-navigation">
             	<ul>
-                	<li><a href="home.aspx" class="mws-i-24 i-home">首页</a></li>
-                	<li><a href="home.aspx" class="mws-i-24 i-chart">其他页</a></li>
+                	<li><a href="home.aspx" class="mws-i-24 i-home">麻将设置</a></li>
+                	<li><a href="setpoker.aspx" class="mws-i-24 i-chart">扑克设置</a></li>
 
                 </ul>
             </div>

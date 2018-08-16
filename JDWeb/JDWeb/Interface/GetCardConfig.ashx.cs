@@ -36,6 +36,8 @@ namespace JDWeb.Interface
                 }
             });
 
+            db.Close();
+
             string[] cards = defaultcards.Split(',');
 
             List<int> ncards = new List<int>();
