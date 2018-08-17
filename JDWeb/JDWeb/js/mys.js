@@ -162,6 +162,24 @@
         return option;
     }
 
+    //获取牌堆的第一张牌 同时移除该张牌
+    function GetListRandomOption(list) {
+
+        if (GetListCurCount(list) <= 0)
+            return null;
+
+        var indexs = new Array();
+        for (var i = 0; i < GetListCurCount(list);i++) {
+            indexs[i]=i;
+        }
+
+        var arr2 = indexs.sort(randomsort);
+
+        var option = list[0][arr2[0]];
+
+        return option;
+    }
+
     //获取选定的那一张牌 同时移除该张牌
     function GetListSelectedOption(list) {
 
@@ -191,6 +209,8 @@
         if (option == null)
             return;
 
+        option.selected = false;
+
         list[0].append(option);
     }
 
@@ -216,15 +236,14 @@
 
     }
 
-
-    btn0.click(function () {
-        //自动分配到各自牌堆
+    //随机填充剩余卡牌
+    function RandomFillList() {
 
         var maxcount = GetListCurCount(list0);
 
-        for (var i = 0; i < maxcount;i++) {
+        for (var i = 0; i < maxcount; i++) {
 
-            var option = GetListFristOption(list0);
+            var option = GetListRandomOption(list0);
 
             if (GetListCurCount(list1) < 14) {
 
@@ -250,7 +269,48 @@
 
         }
 
+        list0.empty();
+
         UpdateListCount();
+    }
+
+
+    btn0.click(function () {
+        //自动分配到各自牌堆
+
+        RandomFillList();
+
+        //var maxcount = GetListCurCount(list0);
+
+        //for (var i = 0; i < maxcount;i++) {
+
+        //    var option = GetListFristOption(list0);
+
+        //    if (GetListCurCount(list1) < 14) {
+
+        //        AddListOption(list1, option);
+
+        //    } else if (GetListCurCount(list2) < 13) {
+
+        //        AddListOption(list2, option);
+
+        //    } else if (GetListCurCount(list3) < 13) {
+
+        //        AddListOption(list3, option);
+
+        //    } else if (GetListCurCount(list4) < 13) {
+
+        //        AddListOption(list4, option);
+
+        //    } else {
+
+        //        AddListOption(list5, option);
+        //        list5.scrollTop(list5[0].scrollHeight);
+        //    }
+
+        //}
+
+        //UpdateListCount();
 
     });
 
@@ -547,14 +607,26 @@
 
     });
 
-    
+    $("#button2").click(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "Interface/GetCardConfig.ashx",
+            dataType: "json",
+            data: { gametype: $("#gametype").val() },
+            success: function (msg) {
+
+                InitList(msg);
+
+            }
+        });
+
+    });
 
 
     $("#button1").click(function () {
 
-        //var curcards = $("#box2View option").map(function () {
-        //    return $(this).val();
-        //}).get().join(",");
+        RandomFillList();
 
         var curcards = null;
         if (GetListCurCount(list1) > 0) {
@@ -658,6 +730,127 @@
 
     });
 
+
+    var self = this;
+
+    this.curData = null;
+
+    this.$sorc = $('#box1View');
+
+    $("#box1View").on("mousedown", "option", function (e) {
+
+        self.curData = e.target;
+
+    });
+
+    $(document).on("mouseup", function (e) {
+
+        var tmpDom = e.target.id;
+
+        if (e.target.localName == "option") {
+
+            tmpDom = e.target.parentElement.id;
+        } 
+        
+        if ("box2View" != tmpDom && "box3View" != tmpDom && "box4View" != tmpDom && "box5View" != tmpDom && "box6View" != tmpDom) {//在放置区以外的地方就清空数据
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+
+        }
+
+        var listcount = $("#" + tmpDom).find("option").length;
+
+        if ("box2View" == tmpDom && listcount >= 14) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box3View" == tmpDom && listcount >= 13) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box4View" == tmpDom && listcount >= 13) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box5View" == tmpDom && listcount >= 13) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if (null != self.curData) {
+
+            var $dom = $(self.curData);
+
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            $("#" + tmpDom).append($dom);
+
+            //$dom.click(function () {
+
+            //    $(this).appendTo(self.$sorc);
+
+            //});
+
+            UpdateListCount();
+
+        }
+
+        self.curData = null;
+
+    });
+
+    
+    //元素跟随移动效果
+
+    $(document).on("mousemove", function (e) {
+
+
+        if (null != self.curData) {
+
+            var sh = $(document).scrollTop();
+            var sw = $(document).scrollLeft();
+
+            var $dom = $(self.curData);
+
+            $dom.css({ position: "fixed", 'top': e.pageY + 10 - sh, 'left': e.pageX + 10 - sw, 'z-index': 2 });
+
+        }
+
+    });
    
 
     

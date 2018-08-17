@@ -124,12 +124,13 @@
             	<div class="mws-panel grid_8">
                 	<div class="mws-panel-header">
                     	<span class="mws-i-24 i-list">麻将牌配置</span>
+                        
                     </div>
                     <div class="mws-panel-body">
                     	<div class="mws-form">
                     		<div class="mws-form-inline">
-
                                 <div class="mws-form-row">
+
                     				<label>游戏选择</label>
                     				<div class="mws-form-item small">
                     					<select id ="gametype">
@@ -144,11 +145,11 @@
                                     	<div class="mws-dualbox clearfix">
                                         	<div style="float:left">
                                                 <span id="box1Counter" class="countLabel">配置牌堆 0 </span>
-                                                <div style="display:block;width:235px">
+                                                <div style="display:block;width:135px">
                                                     <input id="Button1" type="button" value=">>" />
                                                 </div>
                                                 
-                                                <select id="box1View" multiple="multiple" style="height:260px;width:100px">
+                                                <select id="box1View" multiple="multiple" style="height:270px;width:100px">
 
                                                 </select>
                                             </div>
@@ -158,7 +159,7 @@
                                                 <div style="display:block">
                                                     <input id="Button2" type="button" value="<<" />
                                                 </div>
-                                                <select id="box2View" multiple="multiple" style="height:260px;width:100px"></select>
+                                                <select id="box2View" multiple="multiple" style="height:270px;width:100px"></select>
                                                 
                                             </div>
 
@@ -168,7 +169,7 @@
                                                 <div style="display:block">
                                                     <input id="Button3" type="button" value="<<" />
                                                 </div>
-                                                <select id="box3View" multiple="multiple" style="height:260px;width:100px"></select>
+                                                <select id="box3View" multiple="multiple" style="height:270px;width:100px"></select>
 
                                             </div>
                                             <div style="float:left">
@@ -177,7 +178,7 @@
                                                 <div style="display:block">
                                                     <input id="Button4" type="button" value="<<" />
                                                 </div>
-                                                <select id="box4View" multiple="multiple" style="height:260px;width:100px"></select>
+                                                <select id="box4View" multiple="multiple" style="height:270px;width:100px"></select>
 
                                             </div>
 
@@ -187,7 +188,7 @@
                                                 <div style="display:block">
                                                     <input id="Button5" type="button" value="<<" />
                                                 </div>
-                                                <select id="box5View" multiple="multiple" style="height:260px;width:100px"></select>
+                                                <select id="box5View" multiple="multiple" style="height:270px;width:100px"></select>
 
                                             </div>
 
@@ -197,7 +198,7 @@
                                                 <div style="display:block">
                                                     <input id="Button6" type="button" value="<<" />
                                                 </div>
-                                                <select id="box6View" multiple="multiple" style="height:260px;width:100px"></select>
+                                                <select id="box6View" multiple="multiple" style="height:270px;width:100px"></select>
 
                                             </div>
 
@@ -225,6 +226,7 @@
                     		</div>
                     		<div class="mws-button-row">
                     			<input id="button1" type="submit" value="提交" class="mws-button black" />
+                                <input id="button2" type="submit" value="清空" class="mws-button black" />
                     		</div>
                     	</div>
                     </div>    	

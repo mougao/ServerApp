@@ -147,26 +147,90 @@ namespace JDWebBase
                 case PokerSuit.Club:
                     {
                         ret = string.Format("梅花{0}", num);
+
+                        if(num == 11)
+                        {
+                            ret = "梅花J";
+                        }
+                        else if(num==12)
+                        {
+                            ret = "梅花Q";
+                        }
+                        else if(num == 13)
+                        {
+                            ret = "梅花K";
+                        }
+
                         break;
                     }
                 case PokerSuit.Diamond:
                     {
                         ret = string.Format("方块{0}", num);
+
+                        if (num == 11)
+                        {
+                            ret = "方块J";
+                        }
+                        else if (num == 12)
+                        {
+                            ret = "方块Q";
+                        }
+                        else if (num == 13)
+                        {
+                            ret = "方块K";
+                        }
                         break;
                     }
                 case PokerSuit.Heart:
                     {
                         ret = string.Format("红桃{0}", num);
+
+                        if (num == 11)
+                        {
+                            ret = "红桃J";
+                        }
+                        else if (num == 12)
+                        {
+                            ret = "红桃Q";
+                        }
+                        else if (num == 13)
+                        {
+                            ret = "红桃K";
+                        }
+
                         break;
                     }
                 case PokerSuit.Spade:
                     {
                         ret = string.Format("黑桃{0}", num);
+
+                        if (num == 11)
+                        {
+                            ret = "黑桃J";
+                        }
+                        else if (num == 12)
+                        {
+                            ret = "黑桃Q";
+                        }
+                        else if (num == 13)
+                        {
+                            ret = "黑桃K";
+                        }
+
                         break;
                     }
                 case PokerSuit.Joker:
                     {
-                        ret = string.Format("王{0}", num);
+                        if(num == 14)
+                        {
+                            ret = string.Format("小王");
+                        }
+                        else
+                        {
+                            ret = string.Format("大王");
+                        }
+
+                        
                         break;
                     }
             }

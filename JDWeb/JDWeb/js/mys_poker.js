@@ -221,6 +221,8 @@
         if (option == null)
             return;
 
+        option.selected = false;
+
         list[0].append(option);
     }
 
