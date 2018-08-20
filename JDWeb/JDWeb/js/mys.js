@@ -197,8 +197,7 @@
             }
         }
 
-
-        list.find("option:selected").get(0).remove();;
+        //list.find("option:selected").get(0).remove();;
 
         return option;
     }
@@ -439,6 +438,8 @@
     });
 
 
+    
+
     list0.click(function () {
 
         var option = GetListSelectedOption(list0);
@@ -607,7 +608,9 @@
 
     });
 
-    $("#button2").click(function () {
+
+
+    $("#btnclear").click(function () {
 
         $.ajax({
             type: "POST",
@@ -737,9 +740,12 @@
 
     this.$sorc = $('#box1View');
 
+
     $("#box1View").on("mousedown", "option", function (e) {
 
         self.curData = e.target;
+
+        self.curData.selected = true;
 
     });
 
@@ -751,11 +757,50 @@
 
             tmpDom = e.target.parentElement.id;
         } 
-        
-        if ("box2View" != tmpDom && "box3View" != tmpDom && "box4View" != tmpDom && "box5View" != tmpDom && "box6View" != tmpDom) {//在放置区以外的地方就清空数据
+
+        if ("box1View" == tmpDom) {
+
+            var option = self.curData;
+
+            if (GetListCurCount(list1) < 14) {
+
+                AddListOption(list1, option);
+
+            } else if (GetListCurCount(list2) < 13) {
+
+                AddListOption(list2, option);
+
+            } else if (GetListCurCount(list3) < 13) {
+
+                AddListOption(list3, option);
+
+            } else if (GetListCurCount(list4) < 13) {
+
+                AddListOption(list4, option);
+
+            } else {
+
+                AddListOption(list5, option);
+                list5.scrollTop(list5[0].scrollHeight);
+            }
+
+            UpdateListCount();
 
             var $dom = $(self.curData);
             self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+
+        }
+
+
+        if ("box2View" != tmpDom && "box3View" != tmpDom && "box4View" != tmpDom && "box5View" != tmpDom && "box6View" != tmpDom) {//在放置区以外的地方就清空数据
+
+            var $dom = $(self.curData);
+            
             $dom.css("position", "static");
 
             self.curData = null;

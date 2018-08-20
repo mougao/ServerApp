@@ -147,6 +147,7 @@
                                                 <span id="box1Counter" class="countLabel">配置牌堆 0 </span>
                                                 <div style="display:block;width:135px">
                                                     <input id="Button1" type="button" value=">>" />
+                                                    <input id="btnclear" type="button" value="<<" />
                                                 </div>
                                                 
                                                 <select id="box1View" multiple="multiple" style="height:270px;width:100px">
@@ -226,7 +227,7 @@
                     		</div>
                     		<div class="mws-button-row">
                     			<input id="button1" type="submit" value="提交" class="mws-button black" />
-                                <input id="button2" type="submit" value="清空" class="mws-button black" />
+    
                     		</div>
                     	</div>
                     </div>    	
