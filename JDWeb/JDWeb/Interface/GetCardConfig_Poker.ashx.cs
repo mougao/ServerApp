@@ -78,7 +78,7 @@ namespace JDWeb.Interface
 
                 if (cardid != -1)
                 {
-                    string cardname = PokerTF.GetPokerName(cardid);
+                    string cardname = PokerTF.GetPokerName(cardid, gametype);
                     dic.Add(string.Format("<option value={0}>{1}</option>", scardid, cardname));
                 }
             }

@@ -1,4 +1,9 @@
-﻿2018-08-15 11:29:11,594 [6] INFO  ClientVersion - select * from default_cards where GameType=''MySql.Data.MySqlClient.MySqlException (0x80004005): The host 192.168.2.59 does not support SSL connections.
+﻿2018-08-24 12:29:45,885 [6] INFO  ClientVersion - select * from card_configsMySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
    在 MySql.Data.MySqlClient.NativeDriver.Open()
    在 MySql.Data.MySqlClient.Driver.Open()
    在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
@@ -10,58 +15,94 @@
    在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
    在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
    在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
-   在 JDWebBase.MySQLProvider.Read(String sql) 位置 E:\web\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
-2018-08-15 16:30:52,833 [1] INFO  ClientVersion - 梅花1:49
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块1:33
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃1:65
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃1:81
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花2:50
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块2:34
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃2:66
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃2:82
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花3:51
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块3:35
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃3:67
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃3:83
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花4:52
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块4:36
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃4:68
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃4:84
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花5:53
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块5:37
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃5:69
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃5:85
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花6:54
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块6:38
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃6:70
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃6:86
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花7:55
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块7:39
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃7:71
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃7:87
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花8:56
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块8:40
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃8:72
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃8:88
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花9:57
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块9:41
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃9:73
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃9:89
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花10:58
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块10:42
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃10:74
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃10:90
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花11:59
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块11:43
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃11:75
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃11:91
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花12:60
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块12:44
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃12:76
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃12:92
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 梅花13:61
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 方块13:45
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 红桃13:77
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 黑桃13:93
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 王14:30
-2018-08-15 16:30:52,840 [1] INFO  ClientVersion - 王15:31
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
+2018-08-24 12:29:45,886 [8] INFO  ClientVersion - select * from gametypesMySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
+2018-08-24 12:29:46,194 [9] INFO  ClientVersion - select * from default_cards where GameType=''MySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
+2018-08-24 12:30:31,291 [7] INFO  ClientVersion - select * from card_configsMySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
+2018-08-24 12:30:31,292 [6] INFO  ClientVersion - select * from gametypesMySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71
+2018-08-24 12:30:46,418 [13] INFO  ClientVersion - select * from default_cards where GameType=''MySql.Data.MySqlClient.MySqlException (0x80004005): Retrieval of the RSA public key is not enabled for insecure connections.
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.GeneratePassword()
+   在 MySql.Data.MySqlClient.Authentication.CachingSha2AuthenticationPlugin.MoreData(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthentication(Byte[] data)
+   在 MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.Authenticate(Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate(String authMethod, Boolean reset)
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   在 System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   在 JDWebBase.MySQLProvider.Read(String sql) 位置 D:\GitWork\ServerApp\JDWeb\JDWebBase\DataBase\MySQLDBProvider.cs:行号 71

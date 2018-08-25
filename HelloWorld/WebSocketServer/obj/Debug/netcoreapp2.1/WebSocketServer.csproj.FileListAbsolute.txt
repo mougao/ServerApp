@@ -1,0 +1,11 @@
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\bin\Debug\netcoreapp2.1\WebSocketServer.deps.json
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\bin\Debug\netcoreapp2.1\WebSocketServer.runtimeconfig.json
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\bin\Debug\netcoreapp2.1\WebSocketServer.runtimeconfig.dev.json
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\bin\Debug\netcoreapp2.1\WebSocketServer.dll
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\bin\Debug\netcoreapp2.1\WebSocketServer.pdb
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.csprojAssemblyReference.cache
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.csproj.CoreCompileInputs.cache
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.AssemblyInfoInputs.cache
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.AssemblyInfo.cs
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.dll
+D:\GitWork\ServerApp\HelloWorld\WebSocketServer\obj\Debug\netcoreapp2.1\WebSocketServer.pdb

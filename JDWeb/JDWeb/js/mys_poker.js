@@ -192,6 +192,23 @@
         return option;
     }
 
+    function GetListRandomOption(list) {
+
+        if (GetListCurCount(list) <= 0)
+            return null;
+
+        var indexs = new Array();
+        for (var i = 0; i < GetListCurCount(list); i++) {
+            indexs[i] = i;
+        }
+
+        var arr2 = indexs.sort(randomsort);
+
+        var option = list[0][arr2[0]];
+
+        return option;
+    }
+
     //获取选定的那一张牌 同时移除该张牌
     function GetListSelectedOption(list) {
 
@@ -245,16 +262,14 @@
         return arr2.join(",");
     }
 
-
-    btn0.click(function () {
-        //自动分配到各自牌堆
+    //随机填充剩余卡牌
+    function RandomFillList() {
 
         var maxcount = GetListCurCount(list0);
 
-
         for (var j = 0; j < maxcount; j++) {
 
-            var option = GetListFristOption(list0);
+            var option = GetListRandomOption(list0);
 
             var isadd = false;
             for (var i = 0; i < arrayObj.length; i++) {
@@ -281,9 +296,51 @@
             }
 
         }
-        
+
+
+        list0.empty();
 
         UpdateListCount();
+    }
+
+    btn0.click(function () {
+        //自动分配到各自牌堆
+        RandomFillList();
+        //var maxcount = GetListCurCount(list0);
+
+
+        //for (var j = 0; j < maxcount; j++) {
+
+        //    var option = GetListFristOption(list0);
+
+        //    var isadd = false;
+        //    for (var i = 0; i < arrayObj.length; i++) {
+
+        //        //未隐藏
+        //        if (!arrayObj[i].is(':hidden')) {
+
+        //            var list = arraylist[i];
+
+        //            if (GetListCurCount(list) < handcount) {
+
+        //                AddListOption(list, option);
+        //                isadd = true;
+        //                break;
+        //            }
+
+        //        }
+
+        //    }
+
+        //    if (!isadd) {
+        //        AddListOption(list9, option);
+        //        list9.scrollTop(list9[0].scrollHeight);
+        //    }
+
+        //}
+        
+
+        //UpdateListCount();
 
     });
 
@@ -648,7 +705,13 @@
         InitConfigPokers();
     });
 
-    
+    $("#ButtonClear").click(function () {
+
+
+        InitConfigPokers();
+
+    });
+
 
     $("#button1").click(function () {
 
@@ -723,6 +786,228 @@
         });
 
     });
+
+    //鼠标移动
+
+    var self = this;
+
+    this.curData = null;
+
+    this.$sorc = $('#box0View');
+
+
+    $("#box0View").on("mousedown", "option", function (e) {
+
+        self.curData = e.target;
+
+        self.curData.selected = true;
+
+    });
+
+    $(document).on("mouseup", function (e) {
+
+        var tmpDom = e.target.id;
+
+        if (e.target.localName == "option") {
+
+            tmpDom = e.target.parentElement.id;
+        }
+
+        if ("box0View" == tmpDom) {
+
+            var option = GetListSelectedOption(list0);
+
+            var isadd = false;
+            for (var i = 0; i < arrayObj.length; i++) {
+
+                //未隐藏
+                if (!arrayObj[i].is(':hidden')) {
+
+                    var list = arraylist[i];
+
+                    if (GetListCurCount(list) < handcount) {
+
+                        AddListOption(list, option);
+                        isadd = true;
+                        break;
+                    }
+
+                }
+
+            }
+
+            if (!isadd) {
+                AddListOption(list9, option);
+                list9.scrollTop(list9[0].scrollHeight);
+            }
+
+            UpdateListCount();
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+
+        if ("box1View" != tmpDom && "box2View" != tmpDom && "box3View" != tmpDom && "box4View" != tmpDom && "box5View" != tmpDom && "box6View" != tmpDom && "box7View" != tmpDom && "box8View" != tmpDom && "box9View" != tmpDom) {//在放置区以外的地方就清空数据
+
+            var $dom = $(self.curData);
+
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+
+        }
+
+        var listcount = $("#" + tmpDom).find("option").length;
+
+        if ("box1View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box2View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box3View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box4View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box5View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box6View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box7View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box8View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if ("box9View" == tmpDom && listcount >= handcount) {
+
+            var $dom = $(self.curData);
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            self.curData = null;
+
+            return;
+        }
+
+        if (null != self.curData) {
+
+            var $dom = $(self.curData);
+
+            self.curData.selected = false;
+            $dom.css("position", "static");
+
+            $("#" + tmpDom).append($dom);
+
+            //$dom.click(function () {
+
+            //    $(this).appendTo(self.$sorc);
+
+            //});
+
+            UpdateListCount();
+
+        }
+
+        self.curData = null;
+
+    });
+
+
+    //元素跟随移动效果
+
+    $(document).on("mousemove", function (e) {
+
+
+        if (null != self.curData) {
+
+            var sh = $(document).scrollTop();
+            var sw = $(document).scrollLeft();
+
+            var $dom = $(self.curData);
+
+            $dom.css({ position: "fixed", 'top': e.pageY + 10 - sh, 'left': e.pageX + 10 - sw, 'z-index': 2 });
+
+        }
+
+    });
+
 
 
 });

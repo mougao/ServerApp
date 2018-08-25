@@ -160,7 +160,7 @@
                                                 <span id="box0Counter" class="countLabel">配置牌堆 0 </span>
                                                 <div style="display:block;width:235px">
                                                     <input id="Button0" type="button" value=">>" />
-                                                    
+                                                    <input id="ButtonClear" type="button" value="<<" />
                                                 </div>
                                                 
                                                 <select id="box0View" multiple="multiple" style="height:260px;width:100px">

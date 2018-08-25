@@ -70,52 +70,27 @@ namespace JDWebBase
         /// </summary>
         Joker = 1,
         /// <summary>
-        /// 方块
+        /// 方块（梅花）
         /// </summary>
         Diamond,
         /// <summary>
-        /// 梅花
+        /// 梅花（红桃）
         /// </summary>
         Club,
         /// <summary>
-        /// 红桃
+        /// 红桃（黑桃）
         /// </summary>
         Heart,
         /// <summary>
-        /// 黑桃
+        /// 黑桃（方块）
         /// </summary>
         Spade,
     }
 
+
+
     public class PokerTF
     {
-
-        public static List<Tuple<string,int>> TestPoker()
-        {
-            var tempCards = new List<int>();
-            for (int i = 1; i < 14; i++)
-            {
-                tempCards.Add(CreatePokerInt(PokerSuit.Club, i));
-                tempCards.Add(CreatePokerInt(PokerSuit.Diamond, i));
-                tempCards.Add(CreatePokerInt(PokerSuit.Heart, i));
-                tempCards.Add(CreatePokerInt(PokerSuit.Spade, i));
-            }
-
-            tempCards.Add(CreatePokerInt(PokerSuit.Joker, 14));
-            tempCards.Add(CreatePokerInt(PokerSuit.Joker, 15));
-
-            //var randArray = Enumerable.Range(0, 52).OrderBy(c => Guid.NewGuid()).ToArray();
-
-            List<Tuple<string, int>> ret = new List<Tuple<string, int>>();
-
-            foreach(int id in tempCards)
-            {
-                ret.Add(new Tuple<string, int>(GetPokerName(id),id));
-            }
-
-            return ret;
-        }
-
 
         public static int CreatePokerInt(PokerSuit color,int num)
         {
@@ -134,7 +109,7 @@ namespace JDWebBase
             return (int)(poker & 15);
         }
 
-        public static string GetPokerName(int pokervalue)
+        public static string GetPokerName(int pokervalue, string gametype)
         {
             string ret = "";
 
@@ -142,98 +117,198 @@ namespace JDWebBase
 
             int num = GetNumber(pokervalue);
 
-            switch(suit)
+            if (gametype == "牛牛_温州" || gametype=="十三道_温州")
             {
-                case PokerSuit.Club:
-                    {
-                        ret = string.Format("梅花{0}", num);
+                switch (suit)
+                {
+                    case PokerSuit.Club:
+                        {
+                            ret = string.Format("红桃{0}", num);
 
-                        if(num == 11)
-                        {
-                            ret = "梅花J";
-                        }
-                        else if(num==12)
-                        {
-                            ret = "梅花Q";
-                        }
-                        else if(num == 13)
-                        {
-                            ret = "梅花K";
-                        }
+                            if (num == 11)
+                            {
+                                ret = "红桃J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "红桃Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "红桃K";
+                            }
 
-                        break;
-                    }
-                case PokerSuit.Diamond:
-                    {
-                        ret = string.Format("方块{0}", num);
+                            break;
+                        }
+                    case PokerSuit.Diamond:
+                        {
+                            ret = string.Format("梅花{0}", num);
 
-                        if (num == 11)
-                        {
-                            ret = "方块J";
+                            if (num == 11)
+                            {
+                                ret = "梅花J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "梅花Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "梅花K";
+                            }
+                            break;
                         }
-                        else if (num == 12)
+                    case PokerSuit.Heart:
                         {
-                            ret = "方块Q";
-                        }
-                        else if (num == 13)
-                        {
-                            ret = "方块K";
-                        }
-                        break;
-                    }
-                case PokerSuit.Heart:
-                    {
-                        ret = string.Format("红桃{0}", num);
+                            ret = string.Format("黑桃{0}", num);
 
-                        if (num == 11)
-                        {
-                            ret = "红桃J";
-                        }
-                        else if (num == 12)
-                        {
-                            ret = "红桃Q";
-                        }
-                        else if (num == 13)
-                        {
-                            ret = "红桃K";
-                        }
+                            if (num == 11)
+                            {
+                                ret = "黑桃J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "黑桃Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "黑桃K";
+                            }
 
-                        break;
-                    }
-                case PokerSuit.Spade:
-                    {
-                        ret = string.Format("黑桃{0}", num);
+                            break;
+                        }
+                    case PokerSuit.Spade:
+                        {
+                            ret = string.Format("方块{0}", num);
 
-                        if (num == 11)
-                        {
-                            ret = "黑桃J";
-                        }
-                        else if (num == 12)
-                        {
-                            ret = "黑桃Q";
-                        }
-                        else if (num == 13)
-                        {
-                            ret = "黑桃K";
-                        }
+                            if (num == 11)
+                            {
+                                ret = "方块J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "方块Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "方块K";
+                            }
 
-                        break;
-                    }
-                case PokerSuit.Joker:
-                    {
-                        if(num == 14)
-                        {
-                            ret = string.Format("小王");
+                            break;
                         }
-                        else
+                    case PokerSuit.Joker:
                         {
-                            ret = string.Format("大王");
-                        }
+                            if (num == 14)
+                            {
+                                ret = string.Format("小王");
+                            }
+                            else
+                            {
+                                ret = string.Format("大王");
+                            }
 
-                        
-                        break;
-                    }
+
+                            break;
+                        }
+                }
             }
+            else
+            {
+                switch (suit)
+                {
+                    case PokerSuit.Club:
+                        {
+                            ret = string.Format("梅花{0}", num);
+
+                            if (num == 11)
+                            {
+                                ret = "梅花J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "梅花Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "梅花K";
+                            }
+
+                            break;
+                        }
+                    case PokerSuit.Diamond:
+                        {
+                            ret = string.Format("方块{0}", num);
+
+                            if (num == 11)
+                            {
+                                ret = "方块J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "方块Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "方块K";
+                            }
+                            break;
+                        }
+                    case PokerSuit.Heart:
+                        {
+                            ret = string.Format("红桃{0}", num);
+
+                            if (num == 11)
+                            {
+                                ret = "红桃J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "红桃Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "红桃K";
+                            }
+
+                            break;
+                        }
+                    case PokerSuit.Spade:
+                        {
+                            ret = string.Format("黑桃{0}", num);
+
+                            if (num == 11)
+                            {
+                                ret = "黑桃J";
+                            }
+                            else if (num == 12)
+                            {
+                                ret = "黑桃Q";
+                            }
+                            else if (num == 13)
+                            {
+                                ret = "黑桃K";
+                            }
+
+                            break;
+                        }
+                    case PokerSuit.Joker:
+                        {
+                            if (num == 14)
+                            {
+                                ret = string.Format("小王");
+                            }
+                            else
+                            {
+                                ret = string.Format("大王");
+                            }
+
+
+                            break;
+                        }
+                }
+            }
+
+            
 
             return ret;
         }
